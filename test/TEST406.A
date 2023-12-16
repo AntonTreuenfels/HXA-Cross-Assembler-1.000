@@ -1,0 +1,77 @@
+; Hobby Cross-Assembler Test 406
+; Program Counter Manipulation\Pad From Specific Byte Boundary
+; ok: "PADFROM" pseudo op (segmented)
+
+; by Anton Treuenfels
+
+; first created: 11/18/22
+; last revised:  11/04/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile            ; check output
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; for this test first we establish the existence, type and order
+; of the segments we want
+
+        .segment padfrom1
+
+        .padfrom $fff0
+
+        .ends
+
+        .segment    absend1
+
+        .absend	$10000
+
+        .word   $c813
+        .word   $d913
+        .word   $ea13
+
+        .ends
+
+; -------------------------------
+
+; try multiple relative end type segments in a row
+
+        .segment    padfrom2
+
+        .padfrom  8
+
+        .ends
+
+        .segment    relend1
+
+        .relend
+
+        .byte $88
+
+        .ends
+
+        .segment    padfrom3
+
+        .padfrom 8, $a5
+
+        .ends
+
+        .segment    abs2
+
+        .absend    $c000
+
+        .byte $ff
+
+        .ends
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,57 @@
+; Hobby Cross-Assembler Error Test 406m
+; Program Counter Manipulation\Pad From Specific Byte Boundary
+; error\fatal: cannot make absolute (explicit segments)
+
+; by Anton Treuenfels
+
+; first created: 08/19/23
+; last revised:  08/20/23
+
+; warning(s):
+
+; error(s): 2
+; - cannot make absolute
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+        ; padfrom is always a relative-end type...
+
+        .segment    pad1
+
+        .padfrom  32, $01
+
+        .ends
+
+        ; a relative segment
+
+        .segment    rel1_1
+
+        .byte   $02
+
+        .ends
+
+
+        ; an absolute segment
+
+        .segment    abs1
+
+        .org    $1000       ; absolute origin
+
+        .byte $03
+
+        .ends
+
+; -------------------------------
+
+        .end

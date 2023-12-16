@@ -1,0 +1,104 @@
+; Hobby Cross-Assembler Test 404d
+; Program Counter Manipulation\Pad To Specific Byte Boundary
+; ok: "PADTO" pseudo op
+
+; by Anton Treuenfels
+
+; first created: 07/19/05
+; last revised:  08/20/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile            ; check output
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; for this test first we establish the existence, type and order
+; of the segments we want
+
+; first segment cannot be "PADTO"
+; - PADTO segment can only follow ABSORG, RELORG or another PADTO
+
+; follow ABSORG
+
+        .segment    abs1
+
+        .org    $1000       ; ORG before any data makes segment absolute
+
+        .ends
+
+; we'll use addresses higher than what we're currently at as absolute addresses
+
+; followed ABSORG
+
+        .segment    pad1
+
+        .padto  $1100, $01  ; pad to $1100
+
+        .ends
+
+; followed PADTO
+
+        .segment   pad2
+
+        .padto  $1200, $02   ; pad to $1200
+
+        .ends
+
+; follow RELORG
+
+        .segment    rel1
+
+        .uninitialized
+
+        .ds   $100          ; empty space to $1300
+
+        .ends
+
+; followed RELORG
+
+        .segment   pad3
+
+        .padto  $1400, $03  ; pad to $1400
+
+        .ends
+
+; followed PADTO
+
+        .segment    pad4
+
+        .padto  $1500, $04  ; pad to $1500
+
+        .ends
+
+; follow ABSEND
+
+         .segment   abs2
+
+         .absend   $1600
+
+         .uninitialized
+
+         .ds $100
+
+         .ends
+
+; followed ABSEND
+
+        .segment pad5
+
+        .padto  $1700, $05  ; pad to $1700
+
+        .ends
+
+; -------------------------------
+
+        .end

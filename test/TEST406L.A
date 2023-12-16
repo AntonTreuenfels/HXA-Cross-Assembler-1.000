@@ -1,0 +1,51 @@
+; Hobby Cross-Assembler Error Test 406l
+; Program Counter Manipulation\Pad From Specific Byte Boundary
+; error\fatal: PADFROM outside of any segment (explicit segments)
+
+; by Anton Treuenfels
+
+; first created: 11/28/22
+; last revised:  11/28/22
+
+; warning(s):
+
+; error(s): 1
+; - outside segment
+
+; fatal: 1
+; - bad pc
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+        ; a relative segment
+
+        .segment    rel1_1
+
+        .padfrom  32
+
+        .ends
+
+        ; an absolute segment
+
+        .segment    abs1
+
+        .org    $1000
+
+        .ends
+
+        ; invalid outside of any segment
+
+        .padfrom  64
+
+; -------------------------------
+
+        .end

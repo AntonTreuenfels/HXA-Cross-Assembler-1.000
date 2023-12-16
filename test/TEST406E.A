@@ -1,0 +1,41 @@
+; Hobby Cross-Assembler Error Test 406e
+; Program Counter Manipulation\Pad From Specific Byte Boundary
+; warn\error: "PADFROM" not legal in monolithic programs
+
+; by Anton Treuenfels
+
+; first created: 11/26/22
+; last revised:  11/26/22
+
+; warning(s): 2
+; - odd value
+
+; error(s): 6
+; - monolithic
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .padfrom  0           ; silently ignored...
+        .padfrom  -1          ; ...all other complained about
+
+        .padfrom  $0ffff + 2
+        .padfrom  $10000 + 1
+
+        .padfrom  * + $10000
+        .padfrom  600 - 1000
+
+; -------------------------------
+
+        .end

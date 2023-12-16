@@ -1,0 +1,77 @@
+; Hobby Cross-Assembler Error Test 404i
+; Program Counter Manipulation\Pad To Specific Byte Boundary
+; warn: cannot change pad value once set
+
+; by Anton Treuenfels
+
+; first created: 11/26/22
+; last revised:  08/18/23
+
+; warning(s): 14
+; - already set
+; - ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+; must have a segment that can be made absolute before "padto" segment
+
+        .segment    abs1
+
+        .org    $c000
+
+        .word  *
+
+        .ends
+
+        .segment    pad1
+
+        .padto  10          ; ok
+
+        .padto  10          ; ok
+
+        .padto  $100        ; fail
+
+        .padto  10          ; ok
+
+        .ends
+
+        .segment    pad2
+
+        .padto  $21         ; ok
+
+        .padto  $21, $a5    ; fail
+
+        .padto  $10         ; fail
+
+        .padto  0x21, $00   ; ok
+
+        .ends
+
+        .segment    pad3
+
+        .padto  $30, $5A    ; ok
+
+        .padto  $21, $a5    ; fail
+
+        .padto  $10         ; fail
+
+        .padto  030H, 5AH   ; ok
+
+        .ends
+
+; -------------------------------
+
+        .end

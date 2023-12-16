@@ -1,0 +1,43 @@
+; Hobby Cross-Assembler Error Test 402f
+; Program Counter Manipulation\Fill Block With Constant Data
+; warn\error fatal: negative fill value
+
+; by Anton Treuenfels
+
+; first created: 09/27/09
+; last revised:  08/18/23
+
+; warning(s): 1
+; - odd value
+
+; error(s): 1
+; - out of range
+
+; fatal: 1
+; - invalid pc
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .liston autos
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; zero value legal (but silently ignored)
+
+        .fill   0
+
+; negative value fatal
+
+label1  .fill     -256      ; fatal
+
+; -------------------------------
+
+        .end

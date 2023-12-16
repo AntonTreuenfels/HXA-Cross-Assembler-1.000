@@ -1,0 +1,55 @@
+; Hobby Cross-Assembler Error Test 404m
+; Program Counter Manipulation\Pad To Specific Byte Boundary
+; error: PADTO cannot follow relative end segment
+
+; by Anton Treuenfels
+
+; first created: 08/18/23
+; last revised:  08/20/23
+
+; warning(s): 0
+
+; error(s): 2
+; - cannot make absolute
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .usesegments
+
+        .segment     abs1
+
+        .absorg   $2000
+
+        .ds        $100
+
+        .ends
+
+        .segment     rel1
+
+        .relend
+
+        .ds        $100
+
+        .ends
+
+        .segment    pad1
+
+        .padto  0x1000, 0123
+
+        ends
+
+; -------------------------------
+
+        .end

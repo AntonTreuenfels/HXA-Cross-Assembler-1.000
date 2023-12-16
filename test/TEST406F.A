@@ -1,0 +1,170 @@
+; Hobby Cross-Assembler Error Test 404f
+; Program Counter Manipulation\Pad From Specific Byte Boundary
+; warn: incompatible segment types
+
+; by Anton Treuenfels
+
+; first created: 11/26/22
+; last revised:  11/26/22
+
+; warning(s): 0
+
+; error(s): 14
+; - type already set
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+        .segment absorg1    ; first segment can be absolute
+
+        .org    $1000
+
+        .padfrom  16
+
+        .ends
+
+; new segment
+
+        .segment    relorg1
+
+        .relorg 
+
+        .padfrom  333
+
+        .ends
+
+; new segment
+
+        .segment    relend1
+
+        .relend 
+
+        .padfrom  2
+
+        .ends
+
+; new segment
+
+        .segment    absend1
+
+        .absend   $8000
+
+        .padfrom  24
+
+        .ends
+
+; new segment
+
+        .segment    nodata1
+
+        .uninitialized
+
+        .padfrom  36
+
+        .ends
+
+; new segment
+
+        .segment    common1
+
+        .common
+
+        .padfrom  $800
+
+        .ends
+
+; new segment
+
+        .segment    padto1
+
+        .padto    $c000
+
+        .padfrom  $800
+
+        .ends
+
+; -------------------------------
+
+; reverse order of declarations
+
+        .segment absorg2    ; first segment can be absolute
+
+        .padfrom  16
+
+        .org    $1000
+
+        .ends
+
+; new segment
+
+        .segment    relorg2
+
+        .padfrom  333
+
+        .relorg 
+
+        .ends
+
+; new segment
+
+        .segment    relend2
+
+        .padfrom  2
+
+        .relend 
+
+        .ends
+
+; new segment
+
+        .segment    absend2
+
+        .padfrom  24
+
+        .absend   $8000
+
+        .ends
+
+; new segment
+
+        .segment    nodata2
+
+        .padfrom  36
+
+        .uninitialized
+
+        .ends
+
+; new segment
+
+        .segment    common2
+
+        .padfrom  $800
+
+        .common
+
+        .ends
+
+; new segment
+
+        .segment    padfrom2
+
+        .padfrom  $800
+
+        .padto    $c000
+
+        .ends
+
+; -------------------------------
+
+        .end

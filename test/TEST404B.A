@@ -1,0 +1,158 @@
+; Hobby Cross-Assembler Test 404b
+; Program Counter Manipulation\Pad To Specific Byte Boundary
+; ok: "PADTO" pseudo op (segmented)
+
+; by Anton Treuenfels
+
+; first created: 07/19/05
+; last revised:  11/23/22
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile            ; check output
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; for this test first we establish the existence, type and order
+; of the segments we want
+
+; first segment cannot be "PADTO"
+
+        .segment    abs1
+
+        .org    $1000       ; ORG before any data makes segment absolute
+
+        .ends
+
+        .segment    pad1
+
+        .padto  $100        ; pad to $1100
+
+        .ends
+
+        .segment   rel1
+
+        .ends
+
+        .segment    pad2
+
+        .padto  2           ; pad to even byte boundary (already on one)
+
+        .ends
+
+        .segment    abs2
+
+        .org    $2000       ; ORG before any data makes segment absolute
+
+        .ends
+
+        .segment    pad3
+
+        .padto  $200        ; pad to $2200
+
+        .ends
+
+        .segment    rel2
+
+        .ends
+
+        .segment    pad4
+
+        .padto  4           ; pad to four-byte boundary (already on one)
+
+        .ends
+
+        .segment    pad5
+
+        .padto $100         ; pad to 
+
+        .ends
+
+; -------------------------------
+
+; we're going to try to generate an output file consisting of the values
+; $00 -> $5F in sequence (interrupted by padding) even though
+; the source file generates them non-sequentially (compare hexfile to listfile)
+
+repeatcnt   .equ    24
+]loopnum    .equ    0
+
+        .macro store, ?basenum
+        .byte   ?basenum * repeatcnt + ]loopnum
+        .endm
+
+; -------------------------------
+
+        .repeat     repeatcnt
+
+        .segment    abs1
+
+        store   0
+
+        .ends
+
+        .segment    rel1
+
+        store   1
+
+        .ends
+
+        .segment    abs2
+
+        store   2
+
+        .ends
+
+        .segment    rel2
+
+        store   3
+
+        .ends
+
+]loopnum += 1
+
+; end of repeat block
+
+        .endr
+
+; -------------------------------
+
+; test padding to specific address with specific value
+
+        .segment    abs3
+
+        .org    $c000       ; ORG makes segment absolute
+
+        .byte   $ff
+
+        .ends
+
+        .segment    pad6
+
+        .padto  $c010, $a5
+
+        .ends
+
+        .segment    rel3
+
+        .word   $ffff
+
+        .ends
+
+        .segment    pad7
+
+        .padto  $c020, $a500
+
+        .ends
+
+; -------------------------------
+
+        .end
