@@ -1,0 +1,104 @@
+; Hobby Cross-Assembler Test 518
+; Functions\CHR$() and ORD()
+; ok: convert numeric value to single-character string and vice-versa
+
+; by Anton Treuenfels
+
+; first created: 07/05/06
+; last revised:  09/01/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .liston stats
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; special cases
+        ; for chr$() - out-of-range; should be $3F ('?')
+        ; for ord()  - null string;  should be $00
+
+        .str chr$( -1 )
+        .byte   ord( "" )
+
+        ; ord(), default, in-range and out-of-range starts
+
+        .byte ord( "ABCDEF" )
+        .byte ord( "ABCDEF", 2 )
+        .byte ord( "ABCDEF", -2 )
+        .byte ord( "ABCDEF", 0 )
+        .byte ord( "ABCDEF", 100 )
+        .byte ord( "ABCDEF", -100 )
+
+
+        ; check out-of-range indices
+        ; - negative indices count from end of string
+
+]temp   =  -5
+
+         while ]temp <= 5
+        .byte   ]temp, ord( "ABC", ]temp )
+]temp   +=  1
+        .endwhile
+
+; -------------------------------
+
+        ; for chr$() - UTF-8 0 -> 255
+        ; for ord()  - single char string
+
+]temp   =   0
+
+        .repeat 256
+]temp$  =   chr$( ]temp )
+        .str    ]temp$
+        .byte   ord( ]temp$ )
+]temp   +=   1
+        .endr
+
+        ; for chr$() - UTF-8 512 -> 767
+        ; for ord()  - multiple char string
+        ; - UTF-8 results
+
+]temp   =   0
+
+        .repeat 256
+]temp$  =   chr$( ]temp + 512 ) + "multi-char appendage"
+        .str    mid$( ]temp$, 1, 1 )
+        .word   ord( ]temp$ )
+]temp   +=   1
+        .endr
+
+        ; for chr$() - in-range expressions; check other than first char
+        ; for ord()  - multiple char strings; check other than first char
+        ; - should have same result as first repeat loop above
+
+]temp   = 0
+]temp$  = ""
+
+        .repeat 256
+]temp$  +=  chr$( ]temp )
+]temp   +=  1
+        .str    mid$( ]temp$, ]temp, 1 )
+        .byte   ord( ]temp$, ]temp )
+        .endr
+
+        ; now go down (check negative start positions)
+
+]temp   = -1
+
+        .repeat 256
+        .str    mid$( ]temp$, ]temp, 1 )
+        .byte   ord( ]temp$, ]temp )
+]temp   -=  1
+        .endr            
+
+; -------------------------------
+
+        .end

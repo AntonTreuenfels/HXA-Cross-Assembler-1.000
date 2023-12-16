@@ -1,0 +1,100 @@
+; Hobby Cross-Assembler Error Test 522e
+; Functions\SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()
+; error: malformed (detectefirst pass)
+
+; by Anton Treuenfels
+
+; first created: 01/12/08
+; last revised:  01/29/23
+
+; warning(s): 0
+
+; error(s): 18
+; - bad EOE
+; - out of range
+; - bad arg count
+; - no open parenthesis
+; - no close parenthesis
+; - need operator
+; - need operand
+; - need global name
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; malformed function calls
+
+; first explicit segment *must* be absolute
+
+        .segment	abs1
+
+        .org    $1000       ; ORG before any data makes segment absolute
+
+        ; legal useage
+
+        .word   segbeg( abs1 )
+
+        .word   segend( abs1 )
+
+        .word   seglen( abs1 )
+
+        .word   segoff( abs1 )
+
+        ; missing argument
+
+        .word   segbeg(
+
+        .word   segend()
+
+        .word   segoff)
+
+        ; missing parentheses
+
+        .word   segbeg( abs1
+
+        .word   segend abs1
+
+        .word   seglen ( (abs1) 
+
+        .word   segoff abs1 )
+
+        ; illegal names (also illegal as variable names)
+
+        .word   segoff( ?badname )
+
+        .word   segoff( /badname/ )
+
+        .word   segend( + )
+
+        .word   seglen( -- )
+
+        .word   segoff( 123 )
+
+        ; too many arguments
+
+        .word   segbeg( abs1, anothername )
+
+        .word   segend( abs1, )
+
+        .word   seglen( , )
+
+        .word   segoff( , abs1 )
+
+        ; all done (for now, anyway)
+
+        .ends
+
+; --------------------
+
+        .end

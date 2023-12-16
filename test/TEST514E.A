@@ -1,0 +1,54 @@
+; Hobby Cross-Assembler Error Test 514e
+; Functions\TOLOWER$() and TOUPPER$()
+; error: assign result to numeric label
+
+; by Anton Treuenfels
+
+; first created: 08/01/13
+; last revised:  01/20/23
+
+; warning(s): 0
+
+; error(s): 8
+; - need number
+; - need string
+; - out of range
+; - bad count
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; these should work
+
+]temp$  .equ    tolower$( "AbCdEfGh" )
+
+]temp$  .equ    toupper$( "AbCdEfGh" )
+
+        ; these should not
+
+]temp   .equ    tolower$( "AbCdEfGh" )
+
+]temp   .equ    toupper$( "AbCdEfGh" )
+
+]temp$  =       tolower$( 123 )
+
+]temp$  =       toupper$( 345 * 789 )
+
+]temp$  equ     tolower$()
+
+]temp$  equ     toupper$( "abc", "def" )
+
+; -------------------------------
+
+        .end

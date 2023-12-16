@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Test 530
+; Functions\FILE$()
+; ok: current file name
+
+; by Anton Treuenfels
+
+; first created: 04/30/11
+; last revised:  09/05/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .str    FILE$()
+
+        .if TOUPPER$(FILE$()) != "TEST530.A"
+        .fatal  FILE$() + " != TEST530.A"
+        .endif
+
+        ; check that name function shows include file name (when in one)
+
+        .include    "..\\testhelp\\ifilenam.a"
+
+        .if toupper$(ifilenam$) == FILE$()
+        .fatal ifilename$ + " == " + FILE$()
+        .endif
+
+        ; check that expansion lines don't throw name function off
+
+        .repeat 2
+        .str    "Hello from " + FILE$()
+        .endr
+
+; -------------------------------
+
+        .end

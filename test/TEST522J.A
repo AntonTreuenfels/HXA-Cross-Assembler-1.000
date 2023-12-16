@@ -1,0 +1,47 @@
+; Hobby Cross-Assembler Error Test 522j
+; Functions\SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()
+; error: malformed (detected second pass)
+
+; by Anton Treuenfels
+
+; first created: 01/29/23
+; last revised:  09/03/23
+
+; warning(s): 0
+
+; error(s): 3
+; - bad call
+; - name not found
+; - need global name
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; required psop
+
+; -------------------------------
+
+; first explicit segment *must* be absolute
+
+        .segment    abs1
+
+        .org    $1000       ; ORG before any data makes segment absolute
+
+        .word   seglen      ; not a function call
+
+        .word   segbeg( $ ) ; '$' is converted from operand to operator during parsing
+
+        ; all done (for now, anyway)
+
+        .ends
+
+; --------------------
+
+        .end

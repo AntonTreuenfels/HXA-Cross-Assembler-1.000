@@ -1,0 +1,94 @@
+; Hobby Cross-Assembler Test 534
+; Functions\ISMACRO()
+; ok: macro name existence testing
+
+; by Anton Treuenfels
+
+; first created: 09/05/23
+; last revised:  09/06/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; undefined
+
+        .byte ismacro(cstr), ismacro(putstr), ismacro(putnul)
+
+        ; undefined
+
+        .byte ismacro(putstring), ismacro(putstr), ismacro(putnul)
+
+; -------------------------------
+
+; define a macro
+
+        .macro cstring, ?text
+
+; define a nested macro
+
+        .macro cstr, ?text
+        .str  ?text
+        .endm
+
+;  another nested macro
+
+        .macro cnul
+        .byte  $00
+        .endm
+
+        .endm
+
+; -------------------------------
+
+        ; defined
+
+        .byte ismacro(cstring), ismacro(cstr), ismacro(cnul)
+
+        ; undefined (still)
+
+        .byte ismacro(putstring), ismacro(putstr), ismacro(putnul)
+
+; -------------------------------
+
+        cstring "The first test string"
+
+        cstr "The second test string"
+
+        cnul
+
+; -------------------------------
+
+        ; can we undefine a nested macro and still have the nesting macro work ?
+
+        ; defined
+
+        .byte ismacro(cstring), ismacro(cstr), ismacro(cnul)
+
+        .undef cnul
+
+        ; defined ?
+
+        .byte ismacro(cstring), ismacro(cstr), ismacro(cnul)
+
+        cstring "The third test string"
+
+        .undef cstr
+
+        ; defined ?
+
+        .byte ismacro(cstring), ismacro(cstr), ismacro(cnul)
+
+        cstring "The fourth test string"
+
+; -------------------------------
+
+        .end

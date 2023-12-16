@@ -1,0 +1,46 @@
+; Hobby Cross-Assembler Error Test 516e
+; Functions\FORWARD()
+; error: bad parse
+
+; by Anton Treuenfels
+
+; first created: 01/20/23
+; last revised:  01/20/23
+
+; warning(s): 0
+
+; error(s): 7
+; - need operator
+; - bad EOE
+; - need string
+; - bad type
+; - out of range
+; - bad count
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   forward( "A$ \"and more\"" )
+
+        .byte   forward ( "label1 + " )
+
+        .byte   forward ( 123 )
+
+        .byte   forward ()
+
+        .byte   forward ( "A$", "B$" )
+
+; -------------------------------
+
+        .end

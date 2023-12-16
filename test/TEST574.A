@@ -1,0 +1,27 @@
+; Hobby Cross-Assembler Test 574
+; Nonstandard Byte\16-bit Motorola Basic TRecord
+; ok: 16-bit PC, 16-bit Byte
+
+; by Anton Treuenfels
+
+; first created: 06/25/11
+; last revised:  09/07/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .srecfile             ; create an object file
+
+; -------------------------------
+
+        .cpu    "T_16_M16"
+
+        .assume objstr:utf-16 ; 16-bit character strings
+
+        .include "..\\testhelp\\ihexdata.a"
+
+; -------------------------------
+
+        .end

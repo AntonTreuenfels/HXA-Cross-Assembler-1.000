@@ -1,0 +1,47 @@
+; Hobby Cross-Assembler Error Test 516f
+; Functions\FORWARD()
+; error: bad evaluation
+
+; by Anton Treuenfels
+
+; first created: 01/20/23
+; last revised:  01/20/23
+
+; warning(s): 0
+
+; error(s): 6
+; - divide by zero
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+zval    .equ  0
+nonzval .equ 123
+abc$    .equ "abc"
+
+        .byte   forward( "1/0" )
+
+        .byte   forward ( "123%0" )
+
+        .byte   forward ("1 / zval")
+
+        .byte   forward ( "nonzval / zval" )
+
+        .byte   forward ( "len(\"ABC\") % zval" )
+
+        .byte   forward ( "len(abc$) /zval" )
+
+; -------------------------------
+
+        .end

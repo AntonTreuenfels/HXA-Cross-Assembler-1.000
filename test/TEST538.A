@@ -1,0 +1,43 @@
+; Hobby Cross-Assembler Test 538
+; Functions\ROOTFILE$()
+; ok: name of root file
+
+; by Anton Treuenfels
+
+; first created: 09/06/23
+; last revised:  09/06/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .str    rootfile$()
+
+        .include "..\\testhelp\\ifilenam.a"
+
+        .str    rootfile$()
+        .str    rfilenam$
+
+        ; were ROOTFILE$() and FILE$ the same in the include file?
+
+        .if rfilenam$ == ifilenam$
+        .fatal "root file and include file have the same name"
+        .endif
+
+        ; are they the same in this file ?
+        
+        .if rootfile$() != file$()
+        .fatal "rootfile$() and file$() have different names"
+        .endif
+
+; -------------------------------
+
+        .end

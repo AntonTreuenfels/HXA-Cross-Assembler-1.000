@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Error Test 550f
+; Functions\Function Evaluation
+; error: labels with same name as functions
+
+; by Anton Treuenfels
+
+; first created: 03/11/10
+; last revised:  02/03/23
+
+; warning(s): 0
+
+; error(s): 8
+; - reserved name
+; - bad call
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+ver     .byte   ver         ; reserved
+        
+len:    .byte   len:        ; reserved
+
+index   .byte   index + 2   ; reserved
+
+mid$    .str    mid$+"abc"  ; reserved + bad call
+
+val:    .byte   4 * val     ; reserved
+
+str$:   .str    "def"+str$  ; reserved + bad call
+
+; -------------------------------
+
+        .end

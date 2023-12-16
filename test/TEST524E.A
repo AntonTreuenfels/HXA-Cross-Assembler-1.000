@@ -1,0 +1,36 @@
+; Hobby Cross-Assembler Error Test 524e
+; Functions\CPU$()
+; warning: CPU not set
+
+; by Anton Treuenfels
+
+; first created: 02/01/23
+; last revised:  02/02/23
+
+; warning(s): 2
+; - odd value
+; - no effect
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+; no CPU (and no origin, since that depends on CPU)
+
+;        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .str cpu$()
+
+; -------------------------------
+
+        .end                ; optional psop

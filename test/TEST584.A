@@ -1,0 +1,27 @@
+; Hobby Cross-Assembler Test 584
+; Nonstandard Byte\32-bit Motorola Basic URecord
+; ok: 16-bit PC, 32-bit Byte
+
+; by Anton Treuenfels
+
+; first created: 06/25/11
+; last revised:  09/09/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .srecfile           ; create an object file
+
+; -------------------------------
+
+        .cpu    "T_16_M32"
+
+        .assume objstr:utf-32
+
+        .include "..\\testhelp\\ihexdata.a"
+
+; -------------------------------
+
+        .end

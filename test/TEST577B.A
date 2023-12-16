@@ -1,0 +1,125 @@
+; Hobby Cross-Assembler Test 577b
+; Nonstandard Byte\16-bit PADFROM
+; ok: 24-bit PC, 16-bit Byte
+
+; by Anton Treuenfels
+
+; first created: 02/08/23
+; last revised:  02/08/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile            ; check output
+
+; -------------------------------
+
+        .cpu    "T_24_M16"  ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; for this test first we establish the existence, type and order
+; of the segments we want
+
+
+        .segment    pad1
+
+        .padfrom  $a000
+
+        .ends
+
+        .segment    abs1
+
+        .absorg   $a040
+
+        .ends
+
+        .segment   pad2
+
+        .padfrom  $a080
+
+        .ends
+
+        .segment    rel1
+
+        .relend
+
+        .ends
+
+        .segment    pad3
+
+        .padfrom  $a100
+
+        .ends
+
+        .segment    rel2
+
+        .relend
+
+        .ends
+
+        .segment    pad4
+
+        .padfrom  $a140
+
+        .ends
+
+        .segment    abs2
+
+        .absend  $a180
+
+        .ends
+
+; -------------------------------
+
+; we're going to try to generate an output file consisting of the values
+; $00 -> $5F in sequence (interrupted by padding) even though
+; the source file generates them non-sequentially (compare hexfile to listfile)
+
+repeatcnt   .equ    24
+]loopnum    .equ    0
+
+        .macro store, ?basenum
+        .byte   ?basenum * repeatcnt + ]loopnum
+        .endm
+
+; -------------------------------
+
+        .repeat     repeatcnt
+
+        .segment    abs1
+
+        store   0
+
+        .ends
+
+        .segment    rel1
+
+        store   1
+
+        .ends
+
+        .segment    rel2
+
+        store   2
+
+        .ends
+
+        .segment    abs2
+
+        store   3
+
+        .ends
+
+]loopnum += 1
+
+; end of repeat block
+
+        .endr
+
+; -------------------------------
+
+        .end

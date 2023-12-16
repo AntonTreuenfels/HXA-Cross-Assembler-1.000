@@ -1,0 +1,37 @@
+; Hobby Cross-Assembler Test 540
+; Functions\SGN()
+; ok: sign
+
+; by Anton Treuenfels
+
+; first created: 09/06/23
+; last revised:  09/06/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .word 1, sgn(1)
+        .word -1, sgn(-1)
+
+num1    .equ   1
+
+        .word num1, sgn(num1)
+        .word -num1, sgn(-num1)
+        
+        .word 0, sgn(0)
+        
+        .word num1 + 99, sgn(num1 + 99)
+        .word num1 - 101, sgn(num1 - 101)
+
+; -------------------------------
+
+        .end
