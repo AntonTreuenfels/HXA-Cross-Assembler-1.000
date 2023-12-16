@@ -1,0 +1,64 @@
+; Hobby Cross-Assembler Helper Test
+; File Inclusion/A multi-purpose include file
+
+; by Anton Treuenfels
+
+; first created: 06/30/22
+; last revised:  07/01/23
+; -------------------------------
+
+; pre-inclusion customized testss
+
+        .if islabel(TEST251)
+
+; should quietly assign current PC value
+
+@currpc             ; a new symbol...
+]currpc             ; re-assignment to old symbol...(after first time)
+
+        .elseif islabel(TEST251E)
+
+currpc              ; should complain loudly (different value each time)
+
+        .elseif rootfile$() ~ /.+[e-z]\.a/ ; an error test ?
+
+        .echo "No pre-test defined"
+
+        .endif
+
+; -------------------------------
+
+; include another file
+
+        INCTEST
+
+; DEPTH set in root file; ]count in INCTEST expansion
+
+        .if ]count < DEPTH
+
+; local label, visible only in this file
+
+@num$    = str$(]count)
+
+        .echo       "Entering..." + @num$
+        .include    "..\\testhelp\\inctest" + @num$ + ".a"
+        .echo       "...leaving " + @num$
+
+        .endif
+
+; -------------------------------
+
+; post-inclusion customized tests
+
+        .if islabel(TEST251)
+
+; should quietly accept assignment
+
+@equate .equ    1234    ; a new symbol...
+]equate .equ    1234    ; re-assignment to old symbol...(after first time)
+
+        .elseif rootfile$() ~ /.+[e-z]\.a/
+
+        .echo "No post-test defined"
+
+        .endif
