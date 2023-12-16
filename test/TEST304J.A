@@ -1,0 +1,59 @@
+; Hobby Cross-Assembler Error Test 304j
+; Segments\Program Counter (Implicit)
+; warn/error/fatal: "END" psop cannot be used inside segment (labeled, with start address)
+
+; by Anton Treuenfels
+
+; first created: 04/05/23
+; last revised:  04/05/23
+
+; warning(s): 1
+; - odd use
+
+; error(s): 1
+; - unmatched block
+
+; fatal: 1
+; - unclosed block
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+; first explicit segment *must* be absolute
+
+        .segment	abs1
+
+        .org    $1000       ; ORG before any data makes segment absolute
+
+in1_2                       ; ok (implicit assignment)
+
+        .ends
+
+; a relative segment
+
+        .segment    rel1
+
+in2_2                       ; ok (implicit pc assignment)
+
+        .ends
+
+; a relative segment
+
+        .segment    rel2
+
+in3_1                       ; ok (implicit pc assignment)
+
+finir   .end    in2_2       ; not ok !
+
+        .ends
+
+; -------------------------------
+

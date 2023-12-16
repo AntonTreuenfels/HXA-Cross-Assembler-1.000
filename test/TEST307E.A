@@ -1,0 +1,53 @@
+; Hobby Cross-Assembler Error Test 307e
+; Segments\Segment Count
+; fatal: too many segments
+
+; by Anton Treuenfels
+
+; first created: 10/28/23
+; last revised:  10/28/23
+
+; warning(s): 0
+
+; error(s): 0
+
+; fatal: 1
+; - bad count
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+#        .org    $1000       ; required psop (not outside segment)
+
+; -------------------------------
+
+; limit the number of segments allowed
+
+        .maxseg  10
+
+; a while block to make this test easy
+
+]count   =   50
+
+        .while ]count > 0
+
+        .segment  "seg" + str$( ]count )
+
+        .org  ]count * $100
+ 
+        .byte   $FF
+
+        .endseg
+
+]count  -=   1
+
+        .endwhile
+
+; -------------------------------
+
+        .end

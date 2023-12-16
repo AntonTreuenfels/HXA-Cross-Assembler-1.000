@@ -1,0 +1,53 @@
+; Hobby Cross-Assembler Error Test 304f
+; Segments\Program Counter (Implicit)
+; warn\error\fatal: "DS" psop with negative values (relative segment)
+
+; by Anton Treuenfels
+
+; first created: 07/11/05
+; last revised:  10/10/22
+
+; warning(s): 1
+; - odd value
+
+; error(s): 1
+; - too small
+
+; fatal: 1
+; - bad pc
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; negative values for "DS" are disallowed when explicit segments are
+; used for generally the same reasons the use of "ORG" is restricted:
+; there is no logical conflict and the assembler can keep track, but
+; a) it is potentially confusing to understand, and
+; b) there is no particular need to ever do it (make another segment instead), and
+; c) it makes the segment map less meaningful
+
+        .segment    testseg ; won't get far enough to make absolute
+
+        .ds     2048        ; ok - implicitly makes segment "uninitialized"
+
+        .ds     0           ; ok (silently accepted)
+
+        .ds     -1          ; warn/error/fatal
+
+        .ds     -2050       ; this would be too, but it's never reached
+
+        .ends
+
+; -------------------------------
+
+        .end
+
