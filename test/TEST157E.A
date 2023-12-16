@@ -1,0 +1,41 @@
+; Hobby Cross-Assembler Error Test 157e
+; Repeats\Repeat Count
+; fatal: too many repeats
+
+; by Anton Treuenfels
+
+; first created: 06/23/23
+; last revised:  06/25/23
+
+; warning(s): 0
+
+; error(s): 0
+
+; fatal: 1
+; - bad count
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; limit the number of repeats allowed
+
+        .maxloop  25
+
+; a repeat block to expand
+
+        .repeat 50
+        .byte   $FF
+        .endr
+
+; -------------------------------
+
+        .end

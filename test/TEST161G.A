@@ -1,0 +1,55 @@
+; Hobby Cross-Assembler Error Test 161g
+; Whiles\Macros and Whiles
+; error: crossed macro/while blocks (variation 2)
+
+; by Anton Treuenfels
+
+; first created: 12/22/07
+; last revised:  06/22/23
+
+; warning(s): 0
+
+; error(s): 0
+
+; fatal: 1
+; - bad nested block
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; variant:
+;   macro   name
+;   while
+;   endm
+;   endw
+;   name
+
+; define simple macro/while cross
+
+        .macro  PAD_BYT, ?count, ?val
+]COUNT  =   ?count
+        .while ]COUNT
+        .byte   ?val
+]COUNT  =   ]COUNT - 1
+        .endm
+
+; try to expand the little monster
+
+        PAD_BYT 16, $00
+
+; the while close (the crossed block)
+
+        .endw               ; unmatched block
+
+; -------------------------------
+
+        .end

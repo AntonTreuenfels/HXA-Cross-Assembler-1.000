@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Error Test 167e
+; Whiles\While Count
+; fatal: too many whiles
+
+; by Anton Treuenfels
+
+; first created: 06/23/23
+; last revised:  06/25/23
+
+; warning(s): 0
+
+; error(s): 0
+
+; fatal: 1
+; - bad count
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; limit the number of whiles allowed
+
+        .maxloop  25
+
+; a while block to expand
+
+]count   =   50
+
+        .while ]count > 0
+        .byte   $FF
+]count  -=   1
+        .endwhile
+
+; -------------------------------
+
+        .end

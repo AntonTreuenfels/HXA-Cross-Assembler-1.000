@@ -1,0 +1,64 @@
+; Hobby Cross-Assembler Error Test 106e
+; Macros\Macros and Labels
+; error: macros with the same names as labels
+
+; by Anton Treuenfels
+
+; first created: 04/05/22
+; last revised:  04/05/22
+
+; warning(s): 2
+; - definition ignored
+
+; error(s): 4
+; - duplicate name
+; - need opcode
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile			; optional psop
+        .errfile			; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; a simple label
+
+test1    .word    $
+
+; a macro defined *after* label with the same name
+
+        .mac    test1, ?str
+        .str    "?str"
+        .byte   $00
+        .endm
+
+; try to expand it
+
+        test1 "some text"
+
+; ------------------
+
+; let's try that again; simple label first
+
+test2   .word    $
+
+; a macro defined *after* label with the same name
+
+        .mac    test2, ?value
+        .word   ?value
+        .endm
+
+; try to expand it
+
+        test2    $
+
+; -------------------------------
+
+        .end				; optional psop

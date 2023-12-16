@@ -1,0 +1,100 @@
+; Hobby Cross-Assembler Error Test 151e
+; Repeats\Macros and Repeats
+; error: macro definitions within repeat blocks
+
+; by Anton Treuenfels
+
+; first created: 02/01/04
+; last revised:  04/28/22
+
+; warning(s):
+
+; error(s): 3
+; - expecting operand
+
+; fatal:
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; Summary: macros can only be defined on their own or nested
+; within other macro definitions. Macro defined within repeat
+; blocks will not be defined but neither will they directly
+; cause an error. Instead the delimiters (and names) of any
+; such definitions will be silently ignored and the bodies
+; treated as part of the repeat block to be expanded.
+; - if it was possible to define macros within repeat blocks,
+; any such block repeated more than once would cause a multiple
+; definition error
+
+; no error reported; the macro definition is ignored
+
+        .repeat 1
+        .macro  null_1
+        .endm
+        .endr
+
+; interpreted as a label, not a macro call
+
+        null_1
+
+; no error reported; the definition is repeated twice but also ignored twice
+
+        .repeat 2
+        .macro  null_2
+        .endm
+        .endr
+
+; interpreted as a label, not a macro call
+
+        null_2
+
+; no error reported; places two zero bytes in output at this point
+
+        .repeat 2
+        .macro  name_1
+        .byte   $00
+        .endm
+        .endr
+
+; interpreted as a label, not a macro call
+
+        name_1
+
+; error reported when formal argument is not replaced but evaluated anyway
+
+        .repeat 1
+        .macro  name_2, ?text
+        .str    ?text
+        .byte   0
+        .endm
+        .endr
+
+; interpreted as a label, not a macro call
+
+        name_2
+
+; error reported when formal argument is not replaced but evaluated anyway
+
+        .repeat 2
+        .macro  name_3, ?val
+        .word   2 * ?val
+        .endm
+        .endr
+
+; interpreted as label, not a macro call
+
+        name_3
+
+; -------------------------------
+
+        .end

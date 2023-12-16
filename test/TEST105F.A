@@ -1,0 +1,61 @@
+; Hobby Cross-Assembler Error Test 105f
+; Macros\DEFINED() and UNDEF
+; error: illegal DEFINED() argument value
+
+; by Anton Treuenfels
+
+; first created: 06/28/09
+; last revised:  05/16/23
+
+; warning(s): 0
+
+; error(s): 11
+; - expecting macro name
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; errors caught on second pass because names not found on first pass
+
+; illegal names (legal labels, but not numeric global form)
+
+        .byte   defined( badname$ )
+
+        .byte   defined( ]badname )
+
+        .byte   defined( @badname )
+
+        .byte   defined( :+ )
+
+; same illegal names specified as strings
+
+]badname$   = "badname$"
+
+        .byte   defined( ]badname$ )
+
+]badname$   =   "]badname"
+
+        .byte   defined( ]badname$ )
+
+]badname$   =   "@badname"
+
+        .byte   defined( ]badname$ )
+
+]badname$   =   ":+"
+
+        .byte   defined( ]badname$ )
+
+; --------------------
+
+        .end

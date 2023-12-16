@@ -1,0 +1,45 @@
+; Hobby Cross-Assembler Error Test 160i
+; Whiles\While Definition
+; error: storage expression goes out of range
+
+; by Anton Treuenfels
+
+; first created: 07/25/10
+; last revised:  06/22/23
+
+; warning(s): 0
+
+; error(s): 26
+; - out of range
+
+; fatal: 1
+; - too many errors
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; we're testing evaluation limits
+; - evaluation results can have any value but not every value can be stored
+; - we let the control expression build up to a high limit (ten billion in this case)
+; - we have to stop first pass after more than enough storage failures
+; to trigger a fatal error will occur during second pass (we add one million each time)
+
+]control    =   0
+
+         .while  ]control < 10000000000
+         .ulong   ]control
+]control    +=    100000000
+         .endwhile
+
+; -------------------------------
+
+        .end
