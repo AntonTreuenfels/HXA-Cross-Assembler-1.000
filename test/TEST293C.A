@@ -1,0 +1,28 @@
+; Hobby Cross-Assembler Test 293c
+; Intel Hexadecimal Object\Assume Narrower Address Type
+; ok: 20-bit to 16-bit
+
+; by Anton Treuenfels
+
+; first created: 07/17/23
+; last revised:  07/17/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile                    ; create an object file...
+        .assume hexfile:flat        ; ...with "flat" address
+
+; -------------------------------
+
+        .cpu    "T_20_M"
+
+        .include "..\\testhelp\\inarrow.a"
+
+; -------------------------------
+
+; segmented and linear address records *do* use start records
+
+        .end    start

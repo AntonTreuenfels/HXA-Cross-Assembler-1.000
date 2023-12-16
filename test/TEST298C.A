@@ -1,0 +1,58 @@
+; Hobby Cross-Assembler Test 298c
+; Intel Hexadecimal Object\Address Jumps Force New Address Records
+; ok: 16-bit (data records)
+
+; by Anton Treuenfels
+
+; first created: 07/18/23
+; last revised:  07/18/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexfile            ; create an object file
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+
+; -------------------------------
+
+; each 'org' should produce a discontinuous address in the data records
+
+        .org    $CD00
+
+]temp    =   $FFFF0000
+
+        .repeat 64
+        .bit32  ]temp
+]temp    = ]temp - $FFFF
+        .endr
+
+; jump address about 2K higher
+
+        .org    $ED00
+
+]temp    =   $FFFF0000
+
+        .repeat 64
+        .bit32  ]temp
+]temp    = ]temp - $FFFF
+        .endr
+
+; jump address about 4K lower
+
+        .org    $AD00
+
+]temp    =   $FFFF0000
+
+        .repeat 64
+        .bit32  ]temp
+]temp    = ]temp - $FFFF
+        .endr
+
+; -------------------------------
+
+        .end
