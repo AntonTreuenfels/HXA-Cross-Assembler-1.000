@@ -1,0 +1,62 @@
+; Hobby Cross-Assembler Error Test 500e
+; Functions\VER() and VER$()
+; error: malformed
+
+; by Anton Treuenfels
+
+; first created: 08/05/04
+; last revised:  01/09/23
+
+; warning(s): 0
+
+; error(s): 18
+; - bad EOE
+; - unmatched parenthesis
+; - out of range
+; - bad arg count
+; - need operator
+; - bad type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .long   ver(        ; bad EOE
+
+        .long   ver)        ; unmatched parenthesis
+
+        .long   ver(arg)    ; bad arg
+
+        .long   ver("arg")  ; bad arg
+
+        .long   ver(1,2)    ; bad arg count
+
+; -------------------------------
+
+        .string ver$(       ; bad EOE
+
+        .string ver$)       ; unmatched parenthesis
+
+        .string ver$ "plus" ; need open parenthesis
+
+        .string 20 * ver$() ; bad EOE (pattern match is legal here)
+
+        .string ver$( arg ) ; bad arg
+
+        .string ver$("arg") ; bad arg
+
+        .string ver$(1, 2)  ; bad arg
+
+; -------------------------------
+
+        .end

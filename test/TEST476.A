@@ -1,0 +1,94 @@
+; Hobby Cross-Assembler Test 476
+; Program Listing\Cross-Reference
+; ok: macros only, w/ line numbers
+
+; by Anton Treuenfels
+
+; first created: 01/05/23
+; last revised:  08/29/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"        ; required psop
+bak01a  .org    $1000           ; required psop
+
+        .liston macros, linenums
+        .liston xmacros         ; we're testing "xmacros"
+
+; -------------------------------
+
+; largely cribbed from "TEST100.A"
+
+; empty body
+
+        .macro  NO_BODY
+        .endm
+
+; define null-terminated string (a C-style string)
+
+        .macro  STRZ, ?text
+        .str    ?text
+        .byte   0
+        .endm
+
+; define string with preceeding length byte (a Pascal-style string)
+
+        .macro  PSTR, ?text
+        .byte   @end - @beg
+@beg    .str    ?text
+@end    .endm
+
+; expand them here to make sure source cross-reference is okay
+
+        no_body
+
+        strz    "abcdefgh"
+
+        pstr    "ijklmno"
+
+; -------------------------------
+
+        ; make sure listing is correct for include files
+
+        .include "..\\testhelp\\ixrefmac.a"
+        .include "..\\testhelp\\ixrefglb.a"
+
+; -------------------------------
+
+        ; defined in include file, expanded here
+
+        strz_4  "abcdefgh"
+
+        pstr_4  "ijklmno"
+
+; -------------------------------
+
+        ; defined/un-defined in root file
+
+        .undef no_body
+        .undef strz,  pstr
+
+        ; defined in include file, un-defined in root file
+
+        .undef strz_2, pstr_2, strequ
+
+        ; defined/un-defined in the include file
+
+;        .undef strz_3, pstr_3
+
+        ; leave these to make sure no such event is recorded
+
+;       .undef strz_4, pstr_4
+
+; -------------------------------
+
+f.0.2   .word   b_06_       ; ...but not period char
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,46 @@
+; Hobby Cross-Assembler Test 474
+; Program Listing\Formfeed
+; ok: "PAGE" psop (10-line page)
+
+        .page
+; - rem top line -  21
+
+; by Anton Treuenfels
+
+        .page
+; - rem top line -  31
+
+; first created: 05/05/11
+; last revised:  01/04/23
+
+        .page
+; - rem top line -  41
+
+; no errors to detect
+
+        .page
+; - rem top line -  51
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .page
+; - rem top line -  61
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .page
+; - rem top line -  71
+
+        .pagesize   75, 10
+
+; -------------------------------
+        .page
+; - rem top line -  81
+
+        .end

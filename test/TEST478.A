@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Test 478
+; Program Listing\Show Assembly Statistics
+; ok: "STATS" listing option
+
+; by Anton Treuenfels
+
+; first created: 02/17/23
+; last revised:  02/17/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .listoff    object  ; don't care
+        .liston     stats   ; do care
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; try to make assembly last a while
+
+]COUNT   .equ    2048
+
+        .repeat ]COUNT
+        .byte   $01
+        .endr
+
+; force second pass to actually do something
+
+        .while ]COUNT
+        .word   ]COUNT + forwardval
+]COUNT  .-=   1
+        .endw
+
+forwardval = 1
+
+; -------------------------------
+
+        .end

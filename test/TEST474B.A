@@ -1,0 +1,46 @@
+; Hobby Cross-Assembler Test 474b
+; Program Listing\Formfeed
+; ok: "PAGE" psop (w/o pagination enabled)
+
+        .page
+; - rem top line -  14
+
+; by Anton Treuenfels
+
+        .page
+; - rem top line -  19
+
+; first created: 05/05/11
+; last revised:  01/04/23
+
+        .page
+; - rem top line -  25
+
+; no errors to detect
+
+        .page
+; - rem top line -  30
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .page
+; - rem top line -  38
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .page
+; - rem top line -  46
+
+;        .pagesize   75, 10 ; without page length, "PAGE" has no effect
+
+; -------------------------------
+        .page
+; - rem top line -  52
+
+        .end

@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Error Test 500f
+; Functions\VER() and VER$()
+; error: not found
+
+; by Anton Treuenfels
+
+; first created: 01/09/23
+; last revised:  01/14/23
+
+; warning(s): 0
+
+; error(s): 5
+; - reserved name
+; - bad call
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+ver     .equ   2002
+
+ver$    =      "2002"
+
+; -------------------------------
+
+        .string ver$        ; reserved name
+
+        .str    ver$ + "ABC"  ; bad call
+
+        .str    "DEF" + ver$  ; bad call
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,30 @@
+; Hobby Cross-Assembler Test 452
+; Program Listing\Long Lines (Wrapped)
+; ok: source lines too long to list on one line
+
+; by Anton Treuenfels
+
+; first created: 03/24/07
+; last revised:  08/24/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .pagesize    75        ; width= 75, length = unlimited (no paging)
+
+        .liston      linewrap  ; wrap long lines (default, but won't hurt)
+
+        .include    "..\\testhelp\\ilisting.a"
+
+; -------------------------------
+
+        .end

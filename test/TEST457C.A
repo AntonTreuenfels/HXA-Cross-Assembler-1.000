@@ -1,0 +1,38 @@
+; Hobby Cross-Assembler Test 457c
+; Program Listing\Change Left Margin
+; ok: push listing far to right
+
+; by Anton Treuenfels
+
+; first created: 12/23/22
+; last revised:  08/26/23
+
+; no errors to detect
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; built-in page format values
+
+        .include    "..\\testhelp\\ipagsize.a"
+
+; set narrow print width far to right of page
+
+        .margins    0, pagwid+1
+
+        .include    "..\\testhelp\\ilisting.a"
+
+        .pagesize   pagwid+25, 0
+
+; -------------------------------
+
+        .end

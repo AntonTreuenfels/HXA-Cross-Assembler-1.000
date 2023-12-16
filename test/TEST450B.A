@@ -1,0 +1,214 @@
+; Hobby Cross-Assembler Test 450b
+; Program Listing\Listing
+; ok: "LIST--" psops for LABELS section
+
+; by Anton Treuenfels
+
+; first created: 08/23/23
+; last revised:  08/23/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; ------------------------------
+
+        .if ver() < $0150
+        .fatal  "HXA version 0.150 or higher required"
+        .endif
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; tests cribbed from test 054 and 055
+
+; explicitly turn on all options
+; - labels and macnames ON by default, lblval and autos OFF by default
+
+        .liston labels, lblval, autos, macnames
+
+; -------------------------------
+
+        .macro whereami
+        .word $
+        .endm
+
+; -------------------------------
+ 
+        whereami
+ 
+; try every allowed user form (test 054)
+
+label1  .word   label1      ; global label
+
+]var1   .word   ]var1       ; variable label
+
+@local1 .word   @local1     ; local label
+
+ -                          ; backward target label
+        .word   :+
+ +                          ; forward target label
+        .word   :-
+
+        .word   :+
+ +-                         ; forward/backward target label
+        .word   :-                                    
+
+        .word   :+
+ -+                         ; backward/forward target label
+        .word   :-
+
+; try every allowed user form (again)
+
+label2:                     ; global label (local label values re-set)
+        .word   label2:
+
+        .word   ]var1:      ; variable label (same label, old value)
+
+]var1:                      ; variable label (same label, new value)
+        .word   ]var1:
+
+@local1:                    ; local label (new label)
+        .word   @local1:
+ -                          ; backward label
+        .word   :+
+ +                          ; forward label
+        .word   :-
+
+        .word   :+
+ +-                         ; forward/backward label
+        .word   :-
+
+        .word   :+
+ -+                         ; backward/forward label
+        .word   :-
+
+; try every allowed user form again (additional name forms)
+
+u_label .word   p.label     ; global label (local labels re-set)
+
+]var.1  .word   ]var.1      ; variable label
+
+@local.1 .word   @local.1   ; local label
+
+ -                          ; branch target label
+        .word   +
+ +                          ; branch target label
+        .word   ---
+ 
+; try every allowed user form again (check label name re-use)
+
+p.label:                    ; global label (local labels re-set)
+        .word   p.u_label
+
+        .word   ]var.1      ; variable label (same label, old value)
+
+]var.1:                     ; variable label (same label, new value)
+        .word   ]var.1
+
+@local.1:                   ; local label (new label)
+        .word   @local.1
+
+ -                          ; branch target label
+        .word   +
+ +                          ; branch target label
+        .word   ----
+
+; -------------------------------
+
+        whereami
+
+; global form (test 055)
+
+label4                      ; pc (as number)
+label4$                     ; pc (as string)
+
+        .word   label4
+        .string label4$
+
+_label2                     ; pc (as number)
+label_2$                    ; pc (as string)
+
+        .word   _label2
+        .string label_2$
+
+p.label3                    ; pc (as number)
+P.LABEL3$                   ; pc (as string)
+
+        .word   P.LABEL3
+        .string p.label3$
+
+; variable form
+
+]v_label                    ; pc (as number)
+]v.label$                   ; pc (as string)
+
+        .word   ]v_label
+        .string ]v.label$
+
+]V_label                    ; pc (as number)
+]v.LABEL$                   ; pc (as string)
+
+        .word   ]v_label
+        .string ]v.label$
+
+]v_label                    ; pc (as number)
+]v.label$                   ; pc (as string)
+
+        .word   ]V_LABEL
+        .string ]V.LABEL$
+
+; local form
+
+@local_1                    ; pc (as number)
+@local.1$                   ; pc (as string)
+
+        .word   @local_1
+        .string @local.1$
+
+global_resettus             ; global label causes erase of local labels
+
+@local_1                    ; pc (as number)
+@local.1$                   ; pc (as string)
+
+        .word   @local_1
+        .string @local.1$
+
+global_resettus_redux       ; global label causes erase of local labels
+
+@local_1                    ; pc (as number)
+@local.1$                   ; pc (as string)
+
+        .word   @local_1
+        .string @local.1$
+
+; string labels on most pseudo ops also acquire the value of the pc
+
+ pglabel$   .string pglabel$
+]pvlabel$   .string ]pvlabel$
+@pllabel$   .string @pllabel$
+
+; string labels may end with a colon character
+
+colon$:
+]colon$:
+@colon$:
+
+        .string colon$:
+        .string ]colon$:
+        .string @colon$
+
+; -------------------------------
+
+         whereami
+
+; -------------------------------
+
+; 'end' psop can be labeled (in monolithic programs like this one)
+
+p.u_label   .end                ; global label

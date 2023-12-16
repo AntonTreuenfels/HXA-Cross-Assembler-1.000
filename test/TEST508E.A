@@ -1,0 +1,66 @@
+; Hobby Cross-Assembler Error Test 508e
+; Functions\VAL()
+; error: illegal expressions
+
+; by Anton Treuenfels
+
+; first created: 11/08/05
+; last revised:  01/17/23
+
+; warning(s): 0
+
+; error(s): 10
+; - bad EOE
+; - bad type
+; - need function
+; - need operand
+; - unmatched left paren
+; - need expression
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; null string
+
+        .word   val( "" )
+
+        ; blank string
+
+        .word   val( "   " )
+
+        ; numeric argument
+
+        .word   val( $10 )      ; wrong type
+
+        .word   val( :++ )      ; wrong type - branch target
+
+        .word   val( 36 + )     ; incomplete - doesn't get to type error
+
+        ; regular expression argument
+
+        .word   val( /invalid/ )
+
+        ; bad termination
+
+        .word   val( "1 )
+
+        .word   val( "1\" )
+
+        .word   val( "1"
+
+        .word   val( "1",
+
+; -------------------------------
+
+        .end

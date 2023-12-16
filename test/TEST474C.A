@@ -1,0 +1,50 @@
+; Hobby Cross-Assembler Test 474c
+; Program Listing\Formfeed
+; ok: "PAGE" psop (10-line page; no effect in unlisted section)
+
+        .page
+; - rem top line -  21 (0015)
+
+; by Anton Treuenfels
+
+        .page
+; - rem top line -  31 (0020)
+
+; first created: 05/05/11
+; last revised:  01/04/23
+
+        .page
+; - rem top line -  41 (0026)
+
+; no errors to detect
+
+        .page
+; - rem top line -  51 (0031)
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .page
+; - rem top line -  61 (0039)
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .listoff source     ; turn off listing
+
+        .page               ; no effect at listing time
+; - rem top line -  71
+
+        .pagesize   75, 10  ; recognized but not listed
+
+        .liston  source, linenums     ; turn listing on
+
+; -------------------------------
+        .page
+; - rem top line -  81 (0052)
+
+        .end

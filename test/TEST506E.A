@@ -1,0 +1,95 @@
+; Hobby Cross-Assembler Error Test 506e
+; Functions\MID$()
+; error: substring position
+
+; by Anton Treuenfels
+
+; first created: 01/16/23
+; last revised:  01/16/23
+
+; warning(s): 0
+
+; error(s): 30
+; - bad EOE
+; - unmatched parenthesis
+; - out of range
+; - bad count
+; - need operator
+; - need expression
+; - need operand
+; - bad type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .maxerr   50        ; need to raise a little...
+
+        ; no argument problems
+
+        .byte   mid$(              ; malformed
+
+        .byte   mid$)              ; malformed
+
+        .byte   mid$()             ; no argument
+
+        .byte   mid$ ()            ; no argument
+
+        .byte   mid$( )            ; no argument
+
+        .byte   mid$ ( )           ; no argument
+
+        ; one argument problems
+
+        .byte   mid$ "ABC"         ; no parenthesis
+        
+        .byte   mid$( "ABC"        ; missing argument/close parenthesis
+
+        .byte   mid$ "ABC" )       ; no open parenthesis
+
+        .byte   mid$( "ABC" )      ; too few arguments
+
+        ; two argument problems
+
+        .byte   mid$( "ABC",       ; missing argument/close parenthesis
+
+        .byte   mid$( "ABC", )     ; missing argument
+
+        .byte   mid$( , "ABC" )    ; missing argument
+
+        .byte   mid$( , )          ; missing arguments
+
+        .byte   mid$( 100, 100 )   ; numeric arguments
+
+        .byte   mid$( 100, "ABC" ) ; numeric argument
+
+        ; three argument problems
+
+        .byte   mid$( "ABC", "B", )    ; missing argument
+
+        .byte   mid$( "ABC", "B", "C" )    ; string argument
+
+        .byte   mid$( , , )            ; no arguments
+
+        .byte   mid$( "ABC", , 3 )     ; missing argument
+
+        .byte   mid$( "ABC", 2, 1+ ) ; malformed numeric argument
+
+        ; four argument problems
+
+        .byte   mid$( "ABC", 2, 3, 15 )    ; too many arguments
+        .byte   mid$( "ABC", 2, 3, "DEF" ) ; too many arguments
+
+; -------------------------------
+
+        .end

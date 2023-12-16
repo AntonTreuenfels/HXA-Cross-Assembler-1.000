@@ -1,0 +1,47 @@
+; Hobby Cross-Assembler Error Test 508f
+; Functions\VAL()
+; error: out of range expressions
+
+; by Anton Treuenfels
+
+; first created: 11/08/05
+; last revised:  01/17/23
+
+; warning(s): 0
+
+; error(s): 5
+; - out of range
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; out of range
+
+        .long   val( "%101111111111111111111111111111111" ) ; 33 bits
+
+        .long   val( "4294967295+1" )                       ; 33 bits
+
+        .long   val( "$87fffffff")                          ; 36 bits
+
+        .long   val( "fwdValD" ) + 1          ; 33 bits
+
+        .long   val( "fwdValH" )              ; 36 bits
+
+fwdValD .= 4294967295                         ; 32 bits
+
+fwdValH .= $87fffffff                         ; 36 bits
+
+; -------------------------------
+
+        .end

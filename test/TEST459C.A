@@ -1,0 +1,34 @@
+; Hobby Cross-Assembler Test 459c
+; Program Listing\Pagination
+; ok: "PAGESIZE" and "MARGIN" psops (3-line pages w/ line numbers)
+
+; by Anton Treuenfels
+
+; first created: 04/03/10
+; last revised:  08/28/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; with these seettings, basically one text line per "page"
+
+        .pagesize   75, 3      ; width, height
+
+        .margins    1, 0, 1, 0  ; top, left, bot, rgt
+
+        .liston     linenums
+
+        .include    "..\\testhelp\\ilisting.a"
+
+; -------------------------------
+
+        .end

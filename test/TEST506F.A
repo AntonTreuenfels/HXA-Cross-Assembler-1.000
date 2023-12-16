@@ -1,0 +1,33 @@
+; Hobby Cross-Assembler Error Test 506f
+; Functions\MID$()
+; error: reserved name
+
+; by Anton Treuenfels
+
+; first created: 01/16/23
+; last revised:  01/16/23
+
+; warning(s): 0
+
+; error(s): 1
+; - reserved
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+mid$   .equ  "43"           ; reserved
+
+; -------------------------------
+
+        .end

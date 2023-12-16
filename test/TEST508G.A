@@ -1,0 +1,43 @@
+; Hobby Cross-Assembler Error Test 508g
+; Functions\VAL()
+; error: unresolved
+
+; by Anton Treuenfels
+
+; first created: 07/16/22
+; last revised:  01/17/23
+
+; warning(s): 0
+
+; error(s): 4
+; - name not found
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .long val( "notFound0" )
+
+        .long $400 + val( "notFound1" )
+
+        .long val( "fwdValD + notFound2" )
+
+        .long val( "notFound3 * fwdValH" )
+
+fwdValD .= 4294967295                         ; 32 bits
+
+fwdValH .= $87fffffff                         ; 36 bits
+
+; -------------------------------
+
+        .end
