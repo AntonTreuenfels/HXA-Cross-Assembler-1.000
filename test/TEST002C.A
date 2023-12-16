@@ -1,0 +1,38 @@
+; Hobby Cross-Assembler Test 002c
+; Required\Set CPU
+; ok: "CPU" psop (32-bit Processor)
+
+; by Anton Treuenfels
+
+; first created: 05/09/03
+; last revised:  07/29/22
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_32_L"    ; required psop (must come before first ".org")
+        .org     $01000000  ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+        .org    $20000001   ; change program counter
+
+        .byte   $00
+
+        .org    $80         ; change it again...
+
+        .byte   $00
+
+        .org    $80000001   ; one last time...
+
+        .byte   $00
+
+; -------------------------------
+
+        .end

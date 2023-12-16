@@ -1,0 +1,77 @@
+; Hobby Cross-Assembler Test 010g
+; Output Files\Same Directory
+; warn: problematic characters in names
+
+; by Anton Treuenfels
+
+; first created: 03/03/23
+; last revised:  05/14/23
+
+; warning(s): 4
+; - odd use
+
+; error(s): 6
+; - bad template
+
+; fatal: 0
+
+; -------------------------------
+
+; defaults here
+
+        .listfile
+        .errfile
+
+; verify names are what we think they are
+
+        .listfile    "test010g.lst"
+        .errfile     "test010g.err"
+
+; check for characters that might affect cross-platform portability
+; - but only warned of, not forbidden
+
+; names > 32 chars are suspect
+
+        .rawfile "a_very_long_name_designed_to_cause_a_warning"
+
+; control characters are suspect (watch that matches do not exceed 0xFF)
+
+        .hexfile  "control\0x09 chars\0x0A are\0x0B suspect"
+
+; ...as is any non-alphanumeric except "#", "-", "_" and '."
+
+        .rawbyseg   "spaces are suspect"
+        .rawbyblk   'all_these_are_suspect: !@$%^&*()+={}[]|;<>,"?`~'
+
+; characters in the range \0xA1-\0xFF are acceptable
+
+        .hexbyseg   "ça-coûte-au-supermarché"   ; okay
+        .hexbyblk   "path\\filename.###"        ; okay
+
+; output files cannot have template markers in their paths
+; - or as the lead character(s) of their filenames
+; - or in both 'filename' and 'ext'
+; - these ARE forbidden
+
+        .srecbyseg  "path##\\filename.ext"
+        .srecbyblk  "path\\#####.ext"
+
+        .srecbyseg  "file###.###"
+        .srecbyblk  "path\\filena#.##t"
+
+        .srecbyseg  "f#lename.e#t"
+        .srecbyblk  "path\\fi##name.e##"
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+; -------------------------------
+
+        .end
+

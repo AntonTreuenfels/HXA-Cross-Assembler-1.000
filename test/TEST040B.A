@@ -1,0 +1,171 @@
+; Hobby Cross-Assembler Test 040b
+; Expressions\Character Literals
+; ok: Unicode character literals
+
+; by Anton Treuenfels
+
+; first created: 01/25/22
+; last revised:  02/04/22
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; character values (code points) are numeric and can have up to 20 bits
+
+; 8-bit storage size
+
+        .byte   'á'
+        .byte   'é'
+        .byte   'í'
+        .byte   'ó'
+        .byte   'ú'
+        .byte   'à'
+        .byte   'è'
+        .byte   'ì'
+        .byte   'ò'
+        .byte   'ù'
+        .byte   '«'
+        .byte   '»'
+
+        .byte   'â', 'ê', 'î', 'ô', 'û'
+        .byte   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+        ; code points above 255
+
+        .byte   '\u0152', '\u0153'
+        .byte   '\U00002764', '\U0001f496'
+
+; 16-bit storage size
+
+        .word   'á'
+        .word   'é'
+        .word   'í'
+        .word   'ó'
+        .word   'ú'
+        .word   'à'
+        .word   'è'
+        .word   'ì'
+        .word   'ò'
+        .word   'ù'
+        .word   '«'
+        .word   '»'
+
+        .word   'â', 'ê', 'î', 'ô', 'û'
+        .word   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+        ; code points above 255
+
+        .word   '\u0152', '\u0153'
+        .word   '\U00002764', '\U0001f496'
+
+; 24-bit storage size
+
+        .bit24   'á'
+        .bit24   'é'
+        .bit24   'í'
+        .bit24   'ó'
+        .bit24   'ú'
+        .bit24   'à'
+        .bit24   'è'
+        .bit24   'ì'
+        .bit24   'ò'
+        .bit24   'ù'
+        .bit24   '«'
+        .bit24   '»'
+
+        .bit24   'â', 'ê', 'î', 'ô', 'û'
+        .bit24   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+; code points above 255
+
+        .bit24   '\u0152', '\u0153'
+        .bit24   '\U00002764', '\U0001f496'
+
+; 32-bit storage size
+
+        .long   'á'
+        .long   'é'
+        .long   'í'
+        .long   'ó'
+        .long   'ú'
+        .long   'à'
+        .long   'è'
+        .long   'ì'
+        .long   'ò'
+        .long   'ù'
+        .long   '«'
+        .long   '»'
+
+        .long   'â', 'ê', 'î', 'ô', 'û'
+        .long   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+; code points above 255
+
+        .long   '\u0152', '\u0153'
+        .long   '\U00002764', '\U0001f496'
+
+; character values are not affected by string storage settings (being numeric)
+
+        .assume objstr:latin-1
+
+; 32-bit storage size
+
+        .long   'á'
+        .long   'é'
+        .long   'í'
+        .long   'ó'
+        .long   'ú'
+        .long   'à'
+        .long   'è'
+        .long   'ì'
+        .long   'ò'
+        .long   'ù'
+        .long   '«'
+        .long   '»'
+
+        .long   'â', 'ê', 'î', 'ô', 'û'
+        .long   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+; code points above 255
+
+        .long   '\u0152', '\u0153'
+        .long   '\U00002764', '\U0001f496'
+
+        .assume objstr:ascii
+
+; 32-bit storage size
+
+        .long   'á'
+        .long   'é'
+        .long   'í'
+        .long   'ó'
+        .long   'ú'
+        .long   'à'
+        .long   'è'
+        .long   'ì'
+        .long   'ò'
+        .long   'ù'
+        .long   '«'
+        .long   '»'
+
+        .long   'â', 'ê', 'î', 'ô', 'û'
+        .long   'Â', 'Ê', 'Î', 'Ô', 'Û'
+
+; code points above 255
+
+        .long   '\u0152', '\u0153'
+        .long   '\U00002764', '\U0001f496'
+
+
+; ---------------------
+
+        .end

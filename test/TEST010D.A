@@ -1,0 +1,31 @@
+; Hobby Cross-Assembler Test 010d
+; Output Files\Same Directory
+; ok: template filename with default extension
+
+; by Anton Treuenfels
+
+; first created: 03/13/22
+; last revised:  04/03/23
+
+; no errors to detect
+
+        // %testdir% is the directory holding all HXA tests
+        // - in this case, "test\" that directory
+
+        .listfile   "test010d_sd_##"       ; should become "test\test010d_sd_01.lst"
+        .errfile    "test010d_sd_##"       ; should become "test\test010d_sd_01.err" (if any errors)
+
+        .objfile    "test010d_sd_##"       ; should become "test\test010d_sd_01.obj"
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much too it !
+
+; -------------------------------
+
+        .end

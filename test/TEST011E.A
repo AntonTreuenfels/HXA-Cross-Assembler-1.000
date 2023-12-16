@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Test 011e
+; Output Files\Other Directory
+; error: non-existent list/object directories
+
+; by Anton Treuenfels
+
+; first created: 03/14/04
+; last revised:  04/04/23
+
+; warning(s): 0
+
+; error(s): 3
+; - can't open
+
+; fatal: 0
+
+; -------------------------------
+
+; few environments have a "z:" directory
+; - if this one does, change the drive specifier to a non-existent drive
+
+        .listfile   <z:>                ; non-existent drive
+        .errfile                        ; default
+
+        .hexfile    <nosubdir\found>    ; non-existent subdirectory
+        .objfile    <z:\nosubdir\found> ; both
+
+; because there are no errors in the source code itself,
+; the "can't" open errors occur after the second pass,
+; when attempting to open each output file
+; - except for the error file itself, which has the default name
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+; -------------------------------
+
+        .end

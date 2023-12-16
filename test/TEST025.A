@@ -1,0 +1,88 @@
+; Hobby Cross-Assembler Test 025
+; Customization\ASSUME Strings
+; ok: "ASSUME" pseudo-op
+
+; by Anton Treuenfels
+
+; first created: 08/08/04
+; last revised:  01/28/22
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+; no code generating psops or instructions
+
+;        .cpu    "T_16_L"    ; un-required psop
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+; the T_XX processors simply echo their ASSUME arguments to console and error file (if any)
+
+        .echo   == One argument
+
+        .assume "one=ok"
+        .assume two=ok
+
+        .echo   == Two arguments
+
+        .assume "one=ok", "two=ok"
+        .assume three=ok, four=ok
+
+        .echo   == Three arguments w/ escaped newline
+
+        # - in quoted strings the '\n' escape sequence is replaced by a newline
+        # during processing, but when but when formatted later for output to
+        # console or file it is replaced again by the escape sequence '\n'
+        # - (this does not happen to strings which become part of the object code)
+        # - in unquoted ("as-is") strings the escape character '\' is recognized
+        # and the following 'n' skipped, so it also appears as it originally does
+        # - '/' needs to be escaped because it is a regex delimiter
+        # - in quoted strings it needs to be escaped twice, once for when it
+        # is first processed and again for when the string it is split on the 
+        # '=' character
+        # - in unquoted strings it only needs to be escaped once,
+        # as only splitting on the '=' character affects it
+
+        .assume "one=ok", "two=ok\nw\\/ carriage return", "three=ok"
+        .assume four=ok, five=ok\nw\/ carriage return, six=ok
+
+        .echo   == Three arguments w/ escaped space
+        
+        # here the difference is visible: the '\s' mnemonic escape is mapped to
+        # the space character (0x20). This is printable and so is *not*
+        # transformed back into its original form when output
+        # - but in the unquoted form the escape character '\' always means just
+        # "ignore the next character" during splitting, and is passed through unchanged
+
+        .assume "one=ok", "two=ok\sw\\/ escaped space", "three=ok"
+        .assume four=ok, five=ok\sw\/ escaped space, six=ok
+
+        # default message output to console and files is UTF-8
+        # - non-printable characters (eg. control codes) are replaced by escape sequences
+
+        .echo "this string contains non-ASCII characters: le petit déjuener est prêt"
+        .echo où est l'hôpital plus proche
+
+        # but we can restrict message output to console and files to ASCII
+        # - all characters with code points outside of 0x20-0x7E are replaced by escape sequences
+
+        .assume printable:ascii
+
+        .echo "this string contains non-ASCII characters: le petit déjuener est prêt"
+        .echo où est l'hôpital plus proche
+
+        # and we can switch it back
+
+        .assume printable:utf-8
+
+        .echo "this string contains non-ASCII characters: le petit déjuener est prêt"
+        .echo où est l'hôpital plus proche
+
+; -------------------------------
+
+        .end

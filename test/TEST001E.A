@@ -1,0 +1,75 @@
+; Hobby Cross-Assembler Error Test 001e
+; Comments\All Forms
+; error: comments
+
+; by Anton Treuenfels
+
+; first created: 12/21/21
+; last revised:  12/15/23
+
+; warning(s): 0
+
+; error(s): 18
+; - unexpected token
+; - bad EOE
+; - expecting operator
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop (for code generation)
+        .org    $1000       ; required psop (for code generation)
+
+; -------------------------------
+
+; unrecognized use of legal comment chars
+
+       *.byte     $00
+
+        .byte     $01   * (comment)
+
+        .byte     $02   *
+
+       #.byte     $03
+
+; unrecognized leading characters
+
+!       .byte   $00
+
+      ! .byte   $01
+
+        .byte   $02   ! (attempted comment)
+
+&       .byte   $03
+
+      & .byte   $04
+
+        .byte   $05   & (attempted comment)
+
+[]      .byte   $06
+
+     [] .byte   $07
+
+        .byte   $08   [] (attempted comment)
+
+^       .byte   $09
+
+      ^ .byte   $0A
+
+        .byte   $0B    ^ (attempted comment)
+
+{abel}  .byte   $0C
+
+ {abel} .byte   $0D
+
+        .byte   $0E    {abel} (attepted comment)
+
+; -------------------------------
+
+       .end                ; optional psop

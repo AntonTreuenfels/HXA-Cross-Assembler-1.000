@@ -1,0 +1,31 @@
+; Hobby Cross-Assembler Test 010c
+; Output Files\Same Directory
+; ok: default filenames given only directories
+
+; by Anton Treuenfels
+
+; first created: 01/05/22
+; last revised:  03/01/23
+
+; no errors to detect
+
+        // %testdir% is the directory holding all HXA tests
+        // - in this case, "test\" that directory
+
+        .listfile   "test\\"            ; should become "test\test010c.lst"
+        .errfile    "test\\"            ; should become "test\test010c.err" (if any errors)
+
+        .objfile    "test\\"            ; should become "test\test010c.obj"
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much too it !
+
+; -------------------------------
+
+        .end

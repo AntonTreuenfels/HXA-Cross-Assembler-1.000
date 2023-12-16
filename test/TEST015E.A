@@ -1,0 +1,46 @@
+; Hobby Cross-Assembler Error Test 015e
+; Pass Termination\Termination
+; error: "END" w/ un-resolvable start expression
+
+; by Anton Treuenfels
+
+; first created: 08/14/13
+; last revised:  08/10/23
+
+; warning(s): 0
+
+; error(s): 1
+; - name not found
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .objfile            ; create a binary object file
+        .hexfile            ; create an Intel hex object file
+
+; -------------------------------
+
+* no code generating psops or instructions
+
+        .cpu    "T_16_L"           ; required psop
+*        .org    $1000              ; un-required psop
+
+; -------------------------------
+
+        .echo   "This is fine!"     ; but is also sent to error file
+
+; -------------------------------
+
+        .end    start               ; error - label has no value
+
+; -------------------------------
+
+        .fatal  "This is not fine!"
+
+; -------------------------------
+
+        .end

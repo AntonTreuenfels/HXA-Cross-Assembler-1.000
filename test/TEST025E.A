@@ -1,0 +1,69 @@
+; Hobby Cross-Assembler Error Test 025e
+; Customization\ASSUME Strings
+; error: unrecognized flag and arg value
+
+; by Anton Treuenfels
+
+; first created: 08/20/04
+; last revised:  12/13/23
+
+; warning(s): 6
+; - token ignored
+; - odd value
+; - bad assume
+
+; error(s): 6
+; - need equate
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; not EQUATEs
+
+        .assume "this is not okay"
+
+        .assume neither is this
+
+; labels are ignored
+
+alabel  .assume "labels are ignored", but arguments are not
+
+; ASSUME must have an argument...
+
+        .assume
+
+; ...that isn't null (though just a warning since nothing bad can happen)
+
+        .assume ""
+
+; not strictly true T_XX processors don't like next line
+; - they're just programmed to recognize something rejected by an earlier handler
+
+; unrecognized output coding (Windows Latin-1)
+
+        .assume printable:cp-1252
+
+; too many fields
+
+        .assume field1=field2=36
+
+; unrecognized extraction order
+
+        .assume bit16:0123         ; too many octets
+
+        .assume bit16:76           ; unrecognized octets
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,105 @@
+; Hobby Cross-Assembler Test 045c
+; Expressions\String Literals
+; ok: ECHO string literals w/ unprintable chars
+
+; by Anton Treuenfels
+
+; first created: 06/06/06
+; last revised:  02/04/22
+
+; no errors to detect (although there will be an error file)
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; we use escape sequences to produce unprintable chars
+
+        .echo   ** Default encoding is UTF-8
+
+        .echo   "\$01\$02\$03"
+
+        .echo   "An embedded literal \0DH carriage return doesn't work"
+
+        .echo   "\$80M\$90N\$A0O"
+
+        .echo   "\80H1\90H2\0A0H3"
+
+        .echo   "\0x80M\0x90N\0xA0O"
+        
+        .echo   Your entire project is doomed
+        
+        .echo   Tout votre projet est voué à l'échec
+        
+        .echo   "Tout votre projet est voué à l'échec \U0001f635" 
+        
+        .echo   *** Switching to Latin-1 encoding
+        
+        .assume printable:latin-1
+
+        .echo   "\$01\$02\$03"
+
+        .echo   "An embedded literal \0DH carriage return doesn't work"
+
+        .echo   "\$80M\$90N\$A0O"
+
+        .echo   "\80H1\90H2\0A0H3"
+
+        .echo   "\0x80M\0x90N\0xA0O"
+        
+        .echo   Your entire project is doomed
+        
+        .echo   Tout votre projet est voué à l'échec
+        
+        .echo   "Tout votre projet est voué à l'échec \U0001f635"
+
+        .echo   ** Switching to ASCII encoding
+        
+        .assume printable:ascii
+
+        .echo   "\$01\$02\$03"
+
+        .echo   "An embedded literal \0DH carriage return doesn't work"
+
+        .echo   "\$80M\$90N\$A0O"
+
+        .echo   "\80H1\90H2\0A0H3"
+
+        .echo   "\0x80M\0x90N\0xA0O"
+        
+        .echo   Your entire project is doomed
+        
+        .echo   Tout votre projet est voué à l'échec
+        
+        .echo   "Tout votre projet est voué à l'échec \U0001f635"
+
+        .echo   ** Switching back to default UTF-8 encoding
+
+        .assume printable:utf-8
+
+        .echo   "\$01\$02\$03"
+
+        .echo   "An embedded literal \0DH carriage return doesn't work"
+
+        .echo   "\$80M\$90N\$A0O"
+
+        .echo   "\80H1\90H2\0A0H3"
+
+        .echo   "\0x80M\0x90N\0xA0O"
+        
+        .echo   Your entire project is doomed
+        
+        .echo   Tout votre projet est voué à l'échec
+        
+        .echo   "Tout votre projet est voué à l'échec \U0001f635" 
+
+
+; -------------------------------
+
+        .end

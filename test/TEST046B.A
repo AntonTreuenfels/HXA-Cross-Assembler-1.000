@@ -1,0 +1,376 @@
+; Hobby Cross-Assembler Test 046b
+; Expressions\XLATE() and XLATE
+; ok: character set re-mapping
+
+; by Anton Treuenfels
+
+; first created: 02/08/22
+; last revised:  05/19/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; ASCII   - codepoints > 127 stored as escape sequences
+; Latin-1 - codepoints > 255 stored as escape sequences
+; UTF-8   - codepoints > 127 stored as UTF-8 sequences
+; UTF-16  - codepoints > 65535 stored as escape sequences
+; UTF-32  - all codepoints stored as four-byte sequences
+
+; -------------------------------
+
+bkRefA0 .equ 'A'
+bkRefB0 .equ 'B'
+bkRefC0 .equ 'C'
+
+bkRefA1 .equ $41
+bkRefB1 .equ $42
+bkRefC1 .equ $43
+
+; these should all give same result (0 <= codepoints < 128)
+
+        .assume objstr:utf-8 ; (default)
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .assume objstr:ascii
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; change codepoints to $C1-$C3 (128 <= codepoints < 256)
+
+        .xlate A-C=\u00c1-\u00c3
+
+        .assume objstr:utf-8
+
+        .str    "ABC"       ; utf-8 coded
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+        
+        .assume objstr:ascii
+
+        .str    "ABC"        ; '\xhh' coded
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; change codepoints to $ABC1-$ABC3 (256 <= codepoints < 65536)
+
+        .xlate A-C=\uABC1-\uABC3
+
+        .assume objstr:utf-8
+
+        .str    "ABC"        ; utf-8 coded
+        .word   xlate('A')   ; codepoints require two bytes for storage
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"        ; '\uhhhh' coded
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:ascii
+
+        .str    "ABC"        ; '\uhhhh' coded
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; change codepoints to $FABC1-$FABC3 (65536 <= codepoints < 1114112)
+
+        .xlate A-C=\U000fabc1-\U000fabc3
+
+        .assume objstr:utf-8
+
+        .str    "ABC"        ; utf-8 coded
+        .bit24  xlate('A')   ; codepoints require three bytes for storage
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"        ; '\Uhhhhhhhh' coded
+        .bit24  xlate('A')
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .assume objstr:ascii
+
+        .str    "ABC"        ; '\Uhhhhhhhh' coded
+        .bit24  xlate('A')
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; mixed values
+
+        .xlate A=\0C1H, B= \uabc2, C=\U000fabc3
+
+        .assume objstr:utf-8
+
+        .str    "ABC"        ; utf-8 coded
+        .bit24  xlate('A')   ; codepoints require up to three bytes for storage
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"        ; '\uhhhh' and \Uhhhhhhhh' coded
+        .bit24  xlate('A')
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .assume objstr:ascii
+
+        .str    "ABC"        ; '\uhhhh' and '\Uhhhhhhhh' coded
+        .bit24  xlate('A')
+        .bit24  xlate('B')
+        .bit24  xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; change codepoints back to original
+
+        .xlate "A-C=A-C"
+
+        .assume objstr:utf-8
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .byte  xlate( bkRefA0 )
+        .byte  xlate( bkRefB0 )
+        .byte  xlate( bkRefC0 )
+
+        .byte  xlate( bkRefA1 )
+        .byte  xlate( bkRefB1 )
+        .byte  xlate( bkRefC1 )
+
+        .byte  xlate( fwRefA0 )
+        .byte  xlate( fwRefB0 )
+        .byte  xlate( fwRefC0 )
+
+        .byte  xlate( fwRefA1 )
+        .byte  xlate( fwRefB1 )
+        .byte  xlate( fwRefC1 )
+
+        .assume objstr:latin-1
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .assume objstr:ascii
+
+        .str    "ABC"
+        .byte   xlate('A')
+        .byte   xlate('B')
+        .byte   xlate('C')
+
+        .assume objstr:utf-16
+
+        .str    "ABC"
+        .word   xlate('A')
+        .word   xlate('B')
+        .word   xlate('C')
+
+        .assume objstr:utf-32
+
+        .str    "ABC"
+        .long   xlate('A')
+        .long   xlate('B')
+        .long   xlate('C')
+
+; -------------------------------
+
+fwRefA0 .equ 'A'
+fwRefB0 .equ 'B'
+fwRefC0 .equ 'C'
+
+fwRefA1 .equ $41
+fwRefB1 .equ $42
+fwRefC1 .equ $43
+
+        .end

@@ -1,0 +1,297 @@
+; Hobby Cross-Assembler Test 045b
+; Expressions\String Literals
+; ok: object code string storage
+
+; by Anton Treuenfels
+
+; first created: 02/02/22
+; last revised:  05/16/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; we can use escape sequences to include characters we cannot enter
+; directly from a keyboard
+
+        ; default string storage in object code is as UTF-8
+        ; - code points below 128 are stored "as-is"
+        ; - code points above 127 are stored in UTF-8 coding
+
+        ; a string of chars in the range $80-FF
+        ; - but it won't be stored one-to-one because UTF-8
+
+        .str "\$81\82h\83H\0b4h\0xc5\0XD6\xe7\XF8"
+
+        ; place ASCII numeric chars ($30-39) around
+        ; each char in the range $80-FF
+        ; - but it won't work because of UTF-8 storage, so it will be
+        ; stored as ASCII numerics separating UTF-8 codes
+
+        .str "0\$81" + "1\82h2\83H3\0b4h4\0xc5" + "5\0XD6" + "6\xe7" + "7\xF8" +"8"
+
+        ; another attempt, but using 'u' and 'U' escapes
+        ; - but it still won't work because of UTF-8 storage
+
+        .str "0\u00811\u00822\u00833\u00b44\U000000c55\U000000D66\U000000e77\U000000F88"
+
+        ; let's try a sentence in French: "I prefer coffee."
+        ; - works, if UTF-8 is what we want
+        
+        .str "Je préfère le café."
+        .str "Je pr",'é',"f",'è',"re le caf",'é',"."
+        .str $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+
+        ; we can of course store directly as bytes to avoid string storage processing
+
+        .byte $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+        .byte 'J','e',' ','p','r','é','f','è','r','e',' ','l','e',' ','c','a','f','é','.'
+
+        ; some single characters as character literals
+
+        .str 'E'
+        .str 'Ê'
+        .str '\u0401'
+        .str '\U0000FB06'
+
+        ; the same characters as numbers (converted to single characters)
+
+        .str 69
+        .str $CA
+        .str 401H
+        .str 0xfb06
+
+        .byte   $00
+
+; -------------------------------
+
+        ; but we can change the way strings are stored in object code!
+
+        .assume objstr:latin-1
+
+        ; - 'Latin-1' maps $00-$FF to $00-$FF
+        ; - code points above 255 are stored as backslash escape sequences
+
+        ; this creates a string of chars in the range $80-FF
+
+        .str "\$81\82h\83H\0b4h\0xc5\0XD6\xe7\XF8"
+
+        ; place ASCII numeric chars ($30-39) around
+        ; each char in the range $80-FF
+		; - this works
+
+        .str "0\$81" + "1\82h2\83H3\0b4h4\0xc5" + "5\0XD6" + "6\xe7" + "7\xF8" +"8"
+
+        ; another attempt, but using 'u' and 'U' escapes
+
+        .str "0\u00811\u00822\u00833\u00b44\U000000c55\U000000D66\U000000e77\U000000F88"
+
+        ; let's try a sentence in French: "I prefer coffee."
+        ; - works, if Latin-1 is what we want
+
+        .str "Je préfère le café."
+        .str "Je pr",'é',"f",'è',"re le caf",'é',"."
+        .str $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+
+        ; we can of course store directly as bytes to avoid string storage processing
+
+        .byte $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+        .byte 'J','e',' ','p','r','é','f','è','r','e',' ','l','e',' ','c','a','f','é','.'
+
+        ; some single characters as character literals
+
+        .str 'E'
+        .str 'Ê'
+        .str '\u0401'
+        .str '\U0000FB06'
+
+        ; the same characters as numbers (converted to single characters)
+
+        .str 69
+        .str $CA
+        .str 401H
+        .str 0xfb06
+
+        .byte   $00
+
+; -------------------------------
+
+        ; but we can change the way strings are stored in object code!
+
+        .assume objstr:ascii
+
+        ; - 'ASCII' maps $00-$7F to $00-$7F
+        ; - character values above 127 are stored as backslash escape sequences
+
+        ; this creates a string of chars in the range $80-FF
+        ; - but it won't be one-to-one because ASCII
+
+        .str "\$81\82h\83H\0b4h\0xc5\0XD6\xe7\XF8"
+
+        ; place ASCII numeric chars ($30-39) around
+        ; each char in the range $80-FF
+        ; - but it won't work because of ASCII storage, so it will be
+        ; stored as ASCII numerics separating backslash escape sequences
+
+        .str "0\$81" + "1\82h2\83H3\0b4h4\0xc5" + "5\0XD6" + "6\xe7" + "7\xF8" +"8"
+
+        ; another attempt, but using 'u' and 'U' escapes
+        ; - but it won't be one-for-one storage because ASCII
+
+        .str "0\u00811\u00822\u00833\u00b44\U000000c55\U000000D66\U000000e77\U000000F88"
+
+        ; let's try a sentence in French: "I prefer coffee."
+        ; - works, if ASCII with backslash escapes is what we want
+
+        .str "Je préfère le café."
+        .str "Je pr",'é',"f",'è',"re le caf",'é',"."
+        .str $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+
+        ; we can of course store directly as bytes to avoid string storage processing
+
+        .byte $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+        .byte 'J','e',' ','p','r','é','f','è','r','e',' ','l','e',' ','c','a','f','é','.'
+
+        ; some single characters as character literals
+
+        .str 'E'
+        .str 'Ê'
+        .str '\u0401'
+        .str '\U0000FB06'
+
+        ; the same characters as numbers (converted to single characters)
+
+        .str 69
+        .str $CA
+        .str 401H
+        .str 0xfb06
+
+        .byte   $00
+
+; -------------------------------
+
+        ; but we can change the way strings are stored in object code!
+
+        .assume objstr:utf-16
+
+        ; - all characters stored as two octets
+        ; - low byte first, as the CPU descriptor says this is a LSB machine
+
+        ; this creates a string of chars in the range $80-FF
+        ; - but it won't be one-to-one because UTF-16
+
+        .str "\$81\82h\83H\0b4h\0xc5\0XD6\xe7\XF8"
+
+        ; place ASCII numeric chars ($30-39) around
+        ; each char in the range $80-FF
+        ; - but it won't work because of UTF-16le storage,
+        ; so every character less than $100 will be stored with a high byte of zero
+
+        .str "0\$81" + "1\82h2\83H3\0b4h4\0xc5" + "5\0XD6" + "6\xe7" + "7\xF8" +"8"
+
+        ; another attempt, but using 'u' and 'U' escapes
+        ; - but it won't be one-for-one storage because ASCII
+
+        .str "0\u00811\u00822\u00833\u00b44\U000000c55\U000000D66\U000000e77\U000000F88"
+
+        ; let's try a sentence in French: "I prefer coffee."
+        ; - works, if ASCII with backslash escapes is what we want
+
+        .str "Je préfère le café."
+        .str "Je pr",'é',"f",'è',"re le caf",'é',"."
+        .str $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+
+        ; we can of course store directly as bytes to avoid string storage processing
+
+        .byte $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+        .byte 'J','e',' ','p','r','é','f','è','r','e',' ','l','e',' ','c','a','f','é','.'
+
+        ; some single characters as character literals
+
+        .str 'E'
+        .str 'Ê'
+        .str '\u0401'
+        .str '\U0000FB06'
+
+        ; the same characters as numbers (converted to single characters)
+
+        .str 69
+        .str $CA
+        .str 401H
+        .str 0xfb06
+
+        .byte   $00
+
+; -------------------------------
+
+        ; but we can change the way strings are stored in object code!
+
+        .assume objstr:utf-32
+
+        ; - all characters stored as four octets
+        ; - low byte first, as the CPU descriptor says this is a LSB machine
+
+        ; this creates a string of chars in the range $80-FF
+        ; - but it won't be one-to-one because UTF-32
+
+        .str "\$81\82h\83H\0b4h\0xc5\0XD6\xe7\XF8"
+
+        ; place ASCII numeric chars ($30-39) around
+        ; each char in the range $80-FF
+        ; - but it won't work because of UTF-32le storage
+        ; so every character less than $100 will have three high zero bytes
+
+        .str "0\$81" + "1\82h2\83H3\0b4h4\0xc5" + "5\0XD6" + "6\xe7" + "7\xF8" +"8"
+
+        ; another attempt, but using 'u' and 'U' escapes
+        ; - but it won't be one-for-one storage because ASCII
+
+        .str "0\u00811\u00822\u00833\u00b44\U000000c55\U000000D66\U000000e77\U000000F88"
+
+        ; let's try a sentence in French: "I prefer coffee."
+        ; - works, if ASCII with backslash escapes is what we want
+
+        .str "Je préfère le café."
+        .str "Je pr",'é',"f",'è',"re le caf",'é',"."
+        .str $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+
+        ; we can of course store directly as bytes to avoid string storage processing
+
+        .byte $4A,$65,$20,$70,$72,$E9,$66,$E8,$72,$65,$20,$6C,$65,$20,$63,$61,$66,$E9,$2E
+        .byte 'J','e',' ','p','r','é','f','è','r','e',' ','l','e',' ','c','a','f','é','.'
+
+        ; some single characters as character literals
+
+        .str 'E'
+        .str 'Ê'
+        .str '\u0401'
+        .str '\U0000FB06'
+
+        ; the same characters as numbers (converted to single characters)
+
+        .str 69
+        .str $CA
+        .str 401H
+        .str 0xfb06
+
+        .byte   $00
+
+; -------------------------------
+
+        ; back to utf-8
+
+        .assume objstr:utf-8
+
+        .string "That's all folks!"
+
+; -------------------------------
+
+        .end

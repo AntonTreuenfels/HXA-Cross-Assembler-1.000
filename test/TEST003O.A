@@ -1,0 +1,39 @@
+; Hobby Cross-Assembler Error Test 003O
+; Required\Set Program Counter
+; error\fatal: 32-bit PC out of range (too big; by ORG)
+ 
+; by Anton Treuenfels
+
+; first created: 06/27/05
+; last revised:  02/17/23
+
+; warning(s): 0
+
+; error(s): 1
+; - out of range
+
+; fatal: 1
+; - invalid pc
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+; "CPU" psop also sets allowable range for program counter values
+
+        .cpu    "T_32_L"    ; required psop
+        .org    4294967296  ; 2^32, pc max + 1
+
+; -------------------------------
+
+; fatal error happens because program counter is not initialized
+; (not because it's out of range)
+
+        .byte   $00         ; fatal
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,83 @@
+; Hobby Cross-Assembler Test 010f
+; Output Files\Same Directory
+; warn\error: name changed
+
+; by Anton Treuenfels
+
+; first created: 03/14/04
+; last revised:  04/03/23
+
+; warning(s): 3
+; - token ignored
+
+; error(s): 3
+; - no match
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile   "test010f_sd.lst"
+        .errfile    "test010f_sd.err"
+
+        .objfile    "test010f_sd.obj"
+
+; -------------------------------
+
+; can do again without protest
+
+        .listfile   "test010f_sd.lst"
+        .errfile    "test010f_sd.err"
+
+        .objfile    "test010f_sd.obj"
+
+; -------------------------------
+
+; can do again because we used default extensions above
+
+
+        .listfile   "test010f_sd"
+        .errfile    "test010f_sd"
+
+        .objfile    "test010f_sd"
+
+; -------------------------------
+
+; can do again using alternate syntax without protest
+; - note this option might disappear in next version of HXA
+
+        .listfile   <test010f_sd.lst>
+        .errfile    <test010f_sd.err>
+
+        .objfile    <test010f_sd.obj>
+
+; -------------------------------
+
+; can do again using different case without protest
+
+        .listfile   "TEST010f_sd.lst"
+        .errfile    "test010f_sd.ERR"
+
+        .objfile    "TEST010F_SD.OBJ"
+ 
+; -------------------------------
+
+; *cannot* change names once set (will keep existing names)
+
+        .listfile   "yourlist.lst"
+        .errfile    "yourerr.err"
+
+        .objfile    "yourobj.obj"
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+; -------------------------------
+
+        .end

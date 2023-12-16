@@ -1,0 +1,30 @@
+; Hobby Cross-Assembler Test 010
+; Output Files\Same Directory
+; ok: specified names
+
+; by Anton Treuenfels
+
+; first created: 03/14/04
+; last revised:  04/03/22
+
+; no errors to detect
+
+        // %testdir% is the directory holding all HXA tests
+
+        .listfile   "test010a_sd"    ; should create %testdir%test010a_sd.lst
+        .errfile    "test010a_sd"    ; should create %testdir%test010a_sd.err (if error)
+
+        .objfile    "test010a_sd"    ; should create %testdir%test010a_sd.obj
+
+; -------------------------------
+
+        .cpu    "T_16_L"             ; required psop
+        .org    $1000                ; required psop
+
+; -------------------------------
+
+        .byte   $00                  ; not much too it !
+
+; -------------------------------
+
+        .end

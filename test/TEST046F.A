@@ -1,0 +1,57 @@
+; Hobby Cross-Assembler Error Test 046f
+; Expressions\XLATE() and XLATE
+; error: malformed char translation function
+
+; by Anton Treuenfels
+
+; first created: 03/25/04
+; last revised:  05/25/22
+
+; warning(s): 0
+
+; error(s): 9
+; - bad EOE
+; - need open parenthesis
+; - expecting operator
+; - need close parenthesis
+; - value too small
+; - bad arg count
+; - bad type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; malformed xlate()
+
+        .byte   xlate(
+
+        .byte   xlate)
+
+        .byte   xlate 'A'
+
+        .byte   xlate( 'A'
+
+        .byte   xlate 'A' )
+
+; bad arguments - legal argument is numeric expression
+
+        .byte   xlate()
+
+        .byte   xlate( "A" )
+
+        .byte   xlate( /A/ )
+
+; -------------------------------
+
+        .end

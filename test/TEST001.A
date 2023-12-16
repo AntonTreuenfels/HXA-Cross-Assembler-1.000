@@ -1,0 +1,71 @@
+; Hobby Cross-Assembler Test 001
+; Comments\All Forms
+; ok: comments
+
+; by Anton Treuenfels
+
+; first created: 12/21/21
+; last revised:  12/15/23
+
+; no errors to detect
+
+; -------------------------------
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+;        .cpu    "T_16_L"    ; un-required psop
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+; whole line is comment IF leftmost character is any of:
+
+;       .psnull     $01
+
+*       .psnull     $02
+
+#       .psnull     $03
+
+//      .psnull     $04
+
+; whole line is comment IF first non-whitespace char is any of them followed by whitespace:
+
+  ;     .psnull     $04
+
+  *     .psnull     $04
+
+  #     .psnull     $06
+
+  //    .psnull     $07
+
+; whole line is comment IF first non-whitespace char is either of:
+
+       ;.psnull     $08
+
+      //.psnull     $09
+
+; - because '*=' is an alias for 'org'
+; - because '#'(pseudo op) is legal (for now, anyway)
+
+; trailing comment is removed IF first non-whitespace char is one of:
+
+        .psnull     $0A   ;
+        .psnull     $0B   ;text
+        .psnull     $0C   ;  text
+
+        .psnull     $0D   #
+        .psnull     $0E   #text
+        .psnull     $0F   #  text
+
+        .psnull     $10   //
+        .psnull     $11   //text
+        .psnull     $12   //  text
+
+; - because a '*' in the expression field can stand for multiplication or program counter value
+
+# -------------------------------
+
+        .end                ; optional psop

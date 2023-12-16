@@ -1,0 +1,36 @@
+; Hobby Cross-Assembler Test 011b
+; Output Files\Other Directory
+; ok: different device
+
+; by Anton Treuenfels
+
+; first created: 06/28/23
+; last revised:  06/29/23
+
+; this will create list and object files in the current working directory
+; - of whatever device is specified
+; the point of this test is to copy this file to another device
+; and see if HXA can find it
+; - must invoke from command line using device name
+; -- point being that name is NOT relative to current working directory on this device
+; -- it is actually relative to the current working directory on the OTHER device
+; - try absolute and relative paths on other device
+; - eg., if the current working directory on G: is code, try G:filename, G:\code\filename
+
+        .listfile
+        .errfile
+
+        .objfile            ; create an object file
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much too it !
+
+; -------------------------------
+
+        .end

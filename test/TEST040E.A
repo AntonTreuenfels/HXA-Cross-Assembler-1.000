@@ -1,0 +1,96 @@
+; Hobby Cross-Assembler Error Test 040e
+; Expressions\Character Literals
+; error: malformed characters
+
+; by Anton Treuenfels
+
+; first created: 11/26/03
+; last revised:  09/07/23
+
+; warning(s): 0
+
+; error(s): 36
+; - expecting operand
+; - blank field
+; - expecting char
+; - expecting operator
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+        .maxerr 50          ; raise limit
+
+; -------------------------------
+
+; failure to match '.' (single quote\any char\single quote) pattern
+
+        .byte   '
+        .byte   ''
+        .byte   '''         ; error - must be escaped
+        .byte   ''''        ; error - '.' pattern is followed by '
+
+        .byte   ',
+        .byte   ,'
+
+        .byte   'a
+        .byte   'abc'
+        .byte   'a'bc
+
+; malformed escape sequences
+
+        .byte   '\
+        .byte   '\abc'
+        .byte   '\$0ab'
+        .byte   '\ah'
+        .byte   '\abh'      ; this fails...
+        .byte   '\0abh'     ; ...but this is ok
+        .byte   '\$ge'
+        .byte   '\geh'
+
+; more than one character
+
+        .byte   'a\n'
+        .byte   '\n\n'
+        .byte   '\$30H'
+        .byte   '\x30\$40'
+
+; wrong number of characters
+
+        .byte   '\u012'
+        .byte   '\u01234'
+
+        .byte   '\U0123456'
+        .byte   '\U012345678'
+
+; values larger than 255 (one eight-bit byte)
+; - wrong number of characters
+; - hex escapes limited to exactly two hex characters
+; - unless Intel-style, then the first can be zero for three hex characters
+
+        .byte   '\$100'
+        .byte   '\100H'
+        .byte   '\0x100'
+        .byte   '\x100'
+
+        .byte   '\$2001'
+        .byte   '\2001H'
+        .byte   '\0x2001'
+        .byte   '\x2001'
+
+        .byte   '\$1234567'
+        .byte   '\1234567H'
+        .byte   '\0x1234567'
+        .byte   '\x1234567'
+
+; ---------------------
+
+        .end

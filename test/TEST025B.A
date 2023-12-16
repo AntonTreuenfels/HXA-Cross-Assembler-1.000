@@ -1,0 +1,86 @@
+; Hobby Cross-Assembler Test 025b
+; Customization\ASSUME Strings
+; ok: "ASSUME" pseudo-op (Octet Extraction Order)
+
+; by Anton Treuenfels
+
+; first created: 12/13/23
+; last revised:  12/13/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_32_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; BIT assumptions are global for output
+; - it doesn't matter when they happen in source code
+
+; all BIT-- and BIT--R pseudo ops are available (8-bit CPU)
+
+#        default:                3   2   1   0
+#       .bit08  $11          ; $00 $00 $00 $11
+#       .bit16  $1122        ; $00 $00 $11 $22
+#       .bit24  $112233      ; $00 $11 $22 $33
+#       .bit32  $11223344    ; $11 $22 $33 $44
+
+        .assume bit08=3
+        .assume bit16=01
+        .assume bit24=203
+        .assume bit32=0132
+
+        .bit08  $11          ; $00
+        .bit16  $1122        ; $22 $11
+        .bit24  $112233      ; $11 $33 $00
+        .bit32  $11223344    ; $44 $33 $11 $22
+
+#        default:                3   2   1   0
+#       .bit08r  $11         ; $00 $00 $00 $11
+#        .bit16r  $1122      ; $00 $00 $22 $11
+#        .bit24r  $112233    ; $00 $33 $22 $11
+#        .bit32r  $11223344  ; $44 $33 $22 $11
+
+; but these are just names for an extraction order
+; - the original number has not actually been reversed
+
+        .bit08r  $11         ; $00
+        .bit16r  $1122       ; $11 $00
+        .bit24r  $112233     ; $00 $22 $11
+        .bit32r  $11223344   ; $11 $22 $33 $44
+        
+        .assume bit08r = 2
+        .assume bit16r = 13
+        .assume bit24r = 312
+        .assume bit32r = 3210
+
+; -------------------------------
+
+; make sure the whole family is changed
+
+; 'r' family doesn't usually take a fixed number
+; - but 32-bit address range should make it okay here 
+
+;        .rbit08  $11         ; $00 - except for this one ($11 is way below start address)
+        .rbit16  $1122       ; $22 $11
+        .rbit24  $112233     ; $11 $33 $00
+        .rbit32  $11223344   ; $44 $33 $11 $22
+
+        .sbit08  $11         ; $00
+        .sbit16  $1122       ; $22 $11
+        .sbit24  $112233     ; $11 $33 $00
+        .sbit32  $11223344   ; $44 $33 $11 $22
+
+        .ubit08  $11         ; $00
+        .ubit16  $1122       ; $22 $11
+        .ubit24  $112233     ; $11 $33 $00
+        .ubit32  $11223344   ; $44 $33 $11 $22
+
+; -------------------------------
+
+        .end

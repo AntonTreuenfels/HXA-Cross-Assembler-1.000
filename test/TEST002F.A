@@ -1,0 +1,51 @@
+; Hobby Cross-Assembler Error Test 002f
+; Required\Set CPU
+; warn\error: unknown CPU; unique CPU
+
+; by Anton Treuenfels
+
+; first created: 04/26/03
+; last revised:  02/17/23
+
+; warning(s): 4
+; - unrecognized CPU
+; - already set
+; - ignored
+
+; error(s): 1
+; - expecting string
+
+; fatal:
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "z80"       ; rejected (unknown cpu; no cpu set)
+
+        .cpu                ; rejected (no cpu specified; no cpu set)
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop (accepted; cpu now set)
+
+; -------------------------------
+
+        .cpu     T_16_L     ; accepted
+
+        .cpu    "8086"      ; rejected (unknown cpu)
+
+        .cpu    "T_24_M"    ; rejected (cpu already set)
+
+        .cpu    "T_16_L"    ; accepted
+
+; -------------------------------
+
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+        .end                 ; doesn't care about program counter
