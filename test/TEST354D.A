@@ -1,0 +1,92 @@
+; Hobby Cross-Assembler Test 354d
+; Segments\"RELORG" Pseudo Op
+; ok: "RELORG" can follow segment types
+
+; by Anton Treuenfels
+
+; first created: 08/21/23
+; last revised:  08/21/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+;        .absorg  $1000      ; can't use outside of explicit segment
+
+; -------------------------------
+
+; first explicit segment cannot be relative origin
+; follow ABSORG
+
+        .segment	abs1
+
+        .absorg $1000       ; ORG before any data makes segment absolute
+
+        .bit16  *
+
+        .endsegment	abs1
+
+; RELORG may follow ABSORG
+; followed ABSORG
+
+        .segment	rel1
+
+        .relorg
+
+        .bit16  $
+
+        .ends               ; alias for ENDSEGMENT
+
+; RELORG may follow RELORG
+; followed RELORG
+
+        .segment	rel2
+
+        .relorg             ; relative (prior to data storage)
+
+        .bit16  *
+
+        .ends	REL2
+
+; any segment can be absolute
+; follow ABSEND
+
+        .segment	abs2
+
+        .absend $3000       ; absolute end
+
+        .bit16  $
+
+        .ends
+
+; RELORG may follow ABSEND
+; followed ABSEND
+
+        .segment	rel3
+
+        .bit16  *
+
+        .relorg             ; relative (after data storage)
+
+        .ends
+
+; can be the last segment of a program
+; followed RELORG
+
+        .segment	rel4
+
+        .relorg             ; relative (before...)
+
+        .bit16  $
+
+        .relorg             ; (...and after data storage)
+
+        .ends
+
+; -------------------------------
+
+        .end

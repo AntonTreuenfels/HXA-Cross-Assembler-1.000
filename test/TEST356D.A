@@ -1,0 +1,82 @@
+; Hobby Cross-Assembler Test 356d
+; Segments\"ABSEND" and "RELEND" Pseudo Ops
+; ok: segment types "RELEND" can preceed
+
+; by Anton Treuenfels
+
+; first created: 08/22/23
+; last revised:  08/22/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; preceed RELEND
+
+        .segment   relend1
+
+        .relend
+
+        .word    *
+
+        .ends
+
+; preceed ABSORG
+
+        .segment   relend2
+
+        .relend
+
+        .word    *
+
+        .ends
+
+; ABSORG
+
+        .segment   absorg1
+
+        .absorg    $1000
+
+        .word     *
+
+        .ends
+
+        .segment   relend2
+
+        .relend
+        
+        .word    *
+
+        .ends
+        
+; preceed  ABSEND
+
+        .segment   relend3
+
+        .relend
+
+        .word    *
+
+        .ends
+        
+; ABSEND
+
+        .segment   absend1
+
+        .absend     $2000
+
+        .word    *
+
+        .ends
+
+; -------------------------------
+
+        .end

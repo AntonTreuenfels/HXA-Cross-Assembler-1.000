@@ -1,0 +1,25 @@
+; Hobby Cross-Assembler Test 342
+; Segments\Raw Hex Output (By Segments, "##." Template)
+; ok: 16-bit
+
+; by Anton Treuenfels
+
+; first created: 10/21/22
+; last revised:  08/15/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .rawbyseg "test342_##.raw"
+
+; -------------------------------
+
+        .cpu         "T_16_M"
+
+        .include    "..\\testhelp\\ihexseg.a"
+
+; -------------------------------
+
+        .end    start       ; not used by raw format

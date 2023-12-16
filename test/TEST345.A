@@ -1,0 +1,25 @@
+; Hobby Cross-Assembler Test 345
+; Segments\Raw Hex Output (By Blocks, Default Names)
+; ok: 16-bit
+
+; by Anton Treuenfels
+
+; first created: 10/21/22
+; last revised:  08/15/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .rawbyblk           ; check output
+
+; -------------------------------
+
+        .cpu        "T_16_M"
+
+        .include    "..\\testhelp\\ihexseg.a"
+
+; -------------------------------
+
+        .end    start       ; not used by raw format

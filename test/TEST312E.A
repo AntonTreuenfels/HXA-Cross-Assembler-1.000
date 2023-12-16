@@ -1,0 +1,49 @@
+; Hobby Cross-Assembler Error Test 312e
+; Segments\Intel Hexfile Output (By Segments, "###" Template)
+; error: bad template names
+
+; by Anton Treuenfels
+
+; first created: 01/18/10
+; last revised:  08/11/23
+
+; warning(s): 3
+; - ignored
+
+; error(s): 5
+; - bad template
+; - no match
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+;        .cpu    "T_16_L"    ; un-required psop
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+;        .hexbyseg   "badname"   ; no digit locations specified is okay in HXA v1.00
+
+        .hexbyseg   "###name"   ; digit locations cannot lead
+
+        .hexbyseg   "b##n##e"   ; more than one digit location
+
+        .hexbyseg   "ok##name"  ; ok
+
+        .hexbyseg   "badname2"  ; no digit locations specified (ok), but does not match accepted name
+
+        .hexbyseg   "ok##name"  ; ok
+
+        .hexbyseg   "ok##name2" ; no match
+
+        .hexbyseg               ; default name does not match
+
+; -------------------------------
+
+        .end

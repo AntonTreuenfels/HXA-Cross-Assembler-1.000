@@ -1,0 +1,25 @@
+; Hobby Cross-Assembler Test 316
+; Segments\Intel Hexfile Output (By Blocks, ".###" Template)
+; ok: correct output sequence and start address (16-bit)
+
+; by Anton Treuenfels
+
+; first created: 01/19/10
+; last revised:  08/11/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexbyblock "test316.###"      ; check output
+
+; -------------------------------
+
+        .cpu        "T_16_M"
+
+        .include    "..\\testhelp\\ihexseg.a"
+
+; -------------------------------
+
+        .end    start               ; not used by 16-bit

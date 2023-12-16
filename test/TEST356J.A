@@ -1,0 +1,59 @@
+; Hobby Cross-Assembler Error Test 356j
+; Segments\"ABSEND" and "RELEND" Pseudo Ops
+; error: RELEND cannot be last segment
+
+; by Anton Treuenfels
+
+; first created: 12/08/22
+; last revised:  12/08/22
+
+; warning(s): 0
+
+; error(s): 1
+; - cannot make absolute
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+;        .org    $1000       ; can't use outside of explicit segment
+
+; -------------------------------
+
+; define segments and their types
+
+        .segment    absorg_type ; absolute origin
+
+        .absorg $1000           ; must specify before pc changes
+
+        .ends
+
+        .segment    relorg_type ; relative origin
+
+        .byte   $00             ; default type if pc changes first
+
+        .ends
+
+        .segment    absend_type ; absolute end
+
+        .absend $8000           ; must specify before pc changes
+
+        .ends
+
+; nothing to determine where to end this segment
+
+        .segment    relend_type ; relative end
+
+        .relend                 ; must specify before pc changes
+
+        .ends
+
+; -------------------------------
+
+        .end

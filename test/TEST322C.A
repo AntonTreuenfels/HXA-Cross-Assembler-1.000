@@ -1,0 +1,25 @@
+; Hobby Cross-Assembler Test 322c
+; Segments\Motorola Hexfile Output (By Segments, "###." Template)
+; ok: correct output sequence and start address (32-bit)
+
+; by Anton Treuenfels
+
+; first created: 12/11/09
+; last revised:  08/12/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .srecbyseg  "test322c_###_.s37"
+
+; -------------------------------
+
+        .cpu        "T_32_M"
+
+        .include    "..\\testhelp\\ihexseg.a"
+
+; -------------------------------
+
+        .end    start

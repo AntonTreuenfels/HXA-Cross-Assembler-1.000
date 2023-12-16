@@ -1,0 +1,25 @@
+; Hobby Cross-Assembler Test 312c
+; Segments\Intel Hexfile Output (By Segments, "###" Template)
+; ok: correct output sequence and start address (32-bit)
+
+; by Anton Treuenfels
+
+; first created: 12/10/09
+; last revised:  08/11/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .hexbyseg  "test312c_###.hex"
+
+; -------------------------------
+
+        .cpu         "T_32_M"
+
+        .include    "..\\testhelp\\ihexseg.a"
+
+; -------------------------------
+
+        .end    start           ; not used by 16-bit

@@ -1,0 +1,107 @@
+; Hobby Cross-Assembler Error Test 352g
+; Segments\Common Segments
+; error: no COMMON with PADTO or PADFROM
+
+; by Anton Treuenfels
+
+; first created: 10/06/07
+; last revised:  12/05/22
+
+; warning(s): 0
+
+; error(s): 4
+; - bad seg type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+;        .org    $1000       ; required psop
+
+; ------------------------------
+
+; test PADTO
+
+; declare a common segment (absolute origin)
+
+        .segment    common1
+
+        .org   $1000
+
+        .common
+
+        .ds 128
+
+        .ends
+
+; cannot declare padded after common used
+
+        .segment    common1
+
+        .padto  $1234
+
+        .ends
+
+; declare a padto segment (relative origin)
+
+        .segment    padto1
+
+        .padto $1400
+
+        .ends
+
+; cannot declare common after padding used
+
+        .segment    padto1
+
+        .common
+
+        .ends
+
+; -------------------------------
+
+; test PADFROM
+
+; declare common segment (relative origin)
+
+        .segment    common2
+
+        .common
+
+        .ds 128
+
+        .ends
+
+; declare padfrom segment (relative origin)
+
+        .segment    padfrom1
+
+        .padfrom $1800
+
+        .ends
+
+; cannot declare padded after common used
+
+        .segment    common1
+
+        .padto  $1234
+
+        .ends
+
+; cannot declare common after padding used
+
+        .segment    padfrom1
+
+        .common
+
+        .ends
+
+; -------------------------------
+
+        .end
