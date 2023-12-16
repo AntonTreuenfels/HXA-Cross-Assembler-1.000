@@ -1,0 +1,79 @@
+; Hobby Cross-Assembler Processor Error Test 001h
+; 6502\Instruction Set
+; error: bad ASSUME expressions
+
+; by Anton Treuenfels
+
+; first created: 08/21/07
+; last revision: 11/26/23
+
+; warning(s): 3
+; - bad assume
+
+; error(s): 9
+; - need expression
+; - need equate
+; - name not found
+; - out of range
+
+; fatal:
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "6502"      ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; ADDR assumption
+
+        ; blank field
+
+        .assume addr:
+
+        ; no expression
+
+        .assume addr
+
+        ; incorrect expression
+
+        .assume addr:unknown
+
+; -------------------------------
+
+        ; ZEROPAGE assumption
+
+        ; blank field
+
+        .assume zeropage:
+
+        ; no expression
+
+        .assume zeropage
+
+        ; incorrect expression (error during evaluation)
+
+        .assume zeropage:unknown
+
+        ; out of range
+
+        .assume zeropage:$300       ; too high
+        .assume zeropage:20-21      ; too low
+
+; -------------------------------
+
+        ; W65C816S assumptions should not be accepted
+
+        .assume index:8
+
+        .assume databank:64
+
+
+; -------------------------------
+
+        .end
