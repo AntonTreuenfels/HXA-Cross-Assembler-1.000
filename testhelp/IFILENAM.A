@@ -1,0 +1,35 @@
+; Hobby Cross-Assembler FILE$() Test Data
+; an INCLUDE file (for consistency and ease of updating)
+; ok: correct
+
+; by Anton Treuenfels
+
+; first created: 04/30/11
+; last revised:  09/06/23
+
+; -------------------------------
+
+        ; this should be different than FILE$()
+        ; we put in label so we can read this outside this file
+
+rfilenam$   =   ROOTFILE$()
+
+         .str rfilenam$
+
+        ; is FILE$ the name of this file ?
+
+ifilenam$   =   FILE$()
+
+        .str    ifilenam$
+
+        .if "IFILENAM.A" != toupper$(ifilenam$)
+        .fatal  "IFILENAM.A does not equal " + ifilenam$
+        .endif
+
+        ; are ROOTFILE$() and FILE$ the same ?
+
+        .if rfilenam$ == ifilenam$
+        .fatal "root file and include file have the same name"
+        .endif
+
+; -------------------------------
