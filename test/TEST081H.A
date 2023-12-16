@@ -1,0 +1,47 @@
+; Hobby Cross-Assembler Error Test 081h
+; Expressions\Numeric Binary Operators
+; error: bad shift values
+
+; by Anton Treuenfels
+
+; first created: 06/01/23
+; last revised:  06/01/23
+
+; warning(s): 0
+
+; error(s): 5
+; - too low
+; - too high
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+bits    = 0xa5a5
+
+        .word   bits << -33
+        .word   bits << -32
+        .word   bits << -31
+
+        .word   bits << -1
+        .word   bits << 0
+        .word   bits << 1
+
+        .word   bits << 31
+        .word   bits << 32
+        .word   bits << 33
+
+
+; -------------------------------
+
+        .end

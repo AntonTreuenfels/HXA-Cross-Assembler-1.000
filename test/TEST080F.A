@@ -1,0 +1,55 @@
+; Hobby Cross-Assembler Error Test 080f
+; Expressions\Unary Operators
+; error: out-of-range values
+
+; by Anton Treuenfels
+
+; first created: 01/01/10
+; last revised:  05/31/23
+
+; warning(s): 0
+
+; error(s): 9
+; - out of range
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+intMin .equ    -4294967296     ;  -2^32
+intMax  .equ    4294967295     ;  2^32 - 1
+
+; -------------------------------
+
+        ; in general, the way to create an out-of-range error
+        ; is to create a value that won't fit into
+        ; range-checked storage
+
+        .long   -intMax         ; -2^32+1 (ok)
+        .slong   -intMax        ; -2^32+1 (error)
+        .long   -intMin         ; 2^32 (error)
+        .ulong   -intMin        ; 2^32 (error)
+
+        .long    -4294967295    ; -2^32+1 (ok)
+        .slong    -4294967295   ;-2^32+1 (error)
+        .long    -(-4294967296) ; 2^32 (error)
+        .ulong    -(-4294967296) ; 2^32 (error)
+
+        .long   -$FFFFFFFF      ; -2^32+1 (ok)
+        .slong   -$FFFFFFFF     ; -2^32+1 (error)
+        .long   -(-$100000000)  ; 2^32 (error)
+        .ulong   -(-$100000000) ; 2^32 (error)
+
+; -------------------------------
+
+        .end

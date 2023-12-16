@@ -1,0 +1,87 @@
+; Hobby Cross-Assembler Error Test 092f
+; Expressions\Assign Label Value
+; error: "PLUSEQU" and "MINUSEQU" psops
+
+; by Anton Treuenfels
+
+; first created: 03/03/22
+; last revised:  10/27/23
+
+; warning(s): 4
+; - odd use
+
+; error(s): 15
+; - need label
+; - need variable label
+; - need numeric name
+; - need numeric expr
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile            ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; missing labels
+
+        += 123 * 45
+        -= 45 * 123
+
+        ; unknown (as yet) labels
+
+]vara   += 1
+]varb   -= 2000 + 9000 * 100
+
+        ; not numeric variable symbols
+
+global  =  $                ; ok
+global  += $ * 2
+
+@local  = $2000             ; ok
+@local  -= 32
+
+ :       += 1024
+
+world$ = ", World!"         ; ok
+
+global$ = "Hello, "         ; ok
+global$ += world$
+
+@local$ = "Hello"           ; ok
+@local$ -= world$
+
+]vara$  = "Hello, "         ; ok
+]vara$  += world$
+
+]varb$  = "Hello, "         ; ok
+]varb$  -= world$
+
+        ; type mismatch
+
+]varc    = *                 ; ok
+]vard    = ]varc             ; ok
+
+global  += world$
+
+@local  -= world$
+
+]varc   += global$ + world$
+]vard   -= global$ + world$
+
+ :      += world$
+
+global$ += 1024
+
+@local$ -= 2048
+
+; -------------------------------
+
+        .end                ; optional psop

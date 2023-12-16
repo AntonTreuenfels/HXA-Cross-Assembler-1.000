@@ -1,0 +1,61 @@
+; Hobby Cross-Assembler Error Test 083f
+; Expressions\Regular Expression Operators
+; error: EQU psop
+
+; by Anton Treuenfels
+
+; first created: 02/24/22
+; last revised:  06/02/23
+
+; warning(s): 0
+
+; error(s): 10
+; - bad type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; this don't work
+
+abc$    .equ   /regex/
+def$      =    /another(regex)/
+
+abc     .equ   /yet(another)regex/
+def     .=     /yar/
+
+; these work
+
+ghi$     .equ  "/regex/"
+jkl$     .equ  "/another (regex)/"
+
+]1$      .equ "This string contains another (regex), as you can see"
+
+         .byte ]1$ ~ ghi$
+         .byte ]1$ ~ jkl$
+         .byte ]1$ !~ ghi$
+         .byte ]1$ !~ jkl$
+
+; ...but they won't if regex is malformed
+
+mno$      .equ  "regex/i"
+pqr$      .equ  "a bad regex"
+stu$      .equ  "/another bad regex"
+
+         .byte ]1$ ~ mno$
+         .byte ]1$ ~ pqr$
+         .byte ]1$ ~ stu$
+
+         .byte ]1$ !~ mno$
+         .byte ]1$ !~ pqr$
+         .byte ]1$ !~ stu$

@@ -1,0 +1,90 @@
+; Hobby Cross-Assembler Error Test 082g
+; Expressions\String Binary Operators
+; error: multiplication
+
+; by Anton Treuenfels
+
+; first created: 03/07/22
+; last revised:  03/07/22
+
+; warning(s): 7
+; - no effect
+
+; error(s): 10
+; - expecting operand
+; - expecting operator
+; - bad type
+; - name not found
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+bak$    .equ    "backward reference"
+
+nul$    .equ    ""
+
+times    .equ    32
+
+; null strings
+
+        .string "" * 1024
+
+        .string nul$ * 2048
+
+        .string (nul$ + nul$) * 65536
+
+        .string ("" + nul$) * times
+
+; malformed strings
+
+        .string "a * 12
+
+        .string ("a + "b") * times
+
+; type errors
+
+        .string "abc" * "def"
+
+        .string "abc" * bak$
+
+; odd multipliers
+
+        .string bak$ * 0
+
+        .string nul$ * -1
+
+        .string "abc" * -times
+
+; non-commutative
+
+        .string 14 * "abc"
+
+        .string 1024 * "Hello, World! "
+
+        .string times * "def"
+
+        .string times * bak$
+
+; no forward reference for 'string' pseudo op
+
+        .string fwd$ * times
+
+        .string bak$ * unknown_value
+
+
+fwd$    .equ    "forward reference"
+
+; -------------------------------
+
+        .end

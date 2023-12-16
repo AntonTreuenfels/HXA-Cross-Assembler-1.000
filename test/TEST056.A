@@ -1,0 +1,47 @@
+; Hobby Cross-Assembler Test 056
+; Expressions\Pre-Defined Labels
+; ok: string and numeric labels
+
+; by Anton Treuenfels
+
+; first created: 05/27/23
+; last revised:  05/27/23
+
+; no errors to detect
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+         .cpu    "T_16_M"   ; required psop
+         .org    $1000      ; required psop (can be labeled)
+
+; -------------------------------
+
+; all pre-defined labels
+; - have global form
+; - cannot be assigned values
+
+; these labels are pre-defined by all versions of HXA
+
+        .word   __HXA__
+        .word   __VER__
+        .string __VER__$
+
+; labels may end with a colon character
+
+        .word   __HXA__:
+        .word   __VER__:
+        .string __VER__$:
+
+; this label is specific to the "hxa_t" version
+
+        .word __HXA_T__
+        .word __HXA_T__:
+
+; -------------------------------
+
+    .end

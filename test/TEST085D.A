@@ -1,0 +1,40 @@
+; Hobby Cross-Assembler Test 085d
+; Expressions\Logical Short Circuit
+; ok: "&&" and "||" Operators (left side forward-referenced)
+
+; by Anton Treuenfels
+
+; first created: 07/05/23
+; last revised:  07/05/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; these should not evaluate right side if left side is sufficient (short circuit)
+; - but left side is always forward referenced and cannot be resolved on first pass
+; - right side contains an expression that will fail if evaluated
+
+        ; single operator
+
+        .byte   fwdTrue || 1/0      ; 1
+;        .byte   fwdTrue && 1/0     ; unresolvable
+;        .byte   fwdFalse || 1/0    ; unresolvable
+        .byte   fwdFalse && 1/0     ; 0
+
+; -------------------------------
+
+fwdTrue  .equ   1
+fwdFalse .equ   0 
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,68 @@
+; Hobby Cross-Assembler Error Test 082f
+; Expressions\String Binary Operators
+; error: string concatenation
+
+; by Anton Treuenfels
+
+; first created: 12/19/05
+; last revised:  06/01/23
+
+; warning(s): 8
+; - odd value
+; - no effect
+
+; error(s): 9
+; - expecting operand
+; - expecting operator
+; - bad type
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; null strings
+
+        .string ""              ; warn
+
+        .string "" + ""         ; warn
+
+nul$    .equ    ""
+
+        .string nul$            ; warn
+
+        .string "" + nul$       ; warn
+
+; malformed strings
+
+        .string "a              ; error
+
+        .string "a + "b"        ; error
+
+        .string a" + "b"        ; error
+
+        .string "a" + "b        ; error
+
+        .string "a" + b"        ; error
+        
+        .string "a\\\" + "b"    ; error
+
+        .string "a" + "b\\\"    ; error
+
+; illegal operators
+
+        .string "abc" - "def"
+        .string "abc" * "def"
+
+; -------------------------------
+
+        .end

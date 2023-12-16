@@ -1,0 +1,164 @@
+; Hobby Cross-Assembler Error Test 081f
+; Expressions\Numeric Binary Operators
+; error: out-of-range values
+
+; by Anton Treuenfels
+
+; first created: 01/02/10
+; last revised:  06/01/23
+
+; warning(s): 0
+
+; error(s): 25
+; - too small
+; - too big
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+       .maxerr 50
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+intMin .equ    -4294967296     ;  -2^32
+intMax .equ     4294967295     ;  2^32 - 1
+
+; -------------------------------
+
+; out-of-range (during second pass)
+
+        .long   intMin - 1
+        .long   intMax + 1
+
+        .long   intMin + 1 - 2
+        .long   intMax - 1 + 2
+
+        .long   1 + intMin - 2
+        .long   2 + intMax - 1
+
+        .long   1 - 2 + intMin
+        .long   2 - 1 + intMax
+
+        .long   intMin + intMin     ; adds negatives
+        .long   intMax + intMax
+
+        .long   2 * intMin
+        .long   2 * intMax
+
+        .long   intMin << 1
+        .long   intMin << 31
+
+        .long   intMax << 1
+        .long   intMax << 31
+
+
+; -------------------------------
+
+; expression evaluation itself has no intermediate or final range limit
+; - however result values are range checked during second pass expression resolution
+; - all tests give no error (and correct result) except last in each series,
+; which has an end result greater than 32 significant bits
+; - integer literals larger than intMax can be used directly
+; with no error as long as final result is in range
+
+        .long   400000*10000 - 300000*10000         ; = 1E9
+        .long   400000*10000 - 400000*10000         ; = 0
+        .long   400000*10000 - 500000*10000         ; = -1E9
+        .long   400000*10000 - 600000*10000         ; = -2E9
+        .long   400000*10000 - 700000*10000         ; = -3E9
+        .long   400000*10000 - 800000*10000         ; = -4E9
+        .long   400000*10000 - 900000*10000         ; = -5E9 (out of range)
+
+        .long   400000d*10000d - 300000d*10000d     ; = 1E9
+        .long   400000d*10000d - 400000d*10000d     ; = 0
+        .long   400000d*10000d - 500000d*10000d     ; = -1E9
+        .long   400000d*10000d - 600000d*10000d     ; = -2E9
+        .long   400000d*10000d - 700000d*10000d     ; = -3E9
+        .long   400000d*10000d - 800000d*10000d     ; = -4E9
+        .long   400000d*10000d - 900000d*10000d     ; = -5E9 (out of range)
+
+        .long   -400000*10000 + 300000*10000        ; = -1E9
+        .long   -400000*10000 + 400000*10000        ; = 0
+        .long   -400000*10000 + 500000*10000        ; = 1E9
+        .long   -400000*10000 + 600000*10000        ; = 2E9
+        .long   -400000*10000 + 700000*10000        ; = 3E9
+        .long   -400000*10000 + 800000*10000        ; = 4E9
+        .long   -400000*10000 + 900000*10000        ; = 5E9 (out of range)
+
+        .long   -400000d*10000d + 300000d*10000d    ; = -1E9
+        .long   -400000d*10000d + 400000d*10000d    ; = 0
+        .long   -400000d*10000d + 500000d*10000d    ; = 1E9
+        .long   -400000d*10000d + 600000d*10000d    ; = 2E9
+        .long   -400000d*10000d + 700000d*10000d    ; = 3E9
+        .long   -400000d*10000d + 800000d*10000d    ; = 4E9
+        .long   -400000d*10000d + 900000d*10000d    ; = 5E9 (out of range)
+
+        .long   1 + intMax - 2                      ; 10^0
+        .long   10 + intMax - 20                    ; 10^1
+        .long   100 + intMax - 200                  ; 10^2
+        .long   1000 + intMax - 2000                ; 10^3
+        .long   10000 + intMax - 20000              ; 10^4
+        .long   100000 + intMax - 200000            ; 10^5
+        .long   1000000 + intMax - 2000000          ; 10^6
+        .long   10000000 + intMax - 20000000        ; 10^7
+        .long   100000000 + intMax - 200000000      ; 10^8
+        .long   1000000000 + intMax - 2000000000    ; 10^9 
+        .long   10000000000 + intMax - 20000000000  ; 10^10 (out of range)
+
+        .long   -1d + intMin + 2d
+        .long   -10d + intMin + 20d
+        .long   -100d + intMin + 200d
+        .long   -1000d + intMin + 2000d
+        .long   -10000d + intMin + 20000d
+        .long   -100000d + intMin + 200000d
+        .long   -1000000d + intMin + 2000000d
+        .long   -10000000d + intMin + 20000000d
+        .long   -100000000d + intMin + 200000000d
+        .long   -1000000000d + intMin + 2000000000d
+        .long   -10000000000d + intMin + 20000000000d ; out of range
+
+        .long   $1 + intMax - $2                     ; 16^0
+        .long   $10 + intMax - $20                   ; 16^2
+        .long   $100 + intMax - $200                 ; 16^3
+        .long   $1000 + intMax - $2000               ; 16^4
+        .long   $10000 + intMax - $20000             ; 16^5
+        .long   $100000 + intMax - $200000           ; 16^6
+        .long   $1000000 + intMax - $2000000         ; 16^7
+        .long   $10000000 + intMax - $20000000       ; 16^8
+        .long   $100000000 + intMax - $200000000     ; 16^9
+        .long   $1000000000 + intMax - $2000000000   ; 16^10 (out of range)
+
+        .long   1H + intMax - 2H
+        .long   10H + intMax - 20H
+        .long   100H + intMax - 200H
+        .long   1000H + intMax - 2000H
+        .long   10000H + intMax - 20000H
+        .long   100000H + intMax - 200000H
+        .long   1000000H + intMax - 2000000H
+        .long   10000000H + intMax - 20000000H
+        .long   100000000H + intMax - 200000000H
+        .long   1000000000H + intMax - 2000000000H   ; out of range
+
+        .long   0x1 + intMax - 0x2
+        .long   0x10 + intMax - 0x20
+        .long   0x100 + intMax - 0x200
+        .long   0x1000 + intMax - 0x2000
+        .long   0x10000 + intMax - 0x20000
+        .long   0x100000 + intMax - 0x200000
+        .long   0x1000000 + intMax - 0x2000000
+        .long   0x10000000 + intMax - 0x20000000
+        .long   0x100000000 + intMax - 0x200000000
+        .long   0x1000000000 + intMax - 0x2000000000 ; out of range
+
+; -------------------------------
+
+        .end

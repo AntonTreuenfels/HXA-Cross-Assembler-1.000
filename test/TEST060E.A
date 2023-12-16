@@ -1,0 +1,85 @@
+; Hobby Cross-Assembler Error Test 060e
+; Expressions\Program Counter Reference
+; error: "*" and "$" aliases not legal in label field
+
+; by Anton Treuenfels
+
+; first created: 01/03/04
+; last revised:  05/27/23
+
+; warning(s):
+
+; error(s): 5
+; - expecting label
+
+; fatal:
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+
+* "*" and "$" are okay in expression field...
+
+        .word   *
+        .word   $
+
+* ...but not label field
+
+// "* in first column flags comment line
+
+*       .equ    $2000       ; comment
+*       =       $2100       ; comment
+*fubar  equ     $2200       ; comment
+
+        .word   *
+        .word   $
+
+// "*" not in first column but followed by whitespace flags comment line
+ 
+
+ *      .equ    $2500       ; comment
+ *      =       $2600       ; comment
+ *fubar equ     $2700       ; error
+
+        .word   *
+        .word   $
+
+// "$" has no commenting association
+
+$       .equ    $3000       ; error
+$       =       $3100       ; error
+
+        .word   *
+        .word   $
+
+// "$" has no commenting association
+
+ $      .equ    $3800       ; error
+ $      =       $3900       ; error
+
+* "ABSORG" does have aliases that use these characters...
+
+        *=      $2000       ; ok
+        .*=     $2100       ; ok
+
+        .word   *
+        .word   $
+
+        $=      $3000        ; ok
+        .$=     $3100        ; ok
+
+        .word   *
+        .word   $
+
+; -------------------------------
+
+        .end

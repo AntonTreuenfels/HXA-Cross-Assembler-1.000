@@ -1,0 +1,59 @@
+; Hobby Cross-Assembler Test 056e
+; Expressions\Pre-Defined Labels
+; error: string and numeric labels
+
+; by Anton Treuenfels
+
+; first created: 05/27/23
+; last revised:  05/27/23
+
+; warning(s): 0
+
+; error(s): 15
+; - reserved name
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+         .cpu    "T_16_M"   ; required psop
+         .org    $1000      ; required psop (can be labeled)
+
+; -------------------------------
+
+; all pre-defined labels
+; - have global form
+; - cannot be assigned values
+
+; these labels are pre-defined by all versions of HXA
+
+__HXA__   equ    37
+__VER__   equ    37
+__VER__$  equ    "37"
+
+__HXA__:  equ    37
+__VER__:  equ    37
+__VER__$: equ    "37"
+
+; still fails even if we try to be tricky
+
+__HXA__   equ    __HXA__
+__VER__   equ    __VER__
+__VER__$  equ    __VER__$    ; evaluation fails
+
+__HXA__   equ    __HXA__:
+__VER__   equ    __VER__:
+__VER__$  equ    __VER__$:   ; evaluation fails
+
+__HXA__:  equ    __HXA__
+__VER__:  equ    __VER__
+__VER__$: equ    __VER__$    ; evaluation fails
+
+; -------------------------------
+
+    .end

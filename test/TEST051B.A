@@ -1,0 +1,44 @@
+; Hobby Cross-Assembler Test 051b
+; Expressions\Local Labels
+; ok: local labels
+
+; by Anton Treuenfels
+
+; first created: 05/22/23
+; last revised:  05/22/23
+
+; no errors to detect
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .liston     autos   ; "auto-generated" labels shown in symbol listing
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+@local1                     ; =current value of PC
+
+@local1$                    ; =current value of PC
+
+        .word   global1
+
+        .word   @local1     ; refers to first occurance (backward ref)
+
+        .string @local1$
+
+global1:                    ; global clears local label(s)
+
+        .word   @local1     ; refers to second occurance (forward ref)
+
+        .word   global1
+
+//        .string @local1$    ; because 'string' does not allow forward reference
+
+@local1                     ; =current value of PC
+
+@local1$                    ; =current value of PC

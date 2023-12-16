@@ -1,0 +1,54 @@
+; Hobby Cross-Assembler Test 092c
+; Expressions\Assign Label Value
+; ok: "PLUSEQU" and "MINUSEQU" psops
+
+; by Anton Treuenfels
+
+; first created: 03/02/22
+; last revised:  10/27/23
+
+; no errors to detect
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+]inclbl .equ    *
+]declbl .=      *
+
+        .long ]inclbl
+        .long ]declbl
+
+]inclbl .plusequ 1
+]declbl .-= 1
+
+        .long ]inclbl
+        .long ]declbl
+
+]inclbl .+= 1
+]declbl .minusequ 1
+
+        .long ]inclbl
+        .long ]declbl
+
+]inclbl  plusequ ]declbl + 2
+]declbl  -= ]inclbl - 2
+
+        .long ]inclbl
+        .long ]declbl
+
+]inclbl += >$
+]declbl minusequ >*
+
+        .long ]inclbl
+        .long ]declbl
+
+; -------------------------------
+
+        .end                ; optional psop

@@ -1,0 +1,144 @@
+; Hobby Cross-Assembler Test 083c
+; Expressions\Regular Expression Operators
+; ok: syntax
+
+; by Anton Treuenfels
+
+; first created: 06/02/23
+; last revised:  06/02/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+b$      .equ   "abc"
+c$      .equ   "def"
+d$      .equ   "012"
+e$      .equ   "345"
+
+r$      .equ b$ + c$ + c$ + d$ + d$ + d$ + e$ + e$ + e$ + e$
+
+]regex$  .equ   "/abc/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/qwerty/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/[ad03]/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/[A-Z]/i"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/(def){2}/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/(012|345){3}/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/(012|345){4}/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+]regex$ .equ  "/(012|345){3,}/"
+
+        .byte  b$ ~ ]regex$
+        .byte  c$ ~ ]regex$
+        .byte  d$ ~ ]regex$
+        .byte  e$ ~ ]regex$
+        .byte  r$ ~ ]regex$
+
+        .byte  b$ !~ ]regex$
+        .byte  c$ !~ ]regex$
+        .byte  d$ !~ ]regex$
+        .byte  e$ !~ ]regex$
+        .byte  r$ !~ ]regex$
+
+; -------------------------------
+
+        .end

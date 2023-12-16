@@ -1,0 +1,36 @@
+; Hobby Cross-Assembler Test 083b
+; Expressions\Regular Expression Operators
+; ok: EQU psop
+
+; by Anton Treuenfels
+
+; first created: 06/02/23
+; last revised:  06/02/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+a$      .equ   "/abc/"
+b$      .equ   "abc"
+c$      .equ   "def"
+
+        .byte "abc" ~ a$
+        .byte  b$ ~ a$
+        .byte  c$ ~ a$
+
+        .byte "abc" !~ a$
+        .byte  b$ !~ a$
+        .byte  c$ !~ a$
+
+; -------------------------------
+
+        .end

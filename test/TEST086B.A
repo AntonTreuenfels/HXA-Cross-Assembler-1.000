@@ -1,0 +1,75 @@
+; Hobby Cross-Assembler Test 086b
+; Expressions\Ternary Conditional
+; ok: "?:" Operator, Forward Reference
+
+; by Anton Treuenfels
+
+; first created: 07/05/23
+; last revised:  07/05/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; -------------------------------
+; pure numeric conditionals
+; -------------------------------
+
+        ; -------------------------------
+        ; test form: a ? b : c 
+        ; -------------------------------
+
+        ; condition
+
+        .byte   fwdTrue ? fwdOne : 1/0
+        .byte   fwdFalse ? 1/0 : fwdTwo
+
+        ; true branch
+
+        .byte    1 ? fwdOne : 1/0
+
+        ; false branch
+
+        .byte    0 ? 1/0 : fwdTwo
+
+        ; ------------------------------------
+        ; test form:    a ? b : c ? d : e
+        ; association:  a ? b : ( c ? d : e )
+        ; ------------------------------------
+
+        .byte   fwdFalse ? 1/0 : fwdFalse ? 1/0 : fwdThree
+        .byte   fwdFalse ? 1/0 : fwdTrue ? fwdTwo : 1/0
+        .byte   fwdTrue ? fwdOne : fwdFalse ? 1/0 : 1/0
+        .byte   fwdTrue ? fwdOne : fwdTrue ? 1/0 : 1/0
+
+        ; ------------------------------------
+        ; test form:    a ? b ? c : d : e
+        ; association:  a ? ( b ? c : d ) : e
+        ; - as of HXA 1.00, must be explicit
+        ; ------------------------------------
+
+        .byte   fwdFalse ? (fwdFalse ? 1/0 : 1/0) : fwdThree
+        .byte   fwdFalse ? (fwdTrue ? 1/0 : 1/0) : fwdThree
+        .byte   fwdTrue ? (fwdFalse ? 1/0 : fwdTwo) : 1/0
+        .byte   fwdTrue ? (fwdTrue ? fwdOne : 1/0) : 1/0
+
+; -------------------------------
+
+fwdTrue  .equ  1
+fwdFalse .equ  0
+
+fwdOne   .equ  1
+fwdTwo   .equ  2
+fwdThree .equ  3
+
+; -------------------------------
+
+        .end
