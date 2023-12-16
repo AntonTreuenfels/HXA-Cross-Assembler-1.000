@@ -1,0 +1,80 @@
+; Hobby Cross-Assembler Test 253b
+; File Inclusion\Read Exclusion
+; ok: same base filename in another directory
+
+; by Anton Treuenfels
+
+; first created: 07/03/23
+; last revised:  07/03/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .liston  autos
+
+; -------------------------------
+
+; this test is meant to show that it is not guaranteed that a file
+; has not previously been read simply by examining the base filename
+; - the test requires duplicate copies of this file in two directories
+; - because the paths are different the files may in fact be different
+; - because the base filenames are the same the files might be the same
+; - the assembler does not know which is the case, so it simply warns
+; and puts the new (full) name on the "do not read again" list
+
+; -------------------------------
+
+;        .cpu    "T_16_M"    ; un-required psop
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+@currfn$ = dir$() + "\\" + file$()
+
+        .echo "Current file is " + @currfn$
+
+; prohibit a second read of either file
+; - placed before any inclusions, the current file name
+; is added to the "do not read again" list here
+
+        .readonce
+
+        .echo "After READONCE " + @currfn$ + " should not be read again."
+
+; show that a second read of the current file doesn't happen
+
+        .echo "Trying to self-include " + @currfn$
+        .include @currfn$
+
+]incfn1$ = dir$() + "\\" + file$()
+
+        .echo "After first inclusion, current file is " + ]incfn1$
+        .if @currfn$ == ]incfn1$
+        .echo "Inclusion silently failed (we hope)"
+        .else
+        .fatal "Inclusion did not fail"
+        .endif
+
+; try reading what might be a different file (but isn't really)
+
+]altfile$  = "..\\testhelp\\" + file$()
+
+        .echo "Trying to include " + ]altfile$
+        .include ]altfile$
+
+]incfn2$ = dir$() + "\\" + file$()
+
+        .echo "After second inclusion, current file is " + ]incfn2$
+        .if @currfn$ == ]incfn2$
+        .echo "Inclusion silently failed (we hope)"
+        .else
+        .echo "Included " + ]incfn2$ + " (a mistake)"
+        .endif
+
+; -------------------------------
+
+; of course the above applies only if READONCE doesn't apply
+
+;       .end
