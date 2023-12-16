@@ -1,0 +1,58 @@
+; Hobby Cross-Assembler Error Test 250i
+; File Inclusion\Duplicate Basename
+; warn: including self
+
+; by Anton Treuenfels
+
+; first created: 07/02/22
+; last revised:  07/02/23
+
+; warning(s): 1
+; - duplicate name
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+; this test is meant to show that it is not guaranteed that a file
+; has not previously been read simply by examining the base filename
+; - the test requires duplicate copies of this file in two directories
+; - because the paths are different the files may in fact be different
+; - because the base filenames are the same the files might be the same
+; - the assembler does not know which is the case, so it simply warns
+; and goes ahead with the inclusion
+
+; -------------------------------
+
+;        .cpu    "T_16_M"    ; un-required psop
+;        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+; try reading what might be a different file (but only once)
+
+        .if !defined(INCTEST)
+
+        .macro INCTEST
+        .fatal "Should never execute"
+        .endm
+
+        .echo "Trying to include the same file as " + file$()
+
+        .include "test250i.a"
+
+        .endif
+
+
+; -------------------------------
+
+; stop "END" from terminating processing at end of duplicate file
+
+;       .end

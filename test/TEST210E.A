@@ -1,0 +1,90 @@
+; Hobby Cross-Assembler Error Test 210e
+; Conditional Assembly\IFDEF and IFNDEF Blocks
+; warning\error: malformed conditionals
+
+; by Anton Treuenfels
+
+; first created: 12/26/11
+; last revised:  06/16/22
+
+; warning(s): 7
+; - token ignored
+; - expr ignored
+; - odd use
+
+; error(s): 9
+; - need expr
+; - ummatched block
+; - bad type
+; - need global
+
+; fatal: 1
+; - unclosed block
+
+; ---------------
+
+        .listfile
+        .errfile
+
+; ---------------
+
+; - no code generated ! 
+; - so no "CPU" or "ORG" required !
+
+; ---------------
+
+FALSE   .equ    0
+TRUE    .equ    !FALSE
+
+; ---------------
+
+; labels (and some expressions) ignored
+
+label1  .ifndef FALSE
+        .echo "Labels ignored on conditional pseudo-ops"
+
+label2  .elseif FALSE
+        .echo "Labels ignored on conditional pseudo-ops"
+
+label3  .else  expr3
+        .echo "Labels ignored on conditional pseudo-ops"
+        .echo "Expressions ignored on \"unconditional\" pseudo-ops"
+
+label4  .endif expr4
+
+; bad expression type
+
+        .ifdef
+        .echo "Global name argument required"
+        .endif
+
+        .ifndef
+        .echo "Still!"
+        .endif
+
+        .ifdef  1
+        .echo "Numeric expressions not allowed"
+        .endif
+
+        .ifndef 0
+        .echo "Still!"
+        .endif
+
+        .ifdef  "1"
+        .echo "String expressions must evaluate to global names"
+        .endif
+
+        .ifndef "name + 234"
+        .echo "Still!"
+        .endif
+
+; open block
+
+        .ifdef TRUE
+        .ifndef FALSE
+        fatal "Not supposed to show"
+        .endif
+
+; ---------------------
+
+       .end

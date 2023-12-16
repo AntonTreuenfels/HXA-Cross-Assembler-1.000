@@ -1,0 +1,84 @@
+; Hobby Cross-Assembler Error Test 260e
+; Binary File Inclusion\Binary Inclusion
+; warn\error: malformed "INCBIN"
+
+; by Anton Treuenfels
+
+; first created: 09/11/07
+; last revised:  07/10/23
+
+; warning(s): 6
+; - label ignored
+; - odd val
+
+; error(s): 20
+; - need filename
+; - need expression
+; - file not found
+; - name not found
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+badfile$    .equ    "unfound.bin"   ; non-existent file
+
+; missing field(s)
+
+        .incbin                     ; missing filename
+
+        .incbin badfile$,           ; missing offset
+
+        .incbin ,1000               ; missing filename
+
+        .incbin ,                   ; missing filename, offset
+
+        .incbin badfile$,1000,      ; missing count
+
+        .incbin badfile$,,512       ; missing offset
+
+        .incbin badfile$,,          ; missing offset, count
+
+        .incbin ,1000,512           ; missing filename
+
+        .incbin ,1000,              ; missing filename, count
+
+        .incbin ,,                  ; missing filename, offset, count
+
+; labels/null filenames
+
+label   .incbin ""                  ; label ignored, bad name
+
+label$  .incbin <>                  ; label ignored, bad name
+
+        .incbin "        "          ; bad name
+
+        .incbin <        >          ; bad name
+
+; bad filename
+
+        .incbin NoDelimiters        ; not found
+
+        .incbin NoDelimiters$       ; not found, missing filename
+
+; non-existent files
+
+        .incbin badfile$                ; not found
+
+        .incbin "notfound.a"            ; not found
+
+        .incbin "w:\\nopath\\nofile.a"  ; not found
+
+; -------------------------------
+
+        .end

@@ -1,0 +1,71 @@
+; Hobby Cross-Assembler Error Test 260f
+; Binary File Inclusion\Binary Inclusion
+; warn: odd argument values
+
+; by Anton Treuenfels
+
+; first created: 09/13/07
+; last revised:  07/10/22
+
+; warning(s): 3
+; - read truncation
+
+; error(s): 8
+; - out of range
+; - file not found
+; - need numeric value
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+incfile$    .equ    "..\\testhelp\\incdat.bin"       ; previously created, 1024 bytes
+
+; INCBIN file$ [,offset [,count]]
+; - default offset: 0; negative offsets counted from end of file
+; - default count: filesize, negative counts mean to end-of-file
+; - so default is to read entire file
+
+; count > filesize: truncates to filesize
+
+        .incbin incfile$, 0, 2048
+
+; offset not within file: not allowed
+
+        .incbin incfile$, 2048          ; offset past end of file
+
+        .incbin incfile$, -2048         ; offset before start of file
+
+; count + offset > filesize: truncates to filesize - offset
+
+        .incbin incfile$, 512, 1024
+
+        .incbin incfile$, -256, 512
+
+; type mis-matches
+
+incfile = 232
+offset$ = "thisoffset"
+count$ = "thiscount"
+
+         .incbin incfile
+
+         .incbin incfile$, offset$
+
+         .incbin incfile$, offset$,  count$
+
+         .incbin "incfile$", "this offset", "this count"
+
+; -------------------------------
+
+        .end

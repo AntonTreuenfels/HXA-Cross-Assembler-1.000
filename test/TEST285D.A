@@ -1,0 +1,27 @@
+; Hobby Cross-Assembler Test 285d
+; Motorola SRecord Object\Assume Record Supressed
+; ok: assume no name in header (16-bit)
+
+; by Anton Treuenfels
+
+; first created: 09/09/22
+; last revised:  07/12/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .srecfile                   ; create an object file...
+        .assume srecfile:noname     ; ...with no name in header record...
+
+; -------------------------------
+
+        .cpu    "T_16_M"
+
+        .include "..\\testhelp\\ihexdata.a"
+
+
+; -------------------------------
+
+        .end    start

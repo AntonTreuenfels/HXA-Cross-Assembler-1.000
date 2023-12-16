@@ -1,0 +1,42 @@
+; Hobby Cross-Assembler Error Test 281j
+; Motorola SRecord Object\Start Records
+; error: "END" w/ start expression within macro (unresolvable)
+
+; by Anton Treuenfels
+
+; first created: 12/04/09
+; last revised:  07/10/23
+
+; warning(s): 1
+; - odd use
+
+; error(s): 1
+; - no match
+
+; fatal: 1
+; - unclosed block
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .srecfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"
+
+        .include "..\\testhelp\\ihexdata.a"
+
+; -------------------------------
+
+; put unresolvable start address expression inside macro
+
+        .macro  do_end
+        .end    _unknownLabel   ; expression is never evaluated
+        .endm
+
+; try it
+
+        do_end

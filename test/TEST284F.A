@@ -1,0 +1,41 @@
+; Hobby Cross-Assembler Error Test 284f
+; Motorola SRecord Object\Named Output File
+; warn: cannot change name once set
+
+; by Anton Treuenfels
+
+; first created: 12/07/09
+; last revised:  07/12/23
+
+; warning(s): 2
+; - already set
+; - token ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .srecfile   <test284f.obj>       ; override default "s19" extension
+
+name$   =   "test284f.obj"
+
+        .srecfile   name$               ; can set same name again
+
+        .srecfile   "badname.tf"        ; warn - can't change name
+
+; -------------------------------
+
+        .cpu    "T_16_M"
+
+        .include "..\\testhelp\\ihexdata.a"
+
+        .srecfile   "test284f.obj"       ; can set same name again
+
+; -------------------------------
+
+        .end    start

@@ -1,0 +1,193 @@
+; Hobby Cross-Assembler Test 210
+; Conditional Assembly\IFDEF and IFNDEF Blocks
+; ok: IFDEF and INDEF conditionals (for symbols)
+
+; by Anton Treuenfels
+
+; first created: 12/26/11
+; last revised:  06/17/22
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; symbol NOT defined
+
+        .echo "*** symbols not defined ***"
+
+        .ifdef _thissymbol_
+        .fatal "_thissymbol_ defined"
+        .endif
+
+        .ifndef _thissymbol_
+        .echo "_thissymbol_ *NOT* defined (correct)"
+        .endif
+
+        .ifdef _thatsymbol_
+        .fatal "_thatsymbol_ defined"
+        .else
+        .echo "_thatsymbol_ *NOT* defined (correct)"
+        .endif
+
+        .ifndef _othersymbol_
+        .echo   "_othersymbol_ *NOT* defined (correct)"
+        .else
+        .fatal   "_othersymbol_ defined"
+        .endif
+
+        ; symbol defined
+
+        .echo " *** defined symbols *** "
+
+_thissymbol_:   .equ    0
+_thatsymbol_:   .equ    1
+_othersymbol_:
+
+        .ifdef _thissymbol_
+        .echo "_thissymbol_ defined (correct)"
+        .endif
+
+        .ifndef _thissymbol_
+        .fatal "_thissymbol_ *NOT* defined"
+        .endif
+
+        .ifdef _thatsymbol_
+        .echo "_thatsymbol_ defined (correct)"
+        .else
+        .fatal "_thatsymbol_ *NOT* defined"
+        .endif
+
+        .ifndef _othersymbol_
+        .fatal   "_othersymbol_ *NOT* defined"
+        .else
+        .echo   "_othersymbol_ defined (correct)"
+        .endif
+
+        ; string expression arguments
+
+        .echo   "*** defined symbols in string expressions ***"
+
+sym1$   .equ    "_thissymbol_"
+]sym2$  .equ    "_thatsymbol_"
+@sym3$  .equ    "other"
+
+        .ifdef sym1$
+        .echo "_thissymbol_ defined (correct)"
+        .endif
+
+        .ifndef sym1$
+        .fatal "_thissymbol_ *NOT* defined"
+        .endif
+
+        .ifdef ]sym2$
+        .echo "_thatsymbol_ defined (correct)"
+        .else
+        .fatal "_thatsymbol_ *NOT* defined"
+        .endif
+
+        .ifndef "_" + @sym3$ + "symbol_"
+        .fatal   "_othersymbol_ *NOT* defined"
+        .else
+        .echo   "_othersymbol_ defined (correct)"
+        .endif
+
+; -------------------------------
+
+        ; nested blocks
+
+        ; symbol NOT defined
+
+        .echo "*** nested symbols not defined ***"
+
+        .ifdef nested0
+        .fatal "nested0 defined"
+        .else
+        .ifndef nested0
+        .echo "nested0 *NOT* defined (correct)"
+        .endif
+        .endif
+
+        .ifndef nested1
+        .echo "nested1 *NOT* defined (correct)"
+        .else
+        .ifdef nested1
+        .fatal "nested1 defined"
+        .endif
+        .endif
+
+        .if 0                           ; skip everything
+        .ifdef nested3
+        .fatal "nested3 defined in false branch"
+        .else
+        .ifndef nested3
+        .fatal "nested3 *NOT* defined in false branch"
+        .endif
+        .endif
+        .endif
+
+        .if 1
+        .ifndef nested4
+        .echo "nested4 *NOT* defined (correct)"
+        .else
+        .ifdef nested4
+        .fatal "nested4 defined"
+        .endif
+        .endif
+        .endif
+
+        ; symbol defined
+
+        .echo "*** defined nested symbols ***"
+
+nested0 .equ 0
+nested1 .equ 1
+nested3 .equ 3
+nested4 .equ 4
+
+        .ifdef nested0
+        .echo "nested0 defined (correct)"
+        .else
+        .ifndef nested0
+        .fatal "nested0 *NOT* defined"
+        .endif
+        .endif
+
+        .ifndef nested1
+        .fatal "nested1 *NOT* defined"
+        .else
+        .ifdef nested1
+        .echo "nested1 defined (correct)"
+        .endif
+        .endif
+
+        .if 0                           ; skip everything
+        .ifdef nested3
+        .fatal "nested3 defined in false branch"
+        .else
+        .ifndef nested3
+        .fatal "nested3 *NOT* defined in false branch"
+        .endif
+        .endif
+        .endif
+
+        .if 1
+        .ifndef nested4
+        .fatal "nested4 *NOT* defined"
+        .else
+        .ifdef nested4
+        .echo "nested4 defined (correct)"
+        .endif
+        .endif
+        .endif
+
+; -------------------------------
+
+        .end

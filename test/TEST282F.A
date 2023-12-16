@@ -1,0 +1,42 @@
+; Hobby Cross-Assembler Error Test 282f
+; Motorola SRecord Object\Assume Wider Address Type
+; warn: 16 bit to 24 bits, cannot change
+
+; by Anton Treuenfels
+
+; first created: 12/05/09
+; last revised:  07/11/23
+
+; warning(s): 4
+; - already set
+; - token ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .srecfile               ; create an object file...
+        .assume srecfile:s28    ; ...with a wider than default type
+
+        .assume srecfile:s19    ; warn - already set
+
+        .assume srecfile:s28    ; okay
+
+        .assume srecfile:s37    ; warn - already set
+
+        .assume srecfile:s28    ; okay
+
+; -------------------------------
+
+        .cpu    "T_16_M"
+
+        .include "..\\testhelp\\ihexdata.a"
+
+; -------------------------------
+
+        .end    start           ; okay

@@ -1,0 +1,91 @@
+; Hobby Cross-Assembler Error Test 253f
+; File Inclusion\Read Exclusion
+; warning: circular inclusion (no stacked inclusions)
+
+; by Anton Treuenfels
+
+; first created: 09/24/07
+; last revised:  07/03/23
+
+; warning(s): 2
+; - duplicate name
+; - previous inclusion
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .maxdepth   128
+
+; -------------------------------
+
+; this test is meant to show that it is not possible to guarantee
+; that a file has not been previously read simply by examining the
+; currently unclosed include files
+; - the idea is that (by self inclusion) this file is read twice,
+; but at the time "READONCE" is executed there are no unclosed inclusions
+
+; there are three file openings:
+; 1) the initial reading of level 1 "test253f.a" from the command line (reads line 1 to line 69, skipping nothing)
+; 2) the inclusion of level 2 "test253f.a" at line 69 (reads line 1 to line 91, skips from line 43 to line 79)
+; 3) the resumption of reading level one "test253f.a" (reads line 70 to line 91, skipping nothing)
+
+; -------------------------------
+
+; we can get by with only one test file by using self-inclusion
+; (probably not a trick of much use in any other context!)
+
+        .if !defined(INCTEST)
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; how many times to include self
+; - each inclusion generates one byte
+
+ENDADR  =   * + 128
+
+        .macro  INCTEST
+        .byte   *
+        .endmacro
+
+; -------------------------------
+
+; here we go...
+
+        INCTEST
+
+        .if         * < ENDADR
+        .echo       "Entering..." + str$(*)     ; from first read of 253f (level 1)
+        .include    "test253f.a"                ; read 253f (level 2)
+        .echo       "...leaving " + str$(*)     ; return to level 1 (3rd instance in file sequence)
+        .endif
+
+; -------------------------------
+
+        .readonce                               ; executed at level 1 (no stacked files, just a file sequence)
+
+; -------------------------------
+
+        .endif      ; defined(INCTEST)
+
+; -------------------------------
+
+; if we use the "END" psop at the end of this file, it will be executed
+; when the include file is completely read. That's not what we want, though.
+; We want reading to return to the orignal file (ie., itself, but not yet
+; at the end when the return happens). Fortunately "END" is not required
+; because its effects happen automatically at the end of all source anyway
+
+; of course the above applies only if READONCE doesn't apply
+
+;       .end

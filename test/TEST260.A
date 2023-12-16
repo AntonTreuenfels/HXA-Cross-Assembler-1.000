@@ -1,0 +1,70 @@
+; Hobby Cross-Assembler Test 260
+; Binary File Inclusion\Binary Inclusion
+; ok: binary file inclusion
+
+; by Anton Treuenfels
+
+; first created: 09/13/07
+; last revised:  07/07/23
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+        .objfile
+        .rawfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+incfile$    =   "..\\testhelp\\incdat.bin"     ; previously created, 1024 bytes
+
+; INCBIN file$ [,offset [,count]]
+; - default offset: 0; negative offsets counted from end of file
+; - default count: filesize
+; - so default is to read entire file
+
+;        .str "default inclusion is the whole file..."
+
+        .incbin incfile$
+
+;        .str "...but we can take just start..."
+
+        .incbin incfile$, 0, 256
+
+;        .str "...or second quarter..."
+
+         .incbin incfile$, 256, 256
+ 
+;         .str "...or the third quarter..."
+
+         .incbin incfile$, -512, 256
+
+;         .str "...or end..."
+
+        .incbin incfile$, -256
+
+;         .str "counts less than one mean to end-of-file"
+
+        .incbin incfile$, 0, 0
+
+;         .str "...last three quarters..."
+
+        .incbin incfile$, 256, -1
+
+;         .str "...last half..."
+
+        .incbin incfile$, 512, -1000
+
+;         .str "...last quarter..."
+
+        .incbin incfile$, 768, -10000
+
+; -------------------------------
+
+        .end

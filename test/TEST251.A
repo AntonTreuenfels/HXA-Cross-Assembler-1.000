@@ -1,0 +1,85 @@
+; Hobby Cross-Assembler Test 251
+; File Inclusion\File Label Scoping
+; ok: local and variable labels
+
+; by Anton Treuenfels
+
+; first created: 04/01/04
+; last revised:  07/02/23
+
+; -------------------------------
+
+        .if !defined(INCTEST)
+
+        .listfile
+        .errfile
+
+        .liston     autos
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; how many times to include self
+; - each inclusion generates one byte
+
+DEPTH   =  8
+
+        .macro  INCTEST
+
+        .byte   *
+
+; variable label, changes value in every include file
+
+]count   = <(* - $1000)
+
+        .endmacro
+
+TEST251             ; enable custom tests in "ïnctest" files
+
+; -------------------------------
+
+        .endif      ; defined(INCTEST)
+
+; -------------------------------
+
+; here we go...
+
+; to avoid the warning about identical base filenames, we use a
+; whole lot of include files identical except for their names
+
+        INCTEST
+
+; HXA prohibits "INCLUDE" from being used within an active macro expansion
+
+        .if ]count < DEPTH
+
+; should quietly assign current PC value
+
+@currpc             ; a new symbol...
+]currpc             ; re-assignment to old symbol...(after first time)
+
+; local label, visible only in this file
+
+@num$    = str$(]count)
+
+        .echo       "Entering..." + @num$
+        .include    "..\\testhelp\\inctest" + @num$ + ".a"
+        .echo       "...leaving " + @num$
+
+; should quietly accept assignment
+
+@equate .equ    1234    ; a new symbol...
+]equate .equ    1234    ; re-assignment to old symbol...(after first time)
+
+        .endif
+
+; if we use the "END" psop at the end of this file, it will be executed
+; the first time the conditional block is completed. That's not what we
+; want, though, since the block has to complete about 7 more times
+; before the include stack is completely unwound. Fortunately "END" is
+; not a required psop because its effects happen automatically at the
+; end of source anyway.
+
+;       .end
