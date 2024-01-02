@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 04/09/11
-; last revised:  04/09/11
+; last revised:  01/01/24
 
 ; ----------------------
 
@@ -156,3 +156,25 @@ pstr_3  .macro  ?text
         ; un-define to show correct source file location recorded
 
         .undef  strz_3, pstr_3
+
+; ---------------
+
+        ; try nested definitions
+
+; define null-terminated string (a C-style string)
+
+        .macro strz_5, ?text
+        strz_4  ?text
+        .endm
+
+; define string with preceeding length byte (a Pascal-style string)
+
+        .macro pstr_5, ?text
+        pstr_4  ?text
+        .endm
+
+; use them
+
+        strz_5  "Hello, World!"
+
+        pstr_5  "Hello, World!"
