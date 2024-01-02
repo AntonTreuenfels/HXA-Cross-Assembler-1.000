@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/22/03	(in Thompson AWK 4.0)
-# last revision: 12/13/23
+# last revision: 12/30/23
 
 # preferred public function prefix: CG
 
@@ -564,6 +564,9 @@ def resolve():
 			minval[ type ] = -2**32		# -4294967296, -$1 0000 0000
 			maxval[ type ] = 2**32 - 1	#  4294967295,   $ FFFF FFFF
 
+	# we have to leave this at its current value
+	masterline = SRC.getmaster()
+
 	# resolve addresses and data
 	for srcline in _CG.datastore:
 
@@ -636,6 +639,9 @@ def resolve():
 
 			# replace
 			_CG.datastore[ srcline ][ offset ] = resolved
+
+	# restore
+	SRC.setmaster( masterline )
 
 # -----------------------------
 # listing support

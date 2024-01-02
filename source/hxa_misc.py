@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 01/24/03	(in Thompson AWK 4.0)
-# last revision: 12/13/23
+# last revision: 12/29/23
 
 # preferred public function prefix: UTIL
 
@@ -231,16 +231,17 @@ def sameval(new, existing):
 
 def samename(new, existing):
 	''' verify two names match '''
-	# can we compare ?
-	if new is None or existing is None:
+	# can we compare or comparisons match ?
+	if ( new is None
+		or existing is None
+		or new.casefold() == existing.casefold()
+	):
 		return True
-	# compare
-	ok = new.casefold() == existing.casefold()
-	if not ok:
+	else:
 		# first is what the second should be
 		UM.error( 'NeedMatch', existing )
 		UM.ignored( new )
-	return ok
+		return False
 
 # -----------------------------
 

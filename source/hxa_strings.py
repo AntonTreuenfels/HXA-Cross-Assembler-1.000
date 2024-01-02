@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 11/01/21
-# last revision: 12/13/23
+# last revision: 12/28/23
 
 # preferred public function prefix: "STR"
 
@@ -143,17 +143,20 @@ def replaceescapes(this):
 
 	return re.sub( _allEscapes, _replace, this )
 
-def strlit(this):
+def strlit(this, delim='"'):
 	''' convert string literal to string '''
 	if this is None:
 		return this
 
-	s = this[1:-1]
-	return replaceescapes(s) if len(s) else ''
+	elif len(this) > 2 and this.startswith(delim) and this.endswith(delim):
+		return replaceescapes(this[1:-1])
+
+	else:
+		return ''
 
 def chrlit(this):
 	'''convert character literal to number'''
-	val = strlit( this )
+	val = strlit( this, "'" )
 	if isinstance( val, int ):
 		return val
 	elif len(val) == 1:
@@ -166,27 +169,26 @@ def rgxlit(this):
 	'''convert regex to pattern'''
 	# if 'this' is a literal, these tests are unnecessary
 	# - but it may be from a string variable
-	err = '' if this.startswith('/') else this
-	if not err:
-		if this.endswith('/'):
-			try:
-				crgx = re.compile( strlit(this) )
-			except Exception as e:
-				err = f'{this}, {e}'
-		elif this.endswith('/i'):
-			try:
-				crgx = re.compile( strlit(this[:-1]), re.IGNORECASE )
-			except Exception as e:
-				err = f'{this}, {e}'
-		else:
-			err = this
+	if this.endswith('/i'):
+		regex = this[:-1]
+		flag = re.IGNORECASE
+	else:
+		regex = this
+		flag = re.NOFLAG
 
-	if not err:
+	regex = strlit( regex, '/' )
+	if len(regex):
+		try:
+			crgx = re.compile( regex, flag )
+		except Exception as e:
+			this = f'{this}, {e}'
+			regex = ''
+
+	if len(regex):
 		return ( True, crgx )
 	else:
-		UM.error( "NeedRegex", err )
-
-	return ( False, None )
+		UM.error( "NeedRegex", this )
+		return ( False, None )
 
 # -----------------------------
 # psop: XLATE a=b [[, ?=? ]..]
@@ -209,28 +211,29 @@ def doxlate(label, fields):
 		'''get character range for translation'''
 		if this is not None:
 			rng = replaceescapes( this )	# round one if unquoted, round two if quoted
-			beg = ord( rng[0] )
-			# a single char ?
-			if len(rng) == 1:
-				return ( beg, beg )
-			# a character range ?
-			elif len(rng) == 3 and rng[1] == '-':
+		else:
+			rng = "xxxx"					# can't match following
+
+		match len(rng):
+			case 1:						# single char ?
+				return (ord(rng), ord(rng) )
+			case 3 if rng[1] == '-':	# a character range ?
+				beg = ord( rng[0] )
 				end = ord( rng[2] )
-				if end < beg:
-					UM.noeffect(rng)
-				return ( beg, end )
+				if beg <= end:
+					return ( beg, end )
+				else:
+					UM.noeffect( this )
+			case _:
+				UM.error( "NeedXlt", this )
 
-		# something else; (0, -1) ensures no replacement happens
-
-		UM.error( 'NeedXlt', this )
-		return ( 0, -1)
+		return ( 0, -1 )
 
 	rplndx, rplend = _getrange( fields[0] )
 	wthval, wthend = _getrange( fields[1] )
 
 	# "a-b=c-d" form
 	# - until replace range has only one entry left or with range exhausted
-
 	while rplndx < rplend and wthval < wthend:
 		_setxlate( rplndx, wthval )
 		rplndx += 1
@@ -238,7 +241,6 @@ def doxlate(label, fields):
 
 	# "a=b", "a-b=c" and "a=b-c" forms
 	# - also completes "a-b=c-d" form, repeating "d" as often as needed
-
 	while rplndx <= rplend and wthval <= wthend:
 		_setxlate( rplndx, wthval )
 		rplndx += 1

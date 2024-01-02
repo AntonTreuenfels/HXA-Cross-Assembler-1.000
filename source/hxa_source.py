@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 05/16/03		(in Thompson AWK 4.0)
-# last revision: 12/15/23
+# last revision: 12/30/23
 
 # preferred public function prefix: "SRC"
 
@@ -78,8 +78,6 @@ _listOpt = {
 
 	'ALL':		'ALL',
 }
-
-_ifCond = '__IFCOND'
 
 # module variables
 
@@ -248,8 +246,8 @@ def recall(masterline):
 def stripcomment(text):
 	'''remove any comment starting somewhere after first non-whitespace char '''
 	# only '*' is not a legal comment marker now
-	# - we will still require them all to be surrounded by whitespace
-	m = re.search( '[^ \t]([ \t]+)(;|#|//)', text )
+	# - we will still require '#' to be surrounded by whitespace
+	m = re.search( '[^ \t]([ \t]+)(;|#([^a-zA-Z]|$)|//)', text )
 	return text if m is None else text[:m.start(1)]
 
 def ignore(text):
@@ -294,11 +292,11 @@ def nextline():
 
 		# was a line pushed back on source ?
 		# - either zero or one such line
-		if _SRC.putbacktext is not None:
+		if _SRC.putbacktext is None:
+			text = _SRC.textsave[ MAC.getreadndx() ][0]
+		else:
 			text = _SRC.putbacktext
 			_SRC.putbacktext = None
-		else:
-			text = _SRC.textsave[ MAC.getreadndx() ][0]
 
 		# retrieve next non-comment source line
 		# - if loop is entered, guaranteed to be from file
@@ -551,6 +549,7 @@ def list():
 		_SRC.list[ 'SEG' ] &= PC.hassegs()
 
 	def _skipline(count):
+		'''print a blank listing line'''
 		while count > 0:
 			OS.writeout( '' )
 			count -= 1
@@ -708,17 +707,18 @@ def list():
 
 						# ...else try to list non-data generating line
 						# - flags checked in descending order of priority
-						elif _getlist('SRC'):					# source listing enabled ?
-							if isroot or _getlist('INC'):		# include listing enabled ?
-								if issource or _getlist('EXP'):	# expansion listing enabled ?
-									if listbranch:				# conditional listing enabled ?
-										if len(srctext) > 0:	# non-blank line ?
-											_xreflistline( srcline, offset )
-											_listline( f'{CG.leadingblanks()}  {srctext}', tag )
-										else:
-											_newline( tag )
-										if key in _SRC.formfeed:
-											_formfeed()
+						elif ( _getlist('SRC')					# source listing enabled ?
+							and ( isroot or _getlist('INC') )	# include listing enabled ?
+							and ( issource or _getlist('EXP') )	# expansion listing enabled ?
+							and listbranch						# conditional listing enabled ?
+						):
+							if len(srctext) > 0:				# non-blank line ?
+								_xreflistline( srcline, offset )
+								_listline( f'{CG.leadingblanks()}  {srctext}', tag )
+								if key in _SRC.formfeed:		# never a data-generating line
+									_formfeed()
+							else:
+								_newline( tag )
 
 				# process FALSE special flags in source line record
 				# - set here so lines which set them are shown

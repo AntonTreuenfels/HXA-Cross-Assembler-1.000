@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 02/22/03 (in Thompson AWK 4.0)
-# last revision: 10/07/23
+# last revision: 12/30/23
 
 # preferred public function prefix: "MAC"
 
@@ -510,50 +510,52 @@ def doendmacro(label, ename):
 				if not formal in checkargs:
 					UM.undefined( formal )
 
-		SRC.setmaster(end)
+		SRC.setmaster( end )
 
-	blktyp = topblocktype()
+	match topblocktype():
 
-	# end of a macro expansion ?
-	# - terminate expansion
-	if blktyp == _macExpBlk:
-		_ = _MAC.actualargs.pop()
-		endexpansion( label )
+		# end of a macro expansion ?
+		# - terminate expansion
+		case "__MACEXP":
+			_ = _MAC.actualargs.pop()
+			endexpansion( label )
 
-	# end of a nested macro definition during expansion of nesting macro ?
-	# - ignore (except for any label )
-	elif blktyp == _macNestBlk:
-		_ = popblock()
-		SYM.here( label )
+		# end of a nested macro definition during expansion of nesting macro ?
+		# - ignore (except for any label )
+		case "__MACNEST":
+			_ = popblock()
+			SYM.here( label )
 
-	# terminating a definition ?
-	# - name error at first definition line saves a "bad" name
-	# - if name being defined is okay:
-	# -   verify any formal arguments in definition body
-	# -   if ending name provided, check that it matches current name
-	# (note that one check at definition time all is we need to do)
-	# - check if this is the first time the name has been defined
-	# - finish definition
-	# - if nested, also go on to finish enclosing definition
-	elif blktyp == _macDefBlk:
-		bname, formals = _MAC.defining.pop()
-		_ = UTIL.samename( ename, bname )
-		blockbeg = blockstart()
-		blockend = SRC.getmaster()
-		if bname is not None:
-			_verifyargs( blockbeg, blockend, formals )
+		# terminating a definition ?
+		# - name error at first definition line saves a "bad" name
+		# - if name being defined is okay:
+		# -   verify any formal arguments in definition body
+		# -   if ending name provided, check that it matches current name
+		# (note that one check at definition time all is we need to do)
+		# - check if this is the first time the name has been defined
+		# - finish definition
+		# - if nested, also go on to finish enclosing definition
+		case "__MACDEF":
+			bname, formals = _MAC.defining.pop()
+			if ename is not None:
+				ok, ename = EXP.getconstglb( ename )
+				if ok:
+					_ = UTIL.samename( ename, bname )
+			blockbeg = blockstart()
+			blockend = SRC.getmaster()
+			if bname is not None:
+				_verifyargs( blockbeg, blockend, formals )
 
-		if noerrs():
-			_ = _MAC.expcnt.setdefault( bname, 0 )
-			_MAC.macropool[ bname ] = ( blockbeg, blockend, formals )
+			if noerrs():
+				_ = _MAC.expcnt.setdefault( bname, 0 )
+				_MAC.macropool[ bname ] = ( blockbeg, blockend, formals )
 
-		if not enddefinition(bname):
-			PSOP.skipto( _macSkips )
+			if not enddefinition(bname):
+				PSOP.skipto( _macSkips )
 
-	# an orphan !
-	else:
-
-		badblock( _macCrossBlk )
+		# an orphan !
+		case _:
+			badblock( _macCrossBlk )
 
 # -----------------------------
 

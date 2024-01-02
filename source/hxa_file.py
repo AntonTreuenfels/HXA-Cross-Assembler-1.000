@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 11/05/21
-# last revision: 11/02/23
+# last revision: 12/26/23
 
 # preferred public function prefix: "OS"
 
@@ -500,7 +500,7 @@ def makeheader(type):
 	header = []
 	_, rootfile = sourcefile( 1 )
 	_add( f'{UM.expandtext("Version")} {UM.expandtext(type)}' )
-	_add( f'{UM.expandtext("InsSet")}: {UM.expandtext("InsAny") if CG.cpu() is None else CG.cpu()}' )
+	_add( f'{UM.expandtext("InsSet")}: {UM.expandtext("InsAny") if CG.cpu() == "" else CG.cpu()}' )
 	_add( f'{UM.expandtext("Source")}: {os.path.basename(rootfile)}' )
 	_add( f'{UM.expandtext("PrgType")}: {UM.expandtext("IsSeg" if PC.hassegs() else "IsMono")}' )
 	_add( getasctime() )

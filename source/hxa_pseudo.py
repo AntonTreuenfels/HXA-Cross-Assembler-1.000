@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/08/03	(in Thompson AWK 4.0)
-# last revision: 12/09/23
+# last revision: 12/29/23
 
 # preferred public function prefix: PSOP
 
@@ -173,7 +173,7 @@ _psOpcode = {
 	# macros and blocks
 
 	'macro':	( 'a', 'a', '*,', MAC.domacro ),
-	'endmacro':	( 'a', 'g', '?', MAC.doendmacro ),
+	'endmacro':	( 'a', 'a', '?', MAC.doendmacro ),
 	'putback':	( 'i', 'a', '*', SRC.doputback ),
 	'putbacks':	( 'i', 'S', '&', SRC.doputback ),
 	'exit':		( 'i', 'i', '*', MAC.doexit ),
@@ -320,7 +320,7 @@ def _normalize(this):
 	# prefixes allowed for visual distinctiveness but are otherwise ignored
 	# - "manifest type", if you wish
 
-	if this.startswith( ('.',  '#') ):
+	if this.startswith(('.', '#')):
 		this = this[1:]
 
 	this = this.lower()
@@ -419,57 +419,58 @@ def dopseudo(label, psop, exprfield):
 	# first parameter should be 'basepsop' or 'label' ?
 	firstarg = basepsop if argctrl.endswith('^') else label
 
-	# no evaluation ?
-	if argctrl.startswith('*'):
-		handler( firstarg, expr if argctrl == '*,' else exprfield )
+	match argctrl[0]:
+		# no evaluation ?
+		case '*':
+			handler( firstarg, expr if argctrl == '*,' else exprfield )
 
-	# single argument evaluated ?
-	elif argctrl.startswith('?'):
+		# single argument evaluated ?
+		case '?':
 
-		expr = UTIL.maxfields( expr, 1 )
-		ok, argval = getvalueof( argtype, expr.pop() )
-		if ok:
-			handler( firstarg, argval )
-
-	# each argument evaluated, call after each ?
-	elif argctrl.startswith('+'):
-
-		while len(expr):
-			ok, argval = getvalueof( argtype, expr.pop(0) )
+			expr = UTIL.maxfields( expr, 1 )
+			ok, argval = getvalueof( argtype, expr.pop() )
 			if ok:
 				handler( firstarg, argval )
 
-	# fixed number of (possibly different) arguments evaluated, then single call ?
-	# - tries to evaluate each provided argument even if one fails
-	elif argctrl.startswith( '!' ):
+		# each argument evaluated, call after each ?
+		case '+':
 
-		expr = UTIL.maxfields( expr, len(argtype) )
+			while len(expr):
+				ok, argval = getvalueof( argtype, expr.pop(0) )
+				if ok:
+					handler( firstarg, argval )
 
-		argvals = []
-		for type in argtype:
-			oknow, argval = getvalueof( type, expr.pop(0) if len(expr) > 0 else None )
-			if oknow:
-				argvals.append( argval )
-			else:
-				ok = False
+		# fixed number of (possibly different) arguments evaluated, then single call ?
+		# - tries to evaluate each provided argument even if one fails
+		case '!':
 
-		if ok:	# call with unpacked args
-			handler( firstarg, *argvals )
+			expr = UTIL.maxfields( expr, len(argtype) )
 
-	# concatenate multiple string-ish arguments, then single call ?
-	elif argctrl.startswith( '&' ):
+			argvals = []
+			for type in argtype:
+				oknow, argval = getvalueof( type, expr.pop(0) if len(expr) > 0 else None )
+				if oknow:
+					argvals.append( argval )
+				else:
+					ok = False
 
-		argcat = []
-		while len(expr) > 0:
-			oknow, argval = getvalueof( argtype, expr.pop(0) )
-			if oknow:
-				argcat.append( argval if argval is not None else '' )
-			else:
-				ok = False
+			if ok:	# call with unpacked args
+				handler( firstarg, *argvals )
 
-		if ok:	# call with concatenated string
-			handler( firstarg, ''.join(argcat) )
+		# concatenate multiple string-ish arguments, then single call ?
+		case '&':
 
-	# oops!
-	else:
-		UM.noway( basepsop )
+			argcat = []
+			while len(expr) > 0:
+				oknow, argval = getvalueof( argtype, expr.pop(0) )
+				if oknow:
+					argcat.append( argval if argval is not None else '' )
+				else:
+					ok = False
+
+			if ok:	# call with concatenated string
+				handler( firstarg, ''.join(argcat) )
+
+		# oops!
+		case '_':
+			UM.noway( basepsop )

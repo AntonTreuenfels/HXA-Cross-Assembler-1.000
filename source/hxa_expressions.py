@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 04/09/03	(in Thompson AWK 4.0)
-# last revision: 12/13/23
+# last revision: 01/01/24
 
 # preferred public function prefix: EXP
 
@@ -1463,33 +1463,36 @@ def doeval(rpn, forwardok):
 
 		lasttoken = None
 
-		for token in result:
+		# check every token in result
+		for i, token in enumerate(result):
+			match token:
 
-			# failed to resolve program counter value ?
-			if token == 'PC**':
-				UM.error( 'BadPC' )
+				# failed to resolve program counter value ?
+				case 'PC**':
+					UM.error( "BadPC" )
 
-			# failed to verify symbol is global numeric ?
-			elif token == 'SYG':
-				UM.notglobal( lasttoken )
+				# failed to verify symbol is global numeric ?
+				case 'SYG':
+					UM.notglobal( result[i-2] if lasttoken == "SY*" else lasttoken )
 
-			# a symbol we need to ask about ?
-			elif token == 'SY*':
-				# uncalled function ?
-				if isfunc(lasttoken):
-					UM.error( "NeedCall", lasttoken )
-				# other reserved symbol name ?
-				elif SYM.isreserved( lasttoken ):
-					UM.reserved( lasttoken )
-				# not found
-				else:
-					UM.undefined( lasttoken )
+				# a symbol we need to ask about ?
+				case 'SY*':
+					# uncalled function ?
+					if isfunc(lasttoken):
+						UM.error( "NeedCall", lasttoken )
+					# other reserved symbol name ?
+					elif SYM.isreserved( lasttoken ):
+						UM.reserved( lasttoken )
+					# not p - rest of comment was what ? got lost in editing !
+					else:
+						UM.undefined( lasttoken )
 
-			# was the last token one of these functions ?
-			elif lasttoken in ['SEGBEG', 'SEGEND', 'SEGLEN', 'SEGOFF']:
-				UM.undefined( token )
+				# was the last token one of these functions ?
+				case _:
+					if lasttoken in ['SEGBEG', 'SEGEND', 'SEGLEN', 'SEGOFF']:
+						UM.undefined( token )
 
-			# possibly a name we can use later
+			# possibly something we can use later
 			lasttoken = str( token )
 
 	return ( False, None )
@@ -1654,7 +1657,7 @@ def getfname(this):
 	# backwards compatability w/prior versions of HXA
 	# ...candidate for future removal ?
 	if this.startswith('<') and this.endswith('>'):
-		this = this[1:-1].strip()
+		this = this[1:-1]
 
 	ok, val = getoptstr( this )
 	if ok:

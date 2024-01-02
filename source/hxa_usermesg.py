@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03	(in Thompson AWK 4.0)
-# last revision: 12/09/23
+# last revision: 01/01/24
 
 # preferred public function prefix: "UM"
 
@@ -199,7 +199,7 @@ _mesgText = {
 	'LBL':		"Symbol Table Listing",
 	'XRF':		"Cross-Reference Listing",
 	'SEG':		"Segment Map Listing",
-	'STS':		"	Assembly Statistics Listing",
+	'STS':		"Assembly Statistics Listing",
 	'Glbl':		"Global Labels",
 	'Auto':		"Local, Variable and Anonymous Labels",
 	'NumAlpha':	"Numeric Name     Ref Cnt    Hex Value    Dec Value",
@@ -353,7 +353,7 @@ def _caller():
 	f1 = inspect.stack()
 	frame, filename, lineno, function, code_context, index = f1[2]
 	foffset, fname = OS.sourcefile( SRC.getmaster() )
-	return f'{function} {expandtext("BadLine")} {foffset} {expandtext("InIfx")} {OS.currfn()}'
+	return f'{function}(): {expandtext("BadLine")}: {foffset} {expandtext("InIfx")} {expandtext("Source")}: {OS.currfn()}'
 
 def debug(*lookat):
 	''' internal debugging'''
@@ -396,43 +396,29 @@ def _showstumble(type, key, cause=None):
 
 	def circumstance(text):
 		''' what kind of source line is this ? '''
-
-		def tokentype(this):
-			'''classify type of token'''
-			if PSOP.ispseudo(this):
-				return 4
-			elif MAC.ismacro(this):
-				return 3
-			elif CG.isop(this):
-				return 2
-			elif SYM.islabel(this):
-				return 1
-			else:
-				return 0
-
 		tokens = SRC.stripcomment(text).split()
-		token = tokens.pop(0) if len(tokens) > 0 else text
+		token0 = tokens.pop(0) if len(tokens) > 0 else text
+		token1 = tokens.pop(0) if len(tokens) > 0 else None
 
-		type = tokentype( token )
-		# first token was a label ?
-		if type == 1:
-			if len(tokens) > 0:
-				token = tokens.pop( 0 )
-				type = tokentype( token )
+		if PSOP.ispseudo(token0):
+			return ( 'BadPsop', token0 )
+		elif MAC.ismacro(token0):
+			return ( 'BadMacro', token0 )
+		elif CG.isop(token0):
+			return ( 'BadOp', token0 )
+		elif SYM.islabel(token0):
+			if token1 is None:				# no second token ?
+				return ( 'BadLabel', token0 )
+			elif PSOP.ispseudo(token1):
+				return ( 'BadPsop', token1 )
+			elif MAC.ismacro(token1):
+				return ( 'BadMacro', token1 )
+			elif CG.isop(token1):
+				return ( 'BadOp', token1 )
 			else:
-				type = 0
-
-		match type:
-			case 4:
-				return ( 'BadPsop', token )
-			case 3:
-				return ( 'BadMacro', token )
-			case 2:
-				return ( 'BadOp', token )
-			case 1:
-				return ( 'BadLabel', token )
-			case _:
-				return ( 'BadToken', token )
+				return ( 'BadToken', token1 )
+		else:
+			return ('BadToken', token0)
 
 	def _showsource(offset, text):
 		''' show the source of a line involved in an error'''
