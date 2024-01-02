@@ -1,11 +1,11 @@
-####; Hobby Cross-Assembler Test 205
+; Hobby Cross-Assembler Test 205
 ; Conditional Assembly\Deep Nesting
 ; ok: recursive macros; depth = 128
 
 ; by Anton Treuenfels
 
 ; first created: 08/03/04
-; last revised:  06/23/23
+; last revised:  12/30/23
 
 ; no errors to detect
 

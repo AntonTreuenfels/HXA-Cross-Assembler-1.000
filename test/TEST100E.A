@@ -5,18 +5,19 @@
 ; by Anton Treuenfels
 
 ; first created: 05/17/03
-; last revised:  06/13/23
+; last revised:  12/29/23
 
-; warning(s): 38
+; warning(s): 37
 ; - definition ignored
-; - odd label
 ; - token ignored
+; - odd label
 
 ; error(s): 51
-; - need name
+; - need macro name
 ; - unmatched names
-; - illegal name (macro and formal argument)
+; - need global name
 ; - duplicate name (macro and formal argument)
+; - illegal name (macro and formal argument)
 ; - need operand (error specific to problem; not general)
 ; - bad EOE
 ; - unmatched block

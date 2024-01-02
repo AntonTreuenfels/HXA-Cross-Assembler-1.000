@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 06/21/04
-; last revised:  02/12/23
+; last revised:  01/01/24
 
 ; warning(s): 5
 ; - odd use
@@ -13,9 +13,10 @@
 ; - timer reset
 ; - no effect
 
-; error(s): 11
+; error(s): 13
 ; - need global
 ; - name not found
+; - need numeric
 
 ; fatal: 0
 

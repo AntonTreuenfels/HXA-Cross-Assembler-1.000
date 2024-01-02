@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 12/21/21
-; last revised:  12/15/23
+; last revised:  12/28/23
 
 ; no errors to detect
 
@@ -57,7 +57,7 @@
         .psnull     $0C   ;  text
 
         .psnull     $0D   #
-        .psnull     $0E   #text
+        .psnull     $0E   #text - this is not actually removed
         .psnull     $0F   #  text
 
         .psnull     $10   //
@@ -65,6 +65,11 @@
         .psnull     $12   //  text
 
 ; - because a '*' in the expression field can stand for multiplication or program counter value
+; - because '#'(pseudo op) is legal (for now, anyway)
+
+        .psnull     $13   #text1   #text2 - neither are removed
+
+; - because '#'(pseudo op) is legal (for now, anyway)
 
 # -------------------------------
 
