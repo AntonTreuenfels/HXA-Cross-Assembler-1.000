@@ -1,6 +1,6 @@
 # Hobby Cross-Assembler (HXA) V1.000 - Instruction Set (65xx Version)
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03 (in Thompson AWK 4.0)
-# last revision: 12/11/23
+# last revision: 01/04/24
 
 # preferred public function prefix: 'CPU'
 
@@ -399,7 +399,6 @@ def save_mnemonic_expr(mnemonic, addrmode, bitop, expr):
 				elif addrmode.startswith('lab'):
 					addrmode = 'zp' + addrmode[3:]
 			case 'ab':
-				UM.debug( ("mnemonic", mnemonic), ("addrmode", addrmode), ("allowed", _CPU.opcodes[mnemonic]) )
 				bitop = 'bit16'
 				if addrmode.startswith('zp'):
 					addrmode = 'ab' + addrmode[2:]

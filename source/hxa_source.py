@@ -1,6 +1,6 @@
 # Hobby Cross-Assembler (HXA) V1.00 - Source Text Management
 
-# (c) 2004-2022 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 
 # e-mail: teamtempest@yahoo.com
 
-# source language: Python 3.7.1
+# source language: Python 3.11.4
 
 # first created: 05/16/03		(in Thompson AWK 4.0)
-# last revision: 12/30/23
+# last revision: 01/04/24
 
 # preferred public function prefix: "SRC"
 
@@ -245,9 +245,9 @@ def recall(masterline):
 
 def stripcomment(text):
 	'''remove any comment starting somewhere after first non-whitespace char '''
-	# only '*' is not a legal comment marker now
-	# - we will still require '#' to be surrounded by whitespace
-	m = re.search( '[^ \t]([ \t]+)(;|#([^a-zA-Z]|$)|//)', text )
+	# only '*' is not a not legal comment markers now
+	# '#' has to be surrounded by whitespace, though
+	m = re.search( '[^ \t]([ \t]+)(;|//|#([ \t]|$))', text )
 	return text if m is None else text[:m.start(1)]
 
 def ignore(text):
@@ -339,7 +339,7 @@ def nextline():
 				break
 
 		_SRC.explines += _SRC.offset
-		_SRC.offset = _SRC.putback = 0					# reset
+		_SRC.offset = _SRC.putback = 0				# reset
 
 	text = stripcomment( text )
 
