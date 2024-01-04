@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 03/19/07
-; last revised:  12/16/23
+; last revised:  12/27/23
 
 ; no errors to detect
 
@@ -19,8 +19,8 @@
 
 ; -------------------------------
 
-        .if ver() < $0163
-        .fatal  "HXA version 0.163 or higher required"
+        .if ver() < $1000
+        .fatal  "HXA version 1.000 or higher required"
         .endif
 
 ; -------------------------------
@@ -190,8 +190,9 @@ hello$  = "Hello, "
     .str    ]temp$
     .endm
 
-; for this to work as expected we need ASCII output to files
-; - previous default UTF-8 setting won't work any more
+; for this to work as expected, we need Latin-1 output to files
+; - so printable chars in the range $80-$FF are output as one byte each
+; - the default UTF-8 setting outputs two bytes each in this range
 
     .assume  objstr:latin-1
 
@@ -204,7 +205,7 @@ hello$  = "Hello, "
 ; a string whose every character has the high bit set
 ; - an alternate method (most efficient)
 
-    .xlate  \0x20-\0x7f=\0xa0-\0xff
+    .xlate  "\\0x20-\\0x7f=\\0xa0-\\0xff"
 
     .str    "Hello, World!"
 
