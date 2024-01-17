@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03		(in Thompson AWK 4.0)
-# last revision: 01/04/24
+# last revision: 01/13/24
 
 # preferred public function prefix: none (other modules cannot call this module)
 
@@ -57,8 +57,8 @@ import hxa_misc as UTIL
 # - and no, we're not likely to get 99,999 major version numbers :-)
 # - HXA versions implemented in TAWK are all less than '1.00'
 
-verNum = 0x00001000
-verStr = '1.000'
+verNum = 0x00001001
+verStr = '1.001'
 
 # pre-defined symbols
 

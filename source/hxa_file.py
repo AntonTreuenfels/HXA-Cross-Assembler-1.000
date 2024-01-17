@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 11/05/21
-# last revision: 12/26/23
+# last revision: 01/13/24
 
 # preferred public function prefix: "OS"
 
@@ -523,6 +523,10 @@ def _openout(ftype, segnum=1):
 
 	# final check of filename
 	outname, dext = _OS.fnames[ ftype ]
+	
+	# is there a filename ?
+	if outname is None:
+		return False
 
 	# Motorola ?
 	fname, fext = os.path.splitext( outname )
