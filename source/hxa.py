@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Top Level Executive
+# Hobby Cross-Assembler (HXA) V1.002 - Top Level Executive
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03		(in Thompson AWK 4.0)
-# last revision: 01/13/24
+# last revision: 02/05/24
 
 # preferred public function prefix: none (other modules cannot call this module)
 
@@ -57,8 +57,8 @@ import hxa_misc as UTIL
 # - and no, we're not likely to get 99,999 major version numbers :-)
 # - HXA versions implemented in TAWK are all less than '1.00'
 
-verNum = 0x00001001
-verStr = '1.001'
+verNum = 0x00001002
+verStr = '1.002'
 
 # pre-defined symbols
 
@@ -291,19 +291,20 @@ endpass( 'Two' )
 # Write Files
 # -----------------------------
 
+# 0 -> okay, 1..7 -> warning/error of some kind
+errcode = UM.checkerr()
+
 # listing
-SRC.list()
+SRC.list( errcode )
 
 # object
-CG.putobject()
+CG.putobject( errcode )
 
 # warnings/errors
-errcnt = UM.checkerr()
-OS.writeerr()
+OS.writeerr( errcode )
 
 # -----------------------------
 # Done
 # -----------------------------
 
-# 0 -> okay, 1..7 -> warning/error of some kind
-sys.exit( errcnt )
+sys.exit( errcode )

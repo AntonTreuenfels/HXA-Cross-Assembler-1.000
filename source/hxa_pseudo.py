@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Pseudo Opcode Handler
+# Hobby Cross-Assembler (HXA) V1.002- Pseudo Opcode Handler
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/08/03	(in Thompson AWK 4.0)
-# last revision: 12/29/23
+# last revision: 02/05/24
 
 # preferred public function prefix: PSOP
 
@@ -78,16 +78,15 @@ def dopsnull(label=None, expr=None):
 
 def doassume(label, fields):
 	''' handle ASSUME psop '''
-	flag, val = fields
-	flag = flag.lower()
-	val = val.lower()
+	f = [ x.lower() for x in fields ]
+	flag, val = f
 	if not STR.doassume(flag, val):
 		if not CG.doassume(flag, val):
 			UM.warn( 'BadAssume', fields )
 
 # built-in pseudo opcodes
 
-# psop processing rules coding:
+# psop processing rules coding for label and expression types:
 
 # - if capitalized, argument type is required
 # - if not capitalized, argument type is checked whenever present
@@ -96,24 +95,25 @@ def doassume(label, fields):
 # "e" = expression (any type)
 # "f" = filename (defaults to name of first file used if not present)
 # "g" = global name (literal or string expression)
-# "h" = hex string (opt-string)
+# "h" = hex character string (opt-string)
 # "i" = ignored if present (warning message generated)
 # "l" = label (assigned current pc value; branch target labels are odd use)
+# "m" = numeric argument only (no forward reference; strings compared to null)
 # "n" = numeric argument (forward reference ok)
 # "o" = opt-string (string expression or "as-is")
 # "p" = numeric argument (no forward reference; negative odd)
-# "q" = equate string (string expression or "as-is")
-# "r" = argument required (not evaluated)
-# "s" = string constant (numbers converted to one-char strings)
-# "u" = user label (assigned expression value; branch target labels odd use)
-# "v" = variable numeric label (for .plusequ and .minusequ)
+# "q" = equate string (opt-string)
+# "r" = argument required (but not evaluated)
+# "s" = string constant (numbers converted to one-char Unicode strings)
+# "u" = user label (assigned expression value; branch target labels are odd use)
 
 # "?" = one argument only (evaluated)
 # "+" = one or more type-identical arguments allowed (each evaluated)
-# "&" = one or more string-ish arguments allowed (evaluated; concatenated)
+# "&" = one or more string-ish arguments allowed (all evaluated, then concatenated)
 # "!" = one or more type-different arguments allowed (each evaluated)
+# "*" = one or more arguments (none evaluated)
 
-# "^" = suffix to pass psop to handler (if not present, pass label)
+# "^" = suffix to pass psop to handler (if not present, pass label instead)
 # - used when multiple psops point to the same handler
 
 _psOpcode = {
@@ -168,7 +168,7 @@ _psOpcode = {
 
 	# END
 
-	'end':	( 'l', 'y', '?', OS.doend ),
+	'end':	( 'l', 'b', '?', OS.doend ),
 
 	# macros and blocks
 
@@ -272,6 +272,7 @@ _psAlias = {
 _psArgType = {
 
 	'A': ( "BadField",	None ),				# ACCEPT anything or nothing, no evaluation
+	'B': ( "NeedNumVal", EXP.getaddr ),		# ONLYNUM, forward ok, strings are errors
 	'C': ( "NeedCond",	EXP.getconstnum ),	# CONDITION, no forward, strings converted to numbers
 	'F': ( "NeedFile",	EXP.getfname ),		# FILENAME, no forward, OPTIONAL-type string
 	'G': ( "NeedGlobal", EXP.getconstglb ),	# GLOBAL NAME, no forward
@@ -285,7 +286,6 @@ _psArgType = {
 	'R': ( "BadField",	None ),				# REQUIRED something, no evaluation
 	'S': ( "NeedStr",	EXP.getconststr ),	# STRING; no forward, numbers NOT converted to strings
 	'U': ( "NeedLabel",	SYM.warnanon ),		# LABEL, anonymous labels odd
-	'Y': ( "NeedNumVal", EXP.getaddr ),		# ONLYNUM, forward ok, strings are errors
 }
 
 # -----------------------------
@@ -297,7 +297,7 @@ class PSOPvariables(object):
 	def __init__(self):
 
 		self.targetpsop = None		# not None if skipping source lines
-	
+
 _PSOP = PSOPvariables()
 
 # -----------------------------
@@ -411,7 +411,7 @@ def dopseudo(label, psop, exprfield):
 		UM.ignored( exprfield )
 
 	# make a list of the expressions in the expression field
-	# - if splitting not required, just checks for errors
+	# - if splitting not required by psop, just checks for errors
 	ok, expr = STR.splitfield( exprfield )
 	if not ok:
 		return

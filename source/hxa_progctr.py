@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Program Counter Management
+# Hobby Cross-Assembler (HXA) V1.002 - Program Counter Management
 
-# (c) 2004-2022 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 03/11/03	(in Thompson AWK 4.0)
-# last revision: 08/18/23
+# last revision: 02/05/24
 
 # preferred public function prefix: PC
 

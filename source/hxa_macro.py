@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Macro and Block Processing
+# Hobby Cross-Assembler (HXA) V1.002 - Macro and Block Processing
 
-# (c) 2004-2022 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 
 # e-mail: teamtempest@yahoo.com
 
-# source language: Python 3.7.1
+# source language: Python 3.11.4
 
 # first created: 02/22/03 (in Thompson AWK 4.0)
-# last revision: 12/30/23
+# last revision: 02/05/24
 
 # preferred public function prefix: "MAC"
 
@@ -250,7 +250,7 @@ def topblock(type):
 
 def endsource():
 	'''end of first pass'''
-	#kill all active expansions (if any) '''
+	#kill all active expansions (if any)
 	_MAC.expandbeg = []
 	_MAC.expandsrc = []
 	_MAC.expandend = []

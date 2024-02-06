@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - File Manipulation
+# Hobby Cross-Assembler (HXA) V1.002 - File Manipulation
 
-# (c) 2021-2023 by Anton Treuenfels
+# (c) 2021-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 11/05/21
-# last revision: 01/13/24
+# last revision: 02/05/24
 
 # preferred public function prefix: "OS"
 
@@ -566,10 +566,10 @@ def errwrite(this):
 	''' save error text for later writing to error file (if any) '''
 	_OS.errtext.append( this )
 
-def writeerr():
+def writeerr(errcode):
 	'''write error file (if any)'''
-	# no errors if only two "pass#" messages
-	if len(_OS.errtext) > 2 and _openout('errfile'):
+	# any warnings/errors/fatal or echo ?
+	if (errcode > 0 or len(_OS.errtext) > 2) and _openout('errfile'):
 		hdr = makeheader( 'ErrFile' )
 		for line in hdr:
 			writeout( line )
@@ -581,9 +581,10 @@ def writeerr():
 # listing file
 # -----------------------------
 
-def openlist():
+def openlist(errcode):
 	''' open listing file (if any) '''
-	return _openout('listfile')
+	# no errors/fatal ?
+	return errcode < 2 and _openout('listfile')
 
 # -----------------------------
 # assembly output files
@@ -606,16 +607,18 @@ def asmoutwrite(this):
 
 def doend(label, addr):
 	''' handle END psop '''
+	# block stack is not empty ?
 	if MAC.openblock():
 		UM.warn( 'OddUse' )
 
-	# can't set start adress within include file
-	if not _isrootfile() and addr is not None:
+	if _isrootfile():
+		# 'addr' may not be resolved yet if program is segmented
+		CG.store( 'start', addr )
+	elif addr is not None:
+		# tried to use a start address in an INCLUDE file
 		UM.ignored( addr )
 
-	# 'addr' may not be resolved yet if program is segmented
-	else:
-		CG.store( 'start', addr )
+	# in any case, we're not going to read from this file anymore
 
 	# kill any macro expansions
 	MAC.endsource()

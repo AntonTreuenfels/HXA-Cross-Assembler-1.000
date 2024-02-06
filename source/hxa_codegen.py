@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Object Code Management
+# Hobby Cross-Assembler (HXA) V1.002 - Object Code Management
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/22/03	(in Thompson AWK 4.0)
-# last revision: 12/30/23
+# last revision: 02/05/24
 
 # preferred public function prefix: CG
 
@@ -1297,15 +1297,17 @@ def _data2obj(datasegs):
 
 # -------
 
-def putobject():
+def putobject(errcode):
 	''' output finished assembly object (if any)'''
-	# which segments actually contain object data ?
-	_CG.datasegs = [ i for i in range(1, PC.getsegcnt()) if PC.seghasdata(i) ]
+	# no errors/fatal ?
+	if errcode < 2:
+		# which segments actually contain object data ?
+		_CG.datasegs = [ i for i in range(1, PC.getsegcnt()) if PC.seghasdata(i) ]
 
-	# if there are any, output any and all file types specified
-	if len(_CG.datasegs):
-		_data2obj( _CG.datasegs )
-		_putobject( "obj" )		# binary
-		_putobject( "raw" )		# undecorated hex
-		_putobject( "hex" )		# Intel hex
-		_putobject( "srec" )	# Motorola #hex
+		# if there are any, output any and all file types specified
+		if len(_CG.datasegs):
+			_data2obj( _CG.datasegs )
+			_putobject( "obj" )		# binary
+			_putobject( "raw" )		# undecorated hex
+			_putobject( "hex" )		# Intel hex
+			_putobject( "srec" )	# Motorola #hex

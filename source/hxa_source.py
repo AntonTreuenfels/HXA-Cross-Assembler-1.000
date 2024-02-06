@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Source Text Management
+# Hobby Cross-Assembler (HXA) V1.002 - Source Text Management
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 05/16/03		(in Thompson AWK 4.0)
-# last revision: 01/04/24
+# last revision: 02/05/24
 
 # preferred public function prefix: "SRC"
 
@@ -518,7 +518,7 @@ def _xreflistline(master, offset):
 
 # -----------------------------
 
-def list():
+def list(errcode):
 
 	def _exp(key):
 		return UM.expandtext(key)
@@ -877,10 +877,7 @@ def list():
 
 	# do we have a listing file ?
 
-#	if not makeformats():
-#		UM.error( "BadPagFmt" )
-
-	if makeformats() and OS.openlist():
+	if makeformats() and OS.openlist(errcode):
 
 		_initlist()
 

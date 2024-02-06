@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - User Messages (Error and Informational)
+# Hobby Cross-Assembler (HXA) V1.002 - User Messages (Error and Informational)
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03	(in Thompson AWK 4.0)
-# last revision: 01/01/24
+# last revision: 02/05/24
 
 # preferred public function prefix: "UM"
 
@@ -497,7 +497,7 @@ def quitonerr():
 	e = checkerr()
 	if e > 1:
 		info( 'Quit' )
-		OS.writeerr()
+		OS.writeerr( e )
 		sys.exit( e )
 
 def geterr():
@@ -615,7 +615,7 @@ def domesgtext(label, equate):
 	''' handle MESGTEXT psop '''
 	key, text = equate
 	if key in _mesgText:
-		_mesgText[ key ] = STR.printable( text )
+		_mesgText[ key ] = STR.replaceescapes( text )
 	else:
 		undefined( key )
 

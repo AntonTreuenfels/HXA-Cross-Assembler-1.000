@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Miscellaneous 
+# Hobby Cross-Assembler (HXA) V1.002 - Miscellaneous 
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 
 # e-mail: teamtempest@yahoo.com
 
-# source language: Python 3.7.1
+# source language: Python 3.11.4
 
 # first created: 01/24/03	(in Thompson AWK 4.0)
-# last revision: 12/29/23
+# last revision: 02/05/24
 
 # preferred public function prefix: UTIL
 

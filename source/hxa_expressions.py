@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - Expression Parsing and Evaluation
+# Hobby Cross-Assembler (HXA) V1.002 - Expression Parsing and Evaluation
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 04/09/03	(in Thompson AWK 4.0)
-# last revision: 01/01/24
+# last revision: 02/05/24
 
 # preferred public function prefix: EXP
 
@@ -360,7 +360,7 @@ def doparse(this, want):
 
 # -----------------------------
 
-	def parsestate():
+	def parsestate(key, detail):
 		UM.debug(
 			("Input expr", this),
 			("Current expr", expr),
@@ -368,7 +368,9 @@ def doparse(this, want):
 			("Current RPN", rpn),
 			("Parse stack", parsestk),
 			("Type stack", typestk),
-			("Need Operand", wantoperand)
+			("Need Operand", wantoperand),
+			("Error key", key),
+			("Detail", detail),
 		)
 
 # -----------------------------
@@ -376,12 +378,7 @@ def doparse(this, want):
 	def _parserr(key, detail=None):
 		''' report parse errors '''
 
-		if False:
-			parsestate()
-			UM.debug(
-				("Error key", key),
-				("Detail", detail)
-			)
+#		parsestate( key, detail )
 
 		UM.error( key, detail if detail is not None else this )
 		return False
@@ -862,7 +859,7 @@ def doparse(this, want):
 
 	# initialize
 
-	expr = SYM.checkloneanon(this).strip()			# save to new variable but retain original for error reports
+	expr = SYM.checkloneanon( this.strip() )		# save to new variable but retain original for error reports
 	token = None									# anything successfully matched
 	ok = wantoperand = True							# flags
 	rpn = []										# built-up rpn expression
@@ -1253,7 +1250,7 @@ def _eval(rpn):
 	_unarydispatch = {
 		'U-': _arith_negate,	# negate top stack item; an integer
 		'U+': _arith_plus,		# absolute value of top stack item; an integer
-		'U!': _poly_not,		# logical negation of tope stack item; type indifferent
+		'U!': _poly_not,		# logical negation of top stack item; type indifferent
 		'U~': _bit_not,			# bitwise NOT of top stack item; an integer
 		'U<': _bit_lsb,			# least significant byte of top stack item; an integer
 		'U>': _bit_msb,			# most significant byte of top stack item; an integer

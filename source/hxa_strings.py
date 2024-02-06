@@ -1,6 +1,6 @@
-# Hobby Cross-Assembler (HXA) V1.00 - String Helper Functions
+# Hobby Cross-Assembler (HXA) V1.002 - String Helper Functions
 
-# (c) 2004-2023 by Anton Treuenfels
+# (c) 2004-2024 by Anton Treuenfels
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,14 +25,15 @@
 
 # e-mail: teamtempest@yahoo.com
 
-# source language: Python 3.7.1
+# source language: Python 3.11.4
 
 # first created: 11/01/21
-# last revision: 12/28/23
+# last revision: 02/05/24
 
 # preferred public function prefix: "STR"
 
 # -----------------------------
+from sys import maxunicode
 import re
 # other HXA modules
 import hxa_usermesg as UM
@@ -45,6 +46,8 @@ import hxa_misc as UTIL
 class STRvariables(object):
 
 	def __init__(self):
+
+		self.MAXCHAR = chr(maxunicode)		# maxmimum character value
 
 		self.strprint = 'utf-8'				# strings sent to console/list/error file
 		self.strstore = 'utf-8'				# strings sent to object code
@@ -94,7 +97,7 @@ def printable(this):
 		# - any method that lets a codepoint > 255 through doesn't work (a Windows thing)
 		# - (so though in theory UTF-8 and Latin-1 should differ, in practice they don't)
 		filter = r'[^\x20-\x7f]' if _STR.strprint == 'ascii' else r'[^\x20-\x7f\xa0-\xff]'
-		return re.sub(filter, lambda m: f'\\x{ord(m.group()):02X}', this )
+		return re.sub( filter, lambda m: f'\\x{ord(m.group()):02X}', this )
 
 def unichr(val):
 	''' Unicode char of codepoint val '''
@@ -120,8 +123,8 @@ _mnemonEsc = {
 
 _allEscapes = r'\\(([$]|0?[xX])([0-9a-fA-F]{2})|([0-9][0-9a-fA-F]|0[0-9a-fA-F]{2})[hH]|u([0-9a-fA-F]{4})|U([0-9a-fA-F]{8})|(.))'
 
-# groups:         (1->                                                                                        )'
-# groups:          (2->       )(3->           ) (4->             )      (5->           )  (6->          )  (7)'
+# groups:         (1->                                                                                                        )'
+# groups:          (2->       )(3->           ) (4->             )(5->               )(6->             )(7->             ) (8)'
 
 def replaceescapes(this):
 	''' replace any escape sequences in a string '''
@@ -250,9 +253,9 @@ def xlate(this):
 	return _STR.xlatetable[this] if this in _STR.xlatetable else this
 
 _skipTo = {
-	',': "\"'/(,",
-	'=': "\"'=",
-	':': "\"':",
+	',': "\"'/(,",	# split at comma, do not split between balanced double quote, quote, forward slash, nested parentheses
+	'=': "\"'=",	# split at equal sign, do not split between balanced double quote or quote
+	':': "\"':",	# split at colon, do not split between balanced double quote or quote
 	}
 
 def splitfield(this, delim=','):
@@ -264,88 +267,99 @@ def splitfield(this, delim=','):
 	if this is None or delim not in this:
 		return ( True, [this] )
 
-	this = printable( this )
 	# even if split char is present:
-	# - it may be escaped or within a char, string, regex literal or function call argument list
-	# - regex literals are hard because regex delimiter looks like arithmetic divide
-	# - so we will ignore those here - any field delimiter in them has to be escaped
-	skipping = skipesc = False
+	# - it may be escaped or within a literal char, string, or regex or a function call argument list
+	# - regex literals are hard because its delimiter looks like arithmetic divide
 
-	# keep track of where each field starts, parenthesis nesting level
-	start = skipparen = 0
-
-	# which characters are important to watch for ?
+	skipesc = skipping = False
+	fstart = skipparen = 0
 	important = _skipTo[ delim ]
 
 	fields = []
 
-	for i, ch in enumerate( this ):
+	for fend, ch in enumerate(this):
 
+		# if any of these next three are true, we want to loop immediately
+		# - so we don't inadvertantly fall through to 'match..case'
+
+		# unconditionally take character
+		# - this is mostly to enable escaped field split character
 		if skipesc:
-			skipesc = False					# escapes are unconditional for one character
+			skipesc = False
 			continue
 
-		elif ch == '\\':					# escapes can happen inside char, string and regex literals
+		# ignore this and also next character
+		elif ch == '\\':
 			skipesc = True
 			continue
 
-		elif ch not in important:			# is this a character we need to pay attention to ?
-			continue						# no ...
+		# do we need to pay attention to this character ?
+		elif ch not in important:
+			continue
 
-		# if we are skipping, can we stop ?
-		if skipping:
-			if important == '()':
-				skipparen += -1 if ch == ')' else 1
-				if skipparen > 0:
-					continue
+		match ch:
+			# start or end of a delimited single quote, double quote or regex section ?
+			# - if start, we look for the existence of a matching delimiter farther along in 'this'
+			# - if we don't find one, 'this' likely has an input mistake in it
+			# - but for the regex delimiter '/',the division operator might be meant instead
+			# - note this test can fail if 'this' contains two division operators in separate expressions
+			case '"' | "'" | '/':
+				if not skipping and this.find(ch, fend+1) >= 0:
+					important = ch
+					skipping = True
+				else:
+					important = _skipTo[ delim ]
+					skipping = False
+			# open parenthesis ?
+			case '(':
+				skipparen += 1			# watch for possible nested parentheses
+				if this.find(')', fend+1) >= 0:
+					important = '()'
+				else:
+					important = _skipTo[ delim ]
+			# close parenthesis ?
+			case ')':
+				skipparen -= 1
+				if skipparen == 0:		# matched opening parenthesis ?
+					important = _skipTo[ delim ]
+			# a field delimiter ? (pity we can't match on 'delim' directly)
+			case ',' | '=' | ':':
+				fields.append( this[fstart:fend].strip(' ') )
+				fstart = fend + 1
+			# oops !
+			case _:
+				UM.noway( this )
 
-			# '"', "'" and '/' are always the closing match of a pair
-			skipping = False
-			important = _skipTo[ delim ]
+	# take everything left (the last or only field)
+	fields.append( this[fstart:].strip(' ') )
 
-		elif ch == delim:
-			fields.append( this[start:i].strip() )
-			start = i + 1							# update to start of next field
-
-		# we've found the start of a possible skip section
-		# - we look for the existence of a possible close skip section
-		# - if we don't find one, this is probably an input mistake
-		# - but for the regex delimiter '/', it might not be if the division operator is meant
-		# - test can fail if an input line contains two division operators in separate expressions
-		else:
-			skipping = this.find( ')' if ch == '(' else ch, i+1 ) >= 0
-			if skipping:
-				important = '()' if ch == '(' else ch
-				skipparen = 1					# no effect if important != '()'
+	# check for any blank fields caused by:
+	# - split char being first or last char of 'this'
+	# - two consecutive split chars separated only by zero or more spaces
+	blankfield = False
+	for i, field in enumerate(fields):
+		if not len(field):
+			fields[ i ]  = "### "
+			blankfield = True
 
 	errcnt = UM.geterr()
-	# unterminated skip ?
-	if skipesc or skipping:
-		UM.error( 'BadEOE', this[start:] )
+	# at least one blank field found ?
+	if blankfield:
+		UM.error( "BadField", ', '.join(fields) )
+
+	# needed a closure but didn't find one ?
+	elif skipping or skipparen or skipesc:
+		UM.error( "BadEOE", this )
+
+	# everything okay ?
+	if UM.geterr() == errcnt:
+		return ( True, fields )
 	else:
-
-		# unconditionally take everything left (the last or only field)
-		fields.append( this[start:].strip() )
-
-		# check for blank fields caused by:
-		# - split char being first or last char of 'this'
-		# - two consecutive split chars separated only by zero or more spaces
-		err = False
-		for i, field in enumerate(fields):
-			# is there at least one error ?
-			if not len(field):
-				fields[i] = '### '
-				err = True
-
-		if err:
-			UM.error( 'BadField', ', '.join(fields) )
-
-	# done
-	return (True, fields) if errcnt == UM.geterr() else (False, None)
+		return ( False, None )
 
 def splitequate(this):
 	''' split string if it contains an 'equate' pattern '''
-	if this is not None and len(this):
+	if this is not None and ('=' in this or ':' in this):
 		ok, fields = splitfield( this, '=' if '=' in this else ':' )
 		if ok and len(fields) > 1:
 			return ( True, UTIL.maxfields(fields, 2) )
