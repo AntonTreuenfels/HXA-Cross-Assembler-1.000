@@ -6,7 +6,7 @@
 ; by Anton Treuenfels
 
 ; first created: 06/23/04
-; last revised:  01/18/22
+; last revised:  02/01/24
 
 ; no errors to detect
 
@@ -28,19 +28,19 @@
 ; these messages appear on the console (testing quoted strings)
 
         .mesgtext   "EndOne=Done picking apart your source"
-        .mesgtext   "BegTwo=Resolving forward refs, generating code, etc"
+        .mesgtext   "BegTwo=Resolving forward refs\, generating code\, etc"
         .mesgtext   "EndTwo=Done with all that"
         .mesgtext   "Fwrite=Spitting out"
 
 ; these messages appear in the listfile (testing unquoted strings)
 
         .mesgtext   ListFile=Regurgitation
-        .mesgtext   OBJ=Here's what I saw and what I did with it
-        .mesgtext   LBL=Here's the names you made up
+        .mesgtext   OBJ=Here\'s what I saw and here\'s what I did with it
+        .mesgtext   LBL=Here\'re the names you made up
 
 ; another message in the listfile (testing unprintable char in message)
 
-        .mesgtext   "NoRecord=Didn't see anything\nIs that what you meant?"
+        .mesgtext   "NoRecord=Didn\\'t see anything\nIs that what you meant?"
 
 ; -------------------------------
 

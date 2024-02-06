@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 07/27/03
-; last revised:  02/10/22
+; last revised:  01/22/24
 
 ; no errors to detect
 
@@ -21,7 +21,7 @@
 
 ; all (or most) printable ASCII characters
 
-        .string " !\"#$%&'()*+,-./"
+        .string " !\"#$%&'()*+\,-./"
 
         .string "0123456789:;<=>?"
 
@@ -67,7 +67,7 @@
 
 ; In quoted strings...
 
-        .byte   "an embedded ','" == "need not be escaped"
+        .byte   "an embedded '\,'" == "must be escaped"
 
 ; The escape character is...
 
@@ -150,12 +150,12 @@ numericH    =   $48
         .string $146,$1247
         .string numericH,numericH+1
         .string (numericH+2), (numericH) + (3)
-        
+
         .string $50,"\$51",52H,"\53H",0x54,"\0x55",0X56,"\x57"
 
-        .string "Hello, World!",$00
-        .string "Hello, World!",'\0'
-        .string "Hello, World!", '\n', '\0'
+        .string "Hello\, World!",$00
+        .string "Hello\, World!",'\0'
+        .string "Hello\, World!", '\n', '\0'
 
         ; show concatenation occurs before reversal
 
@@ -165,12 +165,12 @@ numericH    =   $48
         .stringr $146,$1247
         .stringr numericH,numericH+1
         .stringr (numericH+2), (numericH) + (3)
-        
+
         .stringr $50,"\$51",52H,"\53H",0x54,"\0x55",0X56,"\x57"
 
-        .stringr "Hello, World!",$00
-        .stringr "Hello, World!",'\0'
-        .stringr "Hello, World!", '\n', '\0'
+        .stringr "Hello\, World!",$00
+        .stringr "Hello\, World!",'\0'
+        .stringr "Hello\, World!", '\n', '\0'
 
 ; -------------------------------
 

@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 11/26/03
-; last revised:  09/07/23
+; last revised:  01/22/24
 
 ; no errors to detect
 
@@ -38,7 +38,7 @@
         .word   'A', 'B', 'C'
 
 ; the comma char is used as separator in the expression field,
-; and can be escaped for clarity when intended as an operand if desired...
+; and must be escaped when intended as an operand
 
         .word   '\,'
 
@@ -46,15 +46,6 @@
         .word   '\,', '\,', '\,'
         .word   '\,' ,'\,' ,'\,'
         .word   '\,' , '\,' , '\,'
-
-; ...but it doesn't have to be
-
-        .word   ','
-
-        .word   ',',',',','
-        .word   ',', ',', ','
-        .word   ',' ,',' ,','
-        .word   ',' , ',' , ','
 
 ; the single quote delimiter itself must be escaped
 
@@ -104,7 +95,7 @@
         .byte   '\x83'
 
 ; literal escape codes
-; - except '\b' is mnemonic, of course
+; - '\b' is mnemonic because only one escape code used
 
         .byte   '\A', '\B', '\C'
         .byte   '\a', '\b', '\c'

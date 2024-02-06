@@ -1,0 +1,26 @@
+; Hobby Cross-Assembler Test 025
+; Customization\ASSUME Strings
+; ok: "ASSUME" pseudo-op
+
+; by Anton Treuenfels
+
+; first created: 08/08/04
+; last revised:  01/26/24
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; un-required psop
+        .org    $1000       ; un-required psop
+
+; -------------------------------
+
+        .mesgtext   "NoRecord=Didn\\'t see anything\nIs that what you meant?"
+
+; -------------------------------
+
+        .end

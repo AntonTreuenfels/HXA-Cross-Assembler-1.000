@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 03/07/04
-; last revised:  05/17/23
+; last revised:  02/02/24
 
 ; no errors to detect
 
@@ -210,7 +210,7 @@
 
 ; -------------------------------
 
-; possible surprises
+; possible surprises (in quoted strings)
 ; - space char must double-escaped to be recognized
 ; - '=' char must be double-escaped to avoid interpretation as
 ; field separator

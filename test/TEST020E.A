@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 08/30/03
-; last revised:  06/13/23
+; last revised:  01/1/24
 
 ; warning(s): 0
 
@@ -38,7 +38,7 @@
 ; not an equate pattern
 
         .psalias    "where's the equal sign?"
-        .psalias    "escaped \\\= isn't seen"
+        .psalias    "escaped \\= is not seen"
 
 ; missing alias name
 

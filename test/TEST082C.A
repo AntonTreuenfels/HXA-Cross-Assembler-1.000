@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 03/07/22
-; last revised:  03/07/22
+; last revised:  01/23/24
 
 ; no errors to detect
 
@@ -21,9 +21,9 @@
 
         .str   "*" * 32
 
-        .str   "Hello, World! " * 2
+        .str   "Hello\, World! " * 2
 
-        .str   "Hello, " * 2 + "World! " * 2
+        .str   "Hello\, " * 2 + "World! " * 2
 
         .str   "Just once" * 1
 
@@ -31,7 +31,7 @@
 
 ; backward reference
 
-bhello$  =   "Hello, " * 2
+bhello$  =   "Hello\, " * 2
 bworld$  =   "World! " * 2
 
 times    = 2
@@ -44,7 +44,7 @@ times    = 2
 
         .str    (bhello$ + bworld$) * 2
 
-        .str    "Hello, World!" * times
+        .str    "Hello\, World!" * times
 
 ; -------------------------------
 

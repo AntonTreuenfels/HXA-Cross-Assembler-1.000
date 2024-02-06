@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 01/25/22
-; last revised:  02/04/22
+; last revised:  01/31/24
 
 ; no errors to detect
 
@@ -41,7 +41,9 @@
 
         ; code points above 255
 
+        .byte   '\u0150'
         .byte   '\u0152', '\u0153'
+        .byte   '\U0010abcd'
         .byte   '\U00002764', '\U0001f496'
 
 ; 16-bit storage size
@@ -64,7 +66,9 @@
 
         ; code points above 255
 
+        .word   '\u0150'
         .word   '\u0152', '\u0153'
+        .word   '\U0010abcd'
         .word   '\U00002764', '\U0001f496'
 
 ; 24-bit storage size
@@ -87,7 +91,9 @@
 
 ; code points above 255
 
+        .bit24   '\u0150'
         .bit24   '\u0152', '\u0153'
+        .bit24   '\U0010abcd'
         .bit24   '\U00002764', '\U0001f496'
 
 ; 32-bit storage size
@@ -110,7 +116,9 @@
 
 ; code points above 255
 
+        .long   '\u0150'
         .long   '\u0152', '\u0153'
+        .long   '\U0010abcd'
         .long   '\U00002764', '\U0001f496'
 
 ; character values are not affected by string storage settings (being numeric)
@@ -137,7 +145,9 @@
 
 ; code points above 255
 
+        .long   '\u0150'
         .long   '\u0152', '\u0153'
+        .long   '\U0010abcd'
         .long   '\U00002764', '\U0001f496'
 
         .assume objstr:ascii
@@ -162,9 +172,10 @@
 
 ; code points above 255
 
+        .long   '\u0150'
         .long   '\u0152', '\u0153'
+        .long   '\U0010abcd'
         .long   '\U00002764', '\U0001f496'
-
 
 ; ---------------------
 

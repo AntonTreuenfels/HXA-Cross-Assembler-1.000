@@ -1,0 +1,29 @@
+; Hobby Cross-Assembler Test 014c
+; Output Files\No Error File
+; ok: error found but no error file to write
+
+; by Anton Treuenfels
+
+; first created: 01/15/24
+; last revised:  01/15/24
+
+; no errors to detect
+; - should not try to write either type
+; - if not executed, no default name
+
+;        .listfile
+;        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte  $00
+        .xxxx  $01          ; not recognized
+
+; -------------------------------
+
+        .end

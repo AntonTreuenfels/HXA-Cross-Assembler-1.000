@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 08/08/04
-; last revised:  01/28/22
+; last revised:  02/02/24
 
 ; no errors to detect
 
@@ -35,31 +35,29 @@
 
         .echo   == Three arguments w/ escaped newline
 
-        # - in quoted strings the '\n' escape sequence is replaced by a newline
-        # during processing, but when but when formatted later for output to
-        # console or file it is replaced again by the escape sequence '\n'
-        # - (this does not happen to strings which become part of the object code)
-        # - in unquoted ("as-is") strings the escape character '\' is recognized
-        # and the following 'n' skipped, so it also appears as it originally does
-        # - '/' needs to be escaped because it is a regex delimiter
-        # - in quoted strings it needs to be escaped twice, once for when it
-        # is first processed and again for when the string it is split on the 
-        # '=' character
-        # - in unquoted strings it only needs to be escaped once,
-        # as only splitting on the '=' character affects it
+        # arguments to 'assume' are opt-strings
+        # - which are processed twice, once for "," field split and once for "=" (or ":") field split
+		# - but the "," may not be present if there is only a single field
+		# - in either case, the escape character has no effect other than to "protect" the next char
+        # - if they are string expressions (quoted):
+        #   "," split leaves any escape chars where they are
+        #   "=" split sees the result of string processing of escape codes
+        # - if they are raw strings (unquoted):
+        #   "," split leaves any escape chars where they are
+        #   "=" split leaves any escape chars where they are
 
-        .assume "one=ok", "two=ok\nw\\/ carriage return", "three=ok"
+        .assume "one=ok", "two=ok\nw\/ carriage return", "three=ok"
         .assume four=ok, five=ok\nw\/ carriage return, six=ok
 
         .echo   == Three arguments w/ escaped space
         
-        # here the difference is visible: the '\s' mnemonic escape is mapped to
-        # the space character (0x20). This is printable and so is *not*
-        # transformed back into its original form when output
-        # - but in the unquoted form the escape character '\' always means just
-        # "ignore the next character" during splitting, and is passed through unchanged
+        # the '\s' mnemonic escape is mapped to the space character (0x20)
+		# - if it is in a string expression (quoted):
+		# - this is printable escape sequence and so is *not* transformed into anything else when output
+		# - in raw strings (unquoted):
+        # - the "\s" pair is passed through unchanged
 
-        .assume "one=ok", "two=ok\sw\\/ escaped space", "three=ok"
+        .assume "one=ok", "two=ok\sw\/ escaped space", "three=ok"
         .assume four=ok, five=ok\sw\/ escaped space, six=ok
 
         # default message output to console and files is UTF-8

@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 03/03/23
-; last revised:  05/14/23
+; last revised:  01/30/24
 
 ; warning(s): 4
 ; - odd use
@@ -38,10 +38,10 @@
 
         .hexfile  "control\0x09 chars\0x0A are\0x0B suspect"
 
-; ...as is any non-alphanumeric except "#", "-", "_" and '."
+; ...as is any non-alphanumeric except "#", "-", "_" and "."
 
         .rawbyseg   "spaces are suspect"
-        .rawbyblk   'all_these_are_suspect: !@$%^&*()+={}[]|;<>,"?`~'
+        .rawbyblk   "all_these_are_suspect: \"!@$%^&*()+={}[]|;<>\,?`'~"
 
 ; characters in the range \0xA1-\0xFF are acceptable
 

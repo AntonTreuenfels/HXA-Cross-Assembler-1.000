@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 12/07/05
-; last revised:  03/07/22
+; last revised:  01/23/24
 
 ; no errors to detect
 
@@ -134,9 +134,9 @@ strD$   .equ    "d"
 
 ; implied concatenation of mixed arguments
 
-        .string "Hello, World!", 0x00
+        .string "Hello\, World!", 0x00
 
-        .string "Hello, World!", 0
+        .string "Hello\, World!", 0
 
 ; -------------------------------
 

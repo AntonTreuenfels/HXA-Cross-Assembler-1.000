@@ -70,7 +70,7 @@ times    .equ    32
 
         .string 14 * "abc"
 
-        .string 1024 * "Hello, World! "
+        .string 1024 * "Hello\, World! "
 
         .string times * "def"
 
