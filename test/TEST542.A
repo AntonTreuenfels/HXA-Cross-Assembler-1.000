@@ -1,0 +1,133 @@
+; Hobby Cross-Assembler Test 542
+; Functions\SEED() and RND()
+; ok: random integers
+
+; by Anton Treuenfels
+
+; first created: 06/01/24
+; last revised:  06/02/24
+
+; no errors to detect
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_M"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; try eight-bit values
+
+seed1 = seed(999999937)		; largest 9-digit prime
+
+		.long seed1
+
+         .repeat 16
+		 .byte rnd(1000)
+		 .endr
+
+seed2 = seed(seed1)
+
+		.long	seed2
+
+         .repeat 24
+		 .byte rnd(1000)
+		 .endr
+
+; try 16-bit values
+
+seed3 = seed()
+
+		.long seed3
+
+         .repeat 16
+		 .word rnd(32768)
+		 .endr
+
+seed4 = seed(seed3)
+
+		.long	seed4
+
+         .repeat 24
+		 .word rnd(32768)
+		 .endr
+
+; can we limit a value to 16-bits in a 24-bit space ?
+
+seed5 = seed()
+
+		.long seed5
+
+         .repeat 16
+		 .bit24 rnd(32768)
+		 .endr
+
+seed6 = seed(seed5)
+
+		.long	seed6
+
+         .repeat 24
+		 .bit24 rnd(32768)
+		 .endr
+
+; can we generate a random sequence with just SEED() ?
+
+seed7 = seed()
+
+		.long	seed7
+
+		.repeat 16
+		.long seed()
+		.endr
+
+seed8 = seed(seed7)
+
+		.long	seed8
+
+		.repeat 24
+		.long seed()
+		.endr
+
+; what if the value given to RND() is zero ?
+
+		.repeat 16
+		.long	rnd(0)
+		.endr
+
+; what if the value given to RND() is positive ?
+
+		.repeat 16
+		.long	rnd(32)
+		.endr
+
+; what if the value given to RND() is negative ?
+
+		.repeat 16
+		.long	rnd(-32)
+		.endr
+
+; what if the values given to RND() are increasing ?
+
+		.repeat 16
+		.long	rnd(32, 64)
+		.endr
+
+; what if the values given to RND() are decreasing ?
+
+		.repeat 16
+		.long	rnd(64, 32)
+		.endr
+
+; what if the values given to RND() are decreasing amd cross zero ?
+
+		.repeat 16
+		.long	rnd(128, -128)
+		.endr
+
+
+; -------------------------------
+
+        .end

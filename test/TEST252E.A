@@ -1,0 +1,64 @@
+; Hobby Cross-Assembler Error Test 252e
+; File Inclusion\Default Output File Names
+; warn: output filename same as input filename (output time)
+
+; by Anton Treuenfels
+
+; first created: 04/19/24
+; last revised:  04/19/24
+
+; warning(s): 2
+; - duplicate name
+; - token ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+; this output file will have the same name as the included input file
+; - output files cannot have the same name as any input file
+; - but it won't be detected until output time because it is named
+; before the include file is
+; - error message refers to the last line of source
+; - so can be confusing, but this is likely a very rare error
+
+        .rawfile    "..\\testhelp\\test252b.a"
+
+; -------------------------------
+
+        .if defined( INCTEST )      ; not defined the first time encountered (so skips everything)
+
+        .listfile                   ; stored in directory test, not testhelp (which is what we want)
+        .errfile
+
+; -------------------------------
+
+        .else
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .macro  INCTEST     ; flag: within include file
+        .endmacro
+
+        .byte   $00         ; just a little something to look at
+
+        .include    "..\\testhelp\\test252b.a"
+
+        .byte   $01         ; again, just something to look at
+
+; -------------------------------
+
+        .endif      ; defined(INCTEST)
+
+; -------------------------------
+
+; prevent "END" from pre-maturely terminating test
+
+;       .end

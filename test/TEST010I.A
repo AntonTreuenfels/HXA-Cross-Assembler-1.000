@@ -1,0 +1,41 @@
+; Hobby Cross-Assembler Test 010i
+; Output Files\Same Directory
+; warn: output filename same as input filename (first pass)
+
+; by Anton Treuenfels
+
+; first created: 04/05/24
+; last revised:  04/19/24
+
+; warning(s): 2
+; - duplicaten name
+; - token ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+; defaults here
+
+        .listfile
+        .errfile
+
+; now try to use an input filename as an output file
+
+        .rawfile     "test010i.a"
+ 
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+; -------------------------------
+
+        .end
+

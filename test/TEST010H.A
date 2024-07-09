@@ -1,0 +1,57 @@
+; Hobby Cross-Assembler Test 010h
+; Output Files\Same Directory
+; error: output filename same as existing ouput filename
+
+; by Anton Treuenfels
+
+; first created: 04/02/24
+; last revised:  04/18/24
+
+; warning(s): 4
+; - duplicate name
+; - input ignored
+
+; error(s): 0
+
+; fatal: 0
+
+; -------------------------------
+
+; defaults here
+
+        .listfile
+        .errfile
+
+; verify names are what we think they are
+
+        .listfile    "test010h.lst"
+        .errfile     "test010h.err"
+
+; now try to use the same names for another file type
+
+        .rawfile     "test010h.lst"
+        .rawfile     "test010h.err"
+
+; make sure original names still ok
+
+        .listfile    "test010h.lst"
+        .errfile     "test010h.err"
+
+; make sure original names still ok
+
+        .listfile
+        .errfile
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        .byte   $00         ; not much to it !
+
+; -------------------------------
+
+        .end
+

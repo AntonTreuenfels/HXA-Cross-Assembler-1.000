@@ -5,14 +5,15 @@
 ; by Anton Treuenfels
 
 ; first created: 12/21/21
-; last revised:  12/15/23
+; last revised:  06/11/24
 
 ; warning(s): 0
 
-; error(s): 18
+; error(s): 20
 ; - unexpected token
 ; - bad EOE
 ; - expecting operator
+; - expecting operand
 
 ; fatal: 0
 
@@ -69,6 +70,12 @@
  {abel} .byte   $0D
 
         .byte   $0E    {abel} (attepted comment)
+
+; no leading whitespace before second '#' character
+
+        .byte  #$0F#text
+
+        .byte  ##text
 
 ; -------------------------------
 

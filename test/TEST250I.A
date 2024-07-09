@@ -1,11 +1,11 @@
 ; Hobby Cross-Assembler Error Test 250i
-; File Inclusion\Duplicate Basename
+; File Inclusion\Self Inclusion
 ; warn: including self
 
 ; by Anton Treuenfels
 
 ; first created: 07/02/22
-; last revised:  07/02/23
+; last revised:  07/07/24
 
 ; warning(s): 1
 ; - duplicate name
@@ -21,8 +21,8 @@
 
 ; -------------------------------
 
-; this test is meant to show that it is not guaranteed that a file
-; has not previously been read simply by examining the base filename
+; this test is meant to show that it is not guaranteed that simply
+; examining a base file name proves it has or has not been read before
 ; - the test requires duplicate copies of this file in two directories
 ; - because the paths are different the files may in fact be different
 ; - because the base filenames are the same the files might be the same
