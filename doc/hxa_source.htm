@@ -2,7 +2,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="normal">
-<title>HXA 1.000 Source Code Overview</title>
+<title>HXA 1.100 Source Code Overview</title>
 <style>
 html {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAARElEQVQYV2M8c+bMfwY0YGJiwggTAjOQFYEkQXyYIrhKZEGYJpAiuAnIxiKbiGIcunUgPtwKZGNRTIC5lqAbYArR3QIAdA85lXmjDMQAAAAASUVORK5CYII=)}
 body {margin:0 auto; padding:0; max-width:82em}
@@ -24,52 +24,53 @@ a:hover {background-color:#FFF}
 </head><body><section><div id="toc">
 <p>Contents</p><hr>
 <ul><li>
-</li><li><a href="#L181">Scope of This Document</a>
+</li><li><a href="#L186">Scope of This Document</a>
 <ul><li>
-</li><li><a href="#L182">Related Resources</a>
+</li><li><a href="#L187">Related Resources</a>
 </li></ul>
-</li><li><a href="#L183">Acknowledgments</a>
-</li><li><a href="#L184">A Note on the Documentation</a>
-</li><li><a href="#L185">HXA Design and Modularization</a>
+</li><li><a href="#L188">Acknowledgments</a>
+</li><li><a href="#L189">A Note on the Documentation</a>
+</li><li><a href="#L18A">HXA Design and Modularization</a>
 <ul><li>
-</li><li><a href="#L186">Design Goals</a>
-</li><li><a href="#L187">Current Modules</a>
+</li><li><a href="#L18B">Design Goals</a>
+</li><li><a href="#L18C">Current Modules</a>
 <ul><li>
-</li><li><a href="#L188">hxa.py</a>
-</li><li><a href="#L189">hxa_usermesg.py</a>
-</li><li><a href="#L18A">hxa_pseudo.py</a>
-</li><li><a href="#L18B">hxa_macro.py</a>
-</li><li><a href="#L18D">hxa_codegen.py</a>
-</li><li><a href="#L18E">hxa_progctr.py</a>
-</li><li><a href="#L18F">hxa_file.py</a>
-</li><li><a href="#L190">hxa_symbol.py</a>
-</li><li><a href="#L191">hxa_source.py</a>
-</li><li><a href="#L192">hxa_string.py</a>
-</li><li><a href="#L193">hxa_misc.py</a>
-</li><li><a href="#L194">hxa_expressions.py</a>
+</li><li><a href="#L18D">hxa.py</a>
+</li><li><a href="#L18E">hxa_usermesg.py</a>
+</li><li><a href="#L18F">hxa_pseudo.py</a>
+</li><li><a href="#L190">hxa_macro.py</a>
+</li><li><a href="#L192">hxa_codegen.py</a>
+</li><li><a href="#L193">hxa_progctr.py</a>
+</li><li><a href="#L194">hxa_file.py</a>
+</li><li><a href="#L195">hxa_symbol.py</a>
+</li><li><a href="#L196">hxa_source.py</a>
+</li><li><a href="#L197">hxa_string.py</a>
+</li><li><a href="#L198">hxa_misc.py</a>
+</li><li><a href="#L199">hxa_expressions.py</a>
 </li></ul>
 </li></ul>
-</li><li><a href="#L195">Creating an HXA Variant</a>
+</li><li><a href="#L19A">Creating an HXA Variant</a>
 <ul><li>
-</li><li><a href="#L196">Using Macros to Implement an Instruction Set</a>
-</li><li><a href="#L198">Creating a Native CPU Handler Module</a>
+</li><li><a href="#L19B">Using Macros to Implement an Instruction Set</a>
+</li><li><a href="#L19D">Creating a Native CPU Handler Module</a>
 <ul><li>
-</li><li><a href="#L1A1">Available HXA Methods</a>
+</li><li><a href="#L1A6">Available HXA Methods</a>
 </li></ul>
 </li></ul>
-</li><li><a href="#L1A8">CPU Handlers</a>
+</li><li><a href="#L1AD">CPU Handlers</a>
 <ul><li>
-</li><li><a href="#L1A9">HXA_T Handler</a>
-</li><li><a href="#L1AA">HXA65 Handler</a>
+</li><li><a href="#L1AE">HXA_T Handler</a>
+</li><li><a href="#L1AF">HXA65 Handler</a>
+</li><li><a href="#L1B1">HXA68 Handler</a>
 </li></ul>
-</li><li><a href="#L1AC">Future Development</a>
-</li><li><a href="#L1AD">Assembler Messages</a>
-</li><li><a href="#L1AE">History</a>
+</li><li><a href="#L1B2">Future Development</a>
+</li><li><a href="#L1B3">Assembler Messages</a>
+</li><li><a href="#L1B4">History</a>
 </li></ul>
-</div><div id="content"><h2>Hobby Cross Assembler 1.000</h2>
+</div><div id="content"><h2>Hobby Cross Assembler 1.100</h2>
 <h3>Source Code Overview</h3>
-<p>Copyright (&copy;) 2004-2023 by Anton Treuenfels</p>
-<a id="L181"></a><h3>Scope of This Document</h3>
+<p>Copyright (&copy;) 2004-2024 by Anton Treuenfels</p>
+<a id="L186"></a><h3>Scope of This Document</h3>
 <p>This document briefly describes</p>
 <ul> <li>the design and modularization of HXA</li>
  <li>how to write a cpu <a href="hxa.htm#L007">handler</a> to accept one or more sets instruction mnemonics</li>
@@ -77,7 +78,7 @@ a:hover {background-color:#FFF}
  <li>the HXA message table</li>
  <li>HXA release history</li>
  </ul>
-<a id="L182"></a><h4>Related Resources</h4>
+<a id="L187"></a><h4>Related Resources</h4>
 <h4>HXA</h4>
 <ul> <li><a href="hxa.htm">User Manual</a></li>
  <li><a href="hxa_test.htm">General Tests</a></li>
@@ -109,9 +110,9 @@ a:hover {background-color:#FFF}
  <li><em>John Wiley & Sons, 1979 (reprinted with corrections, 1980)</em></li>
  <li>a witty, utterly delightful book full of practical advice. HXA's expression evaluation ideas originated here, as well as whatever ability it has to detect and recover from errors</li>
  </ul>
-<a id="L183"></a><h3>Acknowledgments</h3>
+<a id="L188"></a><h3>Acknowledgments</h3>
 <p>I'd like to extend an appreciation to the many people who have written assemblers before me and posted their work on the Internet. Although I often could not follow the source code (it's hard to do without printing it all out!), I learned much simply by reading their documentation. Their feature lists broadened my ideas of what is possible, and their history summaries often pointed out areas that especially benefited from extensive testing.</p>
-<a id="L184"></a><h3>A Note on the Documentation</h3>
+<a id="L189"></a><h3>A Note on the Documentation</h3>
 <p>HXA's documentation exists in several parts:</p>
 <ul> <li>the non-processor specific main user manual</li>
  <li>the implementation manual (ie., this document)</li>
@@ -119,11 +120,11 @@ a:hover {background-color:#FFF}
  <li>the test and demo program suites</li>
  </ul>
 <p>To use HXA requires only the first, plus perhaps one or more of the second. To fully understand how HXA works requires the last three.</p>
-<p>It must be said that writing documentation is fairly tedious. However simply creating it helps to make HXA better. This happens often enough that the process might be worthwhile even if not meant for reference.</p>
+<p>It must be said that writing documentation is fairly tedious. However, simply creating it helps to make HXA better. This happens often enough that the process might be worthwhile even if not meant for reference.</p>
 <p>Sometimes when writing a description of what a pseudo opcode is supposed to do, the question comes to mind "Does it really?" This can lead to a new or revised test to determine if it is so (and if not, why not). Sometimes describing a limitation leads to the question "Does it really have to be that way?" This in turn can lead to finding a way of eliminating the limitation in question.</p>
 <p>The test suite contains many more tests to determine how HXA reacts to an error than how it reacts to legal input. Part of this is simply that there are more ways to err compared to the number of ways to do things right. Part of this is because illegal input more often causes HXA to do something unexpected. Figuring out why often turns up an overlooked possibility. HXA may then be modified and the test suite expanded to account for that possibility.</p>
-<a id="L185"></a><h3>HXA Design and Modularization</h3>
-<a id="L186"></a><h4>Design Goals</h4>
+<a id="L18A"></a><h3>HXA Design and Modularization</h3>
+<a id="L18B"></a><h4>Design Goals</h4>
 <p>There are many desirable traits any computer program should have, some of which conflict with each other. Of the ones HXA consciously considers, they generally rank in the following descending order:</p>
 <ul> <li><b>Reliability</b>  : "The error case is the normal case." - PJ Brown</li>
  <li><b>Simplicity</b>  : both of use and implementation</li>
@@ -133,9 +134,9 @@ a:hover {background-color:#FFF}
  <li><b>Size</b>  : as small as possible, but no smaller</li>
  </ul>
 <hr>
-<a id="L187"></a><h4>Current Modules</h4>
+<a id="L18C"></a><h4>Current Modules</h4>
 <hr>
-<a id="L188"></a><h4>hxa.py</h4>
+<a id="L18D"></a><h4>hxa.py</h4>
 <p><a href="../source/hxa.py">Source File</a></p>
 <p>The top-level supervisor.</p>
 <p>This module only makes calls to other modules. It cannot itself be called from another module.</p>
@@ -147,12 +148,12 @@ a:hover {background-color:#FFF}
  <li>file output: write listing, error and object files</li>
  </ul>
 <hr>
-<a id="L189"></a><h4>hxa_usermesg.py</h4>
+<a id="L18E"></a><h4>hxa_usermesg.py</h4>
 <p><a href="../source/hxa_usermesg.py">Source File</a></p>
-<p>During all phases, sends HXA status and error messages to <em>stdout</em>. Warning and error messages are also saved for possible later output to an <a href="hxa.htm#L053">error file</a>.</p>
-<p>This is the only module that contains the actual text of any message HXA can display. Other modules specify only an index into a table of <a href="#L1AD">assembler messages</a> when calling this module. Replacing these message texts is one way to change HXA's default messages without altering any other module.</p>
+<p>During all phases, sends HXA status and error messages to <em>stdout</em>. Warning and error messages are also saved for possible later output to an <a href="hxa.htm#L055">error file</a>.</p>
+<p>This is the only module that contains the actual text of any message HXA can display. Other modules specify only an index into a table of <a href="#L1B3">assembler messages</a> when calling this module. Replacing these message texts is one way to change HXA's default messages without altering any other module.</p>
 <hr>
-<a id="L18A"></a><h4>hxa_pseudo.py</h4>
+<a id="L18F"></a><h4>hxa_pseudo.py</h4>
 <p><a href="../source/hxa_pseudo.py">Source File</a></p>
 <p>Process HXA's pseudo opcodes.</p>
 <p>Once this module identifies a pseudo opcode, it collects and verifies any arguments and passes them to a handler. A handler can be located in any module except the top-level supervisor.</p>
@@ -162,7 +163,7 @@ a:hover {background-color:#FFF}
  <li>file output: <em>not used</em></li>
  </ul>
 <hr>
-<a id="L18B"></a><h4>hxa_macro.py</h4>
+<a id="L190"></a><h4>hxa_macro.py</h4>
 <p><a href="../source/hxa_macro.py">Source File</a></p>
 <p>Handle macro definition and expansion. "Macro" is here taken in a broad sense to include if, repeat and while blocks as well.</p>
 <p>Macro expansion is performed by re-reading saved source lines originally read from files. HXA nests expansion blocks by stacking indices into the saved line store. The top index on the stack indicates which line to read next.</p>
@@ -173,13 +174,13 @@ a:hover {background-color:#FFF}
  <li>file output: <em>not used</em></li>
  </ul>
 <hr>
-<a id="L18C"></a>
-<a id="L18D"></a><h4>hxa_codegen.py</h4>
+<a id="L191"></a>
+<a id="L192"></a><h4>hxa_codegen.py</h4>
 <p><a href="../source/hxa_codegen.py">Source File</a></p>
 <p>Initializes the hardware CPU, handles translating source code into object code, and creates output data.</p>
-<p>This is the only non-processor specific module that deals with native byte size and orientation. Only this module and the processor-specific <a href="#L197">cpu_---.py</a> module need to know this information.</p>
+<p>This is the only non-processor specific module that deals with native byte size and orientation. Only this module and the processor-specific <a href="#L19C">cpu_---.py</a> module need to know this information.</p>
 <p>The fundamental data structure HXA currently uses for data generation is an array of lists indexed by source code line. Each list contains one or more sub-lists that hold any data generated by the source code. Each sub-list consists of three elements:</p>
-<ul> <li>a data address : segment and offset within segment</li>
+<ul> <li>a data address : segment it belongs to and its offset within that segment</li>
  <li>a data type : most types generate object code, but not all do</li>
  <li>a data value : a 32-bit numeric or a variable size string</li>
  </ul>
@@ -190,17 +191,17 @@ a:hover {background-color:#FFF}
  <li>file output: create output data in forms suitable for listing and object files</li>
  </ul>
 <hr>
-<a id="L18E"></a><h4>hxa_progctr.py</h4>
+<a id="L193"></a><h4>hxa_progctr.py</h4>
 <p><a href="../source/hxa_progctr.py">Source File</a></p>
 <p>Tracks HXA's internal program counters and segment numbers.</p>
-<p>Note that no other module ever directly examines or manipulates a value they get from this module. If they need to know something about it or have something done to it, they ask this module.</p>
+<p>Note that no other modules ever directly examine or manipulate a value they get from this module. If they need to know something about it or have something done to it, they ask this module.</p>
 <p><b>Primary Responsibilities</b></p>
 <ul> <li>pass one: read and write the program counter; handle implicit and explicit segments</li>
  <li>pass two: convert relative values and segments to absolute</li>
  <li>file output: format program counter values; prepare segment map for a listing file</li>
  </ul>
 <hr>
-<a id="L18F"></a><h4>hxa_file.py</h4>
+<a id="L194"></a><h4>hxa_file.py</h4>
 <p><a href="../source/hxa_file.py">Source File</a></p>
 <p>Interacts with the native operating system to read and write files.</p>
 <p><b>Primary Responsibilities</b></p>
@@ -209,7 +210,7 @@ a:hover {background-color:#FFF}
  <li>file output: write text and binary output files</li>
  </ul>
 <hr>
-<a id="L190"></a><h4>hxa_symbol.py</h4>
+<a id="L195"></a><h4>hxa_symbol.py</h4>
 <p><a href="../source/hxa_symbol.py">Source File</a></p>
 <p>Manages the symbol table.</p>
 <p><b>Primary Responsibilities</b></p>
@@ -218,7 +219,7 @@ a:hover {background-color:#FFF}
  <li>file output: prepare symbol table for a listing file</li>
  </ul>
 <hr>
-<a id="L191"></a><h4>hxa_source.py</h4>
+<a id="L196"></a><h4>hxa_source.py</h4>
 <p><a href="../source/hxa_source.py">Source File</a></p>
 <p>Read and manage source code.</p>
 <p>HXA saves every source code line it encounters. This store is used for macro expansion, error-reporting and assembly listing.</p>
@@ -228,7 +229,7 @@ a:hover {background-color:#FFF}
  <li>file output: create listing  file</li>
  </ul>
 <hr>
-<a id="L192"></a><h4>hxa_string.py</h4>
+<a id="L197"></a><h4>hxa_string.py</h4>
 <p><a href="../source/hxa_string.py">Source File</a></p>
 <p><b>Primary Responsibilities</b></p>
 <ul> <li>pass one: handle field splitting, escape sequences and character translation</li>
@@ -236,7 +237,7 @@ a:hover {background-color:#FFF}
  <li>file output: <em>not used</em></li>
  </ul>
 <hr>
-<a id="L193"></a><h4>hxa_misc.py</h4>
+<a id="L198"></a><h4>hxa_misc.py</h4>
 <p><a href="../source/hxa_misc.py">Source File</a></p>
 <p>Miscellaneous functions and variables used by more than one module or too small to warrant their own module.</p>
 <p>Primary Responsibilities</p>
@@ -245,7 +246,7 @@ a:hover {background-color:#FFF}
  <li>file output: prepare pass timing for a listing file</li>
  </ul>
 <hr>
-<a id="L194"></a><h4>hxa_expressions.py</h4>
+<a id="L199"></a><h4>hxa_expressions.py</h4>
 <p><a href="../source/hxa_expressions.py">Source File</a></p>
 <p>Handles expression conversion and evaluation.</p>
 <p>Every expression is converted to Reverse Polish Notation (RPN) form by a generalized operator precedence parser. This type of parser is <em>bottom-up</em> rather than <em>top-down</em>. During parsing, checks are made for syntax errors.</p>
@@ -255,20 +256,20 @@ a:hover {background-color:#FFF}
  <li>pass two: complete evaluation of expressions</li>
  <li>file output: <em>not used</em></li>
  </ul>
-<a id="L195"></a><h3>Creating an HXA Variant</h3>
-<a id="L196"></a><h4>Using Macros to Implement an Instruction Set</h4>
-<p>Note that what HXA deals with after the first pass are essentially <em>[addr, type, value]</em> lists. This implies that some CPU instruction sets might be implemented entirely as macros which expand to one or more <a href="hxa.htm#L06C">BIT--</a> pseudo opcodes.</p>
+<a id="L19A"></a><h3>Creating an HXA Variant</h3>
+<a id="L19B"></a><h4>Using Macros to Implement an Instruction Set</h4>
+<p>Note that what HXA deals with after the first pass are essentially <em>[addr, type, value]</em> lists. This implies that some CPU instruction sets might be implemented entirely as macros which expand to one or more <a href="hxa.htm#L06E">BIT--</a> pseudo opcodes.</p>
 <p>The <a href="../source/cpu_hxa_t.py">HXA_T</a> handler, which has no built-in instruction set, can be used to assemble such macros with the correct program counter size, byte size and orientation.</p>
 <p>A command line to use it might be:</p>
 <blockquote> python hxa.py -hxa_t filename<br> </blockquote>
-<p>where <em>filename</em> is a top-level source file. Within itself it would <a href="hxa.htm#L05C">include</a> another file of macro definitions of the mnemonics of a real processor. These macros would then produce the same output as those of a native assembler.</p>
+<p>where <em>filename</em> is a top-level source file. Within itself it would <a href="hxa.htm#L05E">include</a> another file of macro definitions of the mnemonics of a real processor. These macros would then produce the same output as those of a native assembler.</p>
 <p>For some processors the officially recommended mnemonics could be used. If any expressions following such mnemonics can not be directly evaluated by HXA, they can likely be altered by HXA to an evaluable form.</p>
 <p>For other processors a variant set might be possible, or even desirable. A common reason would be to reduce the effort needed to identify the address mode of a mnemonic. The mnemonic itself would indicate the address mode, and any expression would need no decoration to indicate one. Such a variant set might entail a loss of portability, but this might be acceptable in some cases.</p>
 <p>As a proof-of-concept, macro include files implementing the official mnemonics of the 8080/85, Z80, 6502, 65C02 and R65C02 microprocessor instruction sets are provided in the general demos .</p>
 <p>The 8080/85 mnemonics are the simplest to implement. The instruction set is fairly small and the address modes are generally indicated by the mnemonics themselves.</p>
 <p>The 6502 and 65C02 also have fairly small instruction sets. The main difficulty is that the address modes are often indicated by decorating the expression. Without resorting to non-standard mnemonics, some examination and manipulation are required.</p>
-<p>The macros have been defined to be compatible with the same instruction set extensions recognized by HXA65. They do not recognize any kind of <a href="#L1AB">forced address mode</a>, however. This might be better be implemented as additional macros anyway (eg., "LDAA" might be defined to always "LoaD Accumulator Absolute").</p>
-<p>The R65C02 instruction set is a superset of the 65C02 instruction set. Its macro implementation is simplified by <a href="hxa.htm#L05C">including</a> the 65C02 macro implementation. Only the the 32 new instructions it adds are defined by macros.</p>
+<p>The macros have been defined to be compatible with the same instruction set extensions recognized by HXA65. They do not recognize any kind of <a href="#L1B0">forced address mode</a>, however. This might be better be implemented as additional macros anyway (eg., "LDAA" might be defined to always "LoaD Accumulator Absolute").</p>
+<p>The R65C02 instruction set is a superset of the 65C02 instruction set. Its macro implementation is simplified by <a href="hxa.htm#L05E">including</a> the 65C02 macro implementation. Only the the 32 new instructions it adds are defined by macros.</p>
 <p>The 65C02 macro implementation itself does not use this approach even though its instruction set is also a superset of the 6502 instruction set. Because it introduces new address modes for old instructions, it seems more reasonable to re-define the macros implementing those instructions.</p>
 <p>The Z80 instruction set is fairly large and there are a large number of address modes. The macro file provided makes extensive use of nested macros to determine the proper data to emit.</p>
 <p><b>Advantages</b></p>
@@ -280,11 +281,11 @@ a:hover {background-color:#FFF}
  <li>a (sometimes much) larger number of source lines due to macro expansion</li>
  </ul>
 <hr>
-<a id="L197"></a>
-<a id="L198"></a><h4>Creating a Native CPU Handler Module</h4>
-<p>Every native CPU <a href="hxa.htm#L007">handler</a> supporting one or more processors is implemented by a Python module. The name of the module has the form <em>cpu_---.py</em>, where "---" is usually the processor family. It is the only part that needs to be specified on the command line; HXA fills in the rest.</p>
+<a id="L19C"></a>
+<a id="L19D"></a><h4>Creating a Native CPU Handler Module</h4>
+<p>Every native CPU <a href="hxa.htm#L007">handler</a> supporting one or more processors is implemented by a Python module. The name of the module has the form <em>cpu_---.py</em>, where "---" is usually the processor family. It is only that part which needs to be specified on the command line; HXA fills in the rest.</p>
 <p>Handler modules must be in the same directory as the rest of HXA. The form of the name is mostly to distinguish handler modules from the main HXA  modules.</p>
-<p>To assemble a different language, only this single module needs to be replaced. It is called only from the <a href="#L18C">code generator</a> module. This isolates it from all other HXA modules, making it unnecessary to change them as well.</p>
+<p>To assemble a different language, only this single module needs to be replaced. It is called only from the <a href="#L191">code generator</a> module. This isolates it from all other HXA modules, making it unnecessary to change them as well.</p>
 <p>The specification details only the following public functions that must be provided. How they work is up to the implementer. All that is required is that any inputs and outputs be correct.</p>
 <p>Primary Responsibilities:</p>
 <ul> <li>pass one: describe CPU; identify CPU mnemonics; begin evaluating mnemonic expressions; handle CPU-specific "ASSUME" options</li>
@@ -293,18 +294,18 @@ a:hover {background-color:#FFF}
  </ul>
 <hr>
 <p>These methods must be provided in a native handler:</p>
-<ul> <li><a href="#L199">name()</a> : provides the generic or family name of the HXA variant (for display to user)</li>
- <li><a href="#L19A">reserved()</a> : provides a variant identifier symbol, plus any other symbols that are not available for programmer use</li>
- <li><a href="#L19B">iscpu()</a> : determine whether or not a token is the name of CPU this module can assemble code for</li>
- <li><a href="#L19C">getdescriptor()</a> : describe the program counter size, native orientation of multi-octet values, and the "byte" size</li>
- <li><a href="#L19D">setcpu()</a> : perform any setup needed for a particular CPU</li>
- <li><a href="#L19E">isop()</a> : determine whether or not a token is a CPU mnemonic</li>
- <li><a href="#L19F">doop()</a> : assemble one mnemonic and add the result to the code storage array in the <a href="#L18C">code generator</a></li>
- <li><a href="#L1A0">doassume()</a> : to communicate in source code information that could not otherwise be easily known to HXA</li>
+<ul> <li><a href="#L19E">name()</a> : provides the generic or family name of the HXA variant (for display to user)</li>
+ <li><a href="#L19F">reserved()</a> : provides a variant identifier symbol, plus any other symbols that are not available for programmer use</li>
+ <li><a href="#L1A0">iscpu()</a> : determine whether or not a token is the name of CPU this module can assemble code for</li>
+ <li><a href="#L1A1">getdescriptor()</a> : describe the program counter size, native orientation of multi-octet values, and the "byte" size</li>
+ <li><a href="#L1A2">setcpu()</a> : perform any setup needed for a particular CPU</li>
+ <li><a href="#L1A3">isop()</a> : determine whether or not a token is a CPU mnemonic</li>
+ <li><a href="#L1A4">doop()</a> : assemble one mnemonic and add the result to the code storage array in the <a href="#L191">code generator</a></li>
+ <li><a href="#L1A5">doassume()</a> : to communicate in source code information that could not otherwise be easily known to HXA</li>
  </ul>
 <p>How they work, and what other methods they might call, is up to the implementer.</p>
 <hr>
-<a id="L199"></a>
+<a id="L19E"></a>
 <h4><b>name()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>name</b> ()</li>
@@ -316,7 +317,7 @@ a:hover {background-color:#FFF}
 <ul> <li>a string identifying the variant (eg., "HXA_T" or "HXA65")</li>
  </ul>
 <hr>
-<a id="L19A"></a>
+<a id="L19F"></a>
 <h4><b>reserved()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>reserved</b> ()</li>
@@ -330,43 +331,43 @@ a:hover {background-color:#FFF}
  <li>the identifier tuple may optionally be accompanied by one or more tuples describing any other reserved symbols (eg., register names)</li>
  </ul>
 <hr>
-<a id="L19B"></a>
+<a id="L1A0"></a>
 <h4>iscpu()</h4>
 <h4>Called As</h4>
 <ul> <li><b>iscpu</b> (  token )</li>
  </ul>
 <h4>Parameter</h4>
-<ul> <li><em>token</em> is the string argument following a <a href="hxa.htm#L068">CPU</a> pseudo opcode</li>
+<ul> <li><em>token</em> is the string argument following a <a href="hxa.htm#L06A">CPU</a> pseudo opcode</li>
  </ul>
 <h4>Return Value</h4>
 <ul> <li><em>TRUE</em> if <em>token</em> is the name of a CPU whose instruction set this module can assemble, otherwise <em>FALSE</em></li>
  </ul>
 <hr>
-<a id="L19C"></a>
+<a id="L1A1"></a>
 <h4><b>getdescriptor()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>getdesciptor</b> ( name )</li>
  </ul>
 <h4>Parameter</h4>
-<ul> <li><em>name</em> is the name of a CPU previously identified by <a href="#L19B">iscpu()</a></li>
+<ul> <li><em>name</em> is the name of a CPU previously identified by <a href="#L1A0">iscpu()</a></li>
  </ul>
 <h4>Return Value</h4>
-<ul> <li>a <a href="hxa.htm#L069">CPU descriptor</a> string</li>
+<ul> <li>a <a href="hxa.htm#L06B">CPU descriptor</a> string</li>
  </ul>
 <hr>
-<a id="L19D"></a>
+<a id="L1A2"></a>
 <h4><b>setcpu()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>setcpu</b> ( name )</li>
  </ul>
 <h4>Parameter</h4>
-<ul> <li><em>name</em> is the name of a CPU previously identified by <a href="#L19B">iscpu()</a></li>
+<ul> <li><em>name</em> is the name of a CPU previously identified by <a href="#L1A0">iscpu()</a></li>
  </ul>
 <h4>Return Value</h4>
 <ul> <li><em>TRUE</em> if <em>name</em> is successfully initialized, otherwise <em>FALSE</em></li>
  </ul>
 <hr>
-<a id="L19E"></a>
+<a id="L1A3"></a>
 <h4><b>isop()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>isop</b> ( token )</li>
@@ -378,20 +379,20 @@ a:hover {background-color:#FFF}
 <ul> <li><em>TRUE</em> if <em>token</em> is an mnemonic of the current CPU instruction set, otherwise <em>FALSE</em></li>
  </ul>
 <hr>
-<a id="L19F"></a>
+<a id="L1A4"></a>
 <h4><b>doop()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>doop</b> ( mnemonic, cnt, exprlist )</li>
  </ul>
 <h4>Parameters</h4>
-<ul> <li><em>mnemonic</em> is a CPU instruction mnemonic previously identified by <a href="#L19E">isop()</a></li>
+<ul> <li><em>mnemonic</em> is a CPU instruction mnemonic previously identified by <a href="#L1A3">isop()</a></li>
  <li><em>cnt</em> is the number of comma-separated expressions found in the expression field</li>
  <li><em>exprlist</em> is a list of the expressions in the expression field</li>
  </ul>
 <h4>Return Value</h4>
 <ul> <li>a ( <em>boolean, mesgndx</em> ) tuple</li>
  <li><em>boolean</em> is <em>TRUE</em> if assembly was successful, otherwise <em>FALSE</em></li>
- <li><em>mesgndx</em> is an key in the dictionary of <a href="#L1AD">assembler messages</a></li>
+ <li><em>mesgndx</em> is an key in the dictionary of <a href="#L1B3">assembler messages</a></li>
  </ul>
 <h4>Notes</h4>
 <ul> <li>this method can alter any expression in any way it likes to assure correct expression evaluation</li>
@@ -401,7 +402,7 @@ a:hover {background-color:#FFF}
  <li>no element of exprlist has been evaluated</li>
  </ul>
 <hr>
-<a id="L1A0"></a>
+<a id="L1A5"></a>
 <h4><b>doassume()</b></h4>
 <h4>Called As</h4>
 <ul> <li><b>doassume</b> ( flag, arg )</li>
@@ -420,24 +421,24 @@ a:hover {background-color:#FFF}
  <li>this method is called once for every comma-separated <em>flag:arg</em> pair found in the expression field</li>
  </ul>
 <hr>
-<a id="L1A1"></a><h4>Available HXA Methods</h4>
+<a id="L1A6"></a><h4>Available HXA Methods</h4>
 <p>The following methods in other modules may be called by a CPU handler.</p>
-<p>In <a href="#L194">hxa_expressions.py</a>:</p>
-<ul> <li><a href="#L1A2">EXP.getnum()</a> : parse an expression and fully or partially evaluate it</li>
- <li><a href="#L1A3">EXP.resolved()</a> : determine if <em>EXP.getnum()</em> resulted in a full evaluation or not</li>
- <li><a href="#L1A4">EXP.getconstnum()</a> parse and fully evaluate an expression</li>
- <li><a href="#L1A5">EXP.getinrange()</a> : fully evalute an expression and check if the result is within a range</li>
+<p>In <a href="#L199">hxa_expressions.py</a>:</p>
+<ul> <li><a href="#L1A7">EXP.getnum()</a> : parse an expression and fully or partially evaluate it</li>
+ <li><a href="#L1A8">EXP.resolved()</a> : determine if <em>EXP.getnum()</em> resulted in a full evaluation or not</li>
+ <li><a href="#L1A9">EXP.getconstnum()</a> parse and fully evaluate an expression</li>
+ <li><a href="#L1AA">EXP.getinrange()</a> : fully evalute an expression and check if the result is within a range</li>
  </ul>
-<p>In <a href="#L18D">hxa_codegen.py</a>:</p>
-<ul> <li><a href="#L1A6">CG.store()</a> : make an entry in the code storage array</li>
+<p>In <a href="#L192">hxa_codegen.py</a>:</p>
+<ul> <li><a href="#L1AB">CG.store()</a> : make an entry in the code storage array</li>
  </ul>
-<p>In <a href="#L189">hxa_usermesg.py</a>:</p>
-<ul> <li><a href="#L1A7">UM.warn()</a> : report an HXA warning</li>
- <li><a href="#L1A7">UM.error()</a> : report an HXA error</li>
- <li><a href="#L1A7">UM.fatal()</a> : report a fatal HXA error</li>
+<p>In <a href="#L18E">hxa_usermesg.py</a>:</p>
+<ul> <li><a href="#L1AC">UM.warn()</a> : report an HXA warning</li>
+ <li><a href="#L1AC">UM.error()</a> : report an HXA error</li>
+ <li><a href="#L1AC">UM.fatal()</a> : report a fatal HXA error</li>
  </ul>
 <hr>
-<a id="L1A2"></a>
+<a id="L1A7"></a>
 <h4><b>EXP.getnum()</b></h4>
 <h4>Usage</h4>
 <ul> <li><b>EXP.getnum</b> ( expr )</li>
@@ -451,7 +452,7 @@ a:hover {background-color:#FFF}
  <li><em>result</em> is the full or partial evaluation of <em>expr</em> if <em>TRUE</em>, otherwise <em>None</em></li>
  </ul>
 <hr>
-<a id="L1A3"></a>
+<a id="L1A8"></a>
 <h4><b>EXP.resolved()</b></h4>
 <h4>Usage</h4>
 <ul> <li><b>EXP.resolved</b> ( result )</li>
@@ -466,7 +467,7 @@ a:hover {background-color:#FFF}
 <ul> <li><em>no assumption whatsoever</em> can be made about the type of a partially evaluated expression</li>
  </ul>
 <hr>
-<a id="L1A4"></a>
+<a id="L1A9"></a>
 <h4><b>EXP.getconstnum()</b></h4>
 <h4>Usage</h4>
 <ul> <li><b>EXP.getconstnum</b> ( expr )</li>
@@ -484,7 +485,7 @@ a:hover {background-color:#FFF}
  <li>this method is like <em>EXP.getnum()</em>, except <a href="hxa.htm#L02A">forward reference</a> is not allowed in <em>expr</em></li>
  </ul>
 <hr>
-<a id="L1A5"></a>
+<a id="L1AA"></a>
 <h4><b>EXP.getinrange()</b></h4>
 <h4>Usage</h4>
 <ul> <li><b>EXP.getinrange</b> ( expr, min, max )</li>
@@ -500,13 +501,13 @@ a:hover {background-color:#FFF}
  <li><em>result</em> is the integer value of <em>expr</em> if <em>TRUE</em>, otherwise <em>None</em></li>
  </ul>
 <hr>
-<a id="L1A6"></a>
+<a id="L1AB"></a>
 <h4><b>CG.store()</b></h4>
 <h4>Usage:</h4>
 <ul> <li><b>CG.store</b> ( type, data )</li>
  </ul>
 <h4>Parameters</h4>
-<ul> <li><em>type</em> is typically one of the <a href="hxa.htm#L06C">BIT--</a> pseudo opcodes (ie., BIT--, RBIT--, SBIT-- or UBIT--)</li>
+<ul> <li><em>type</em> is typically one of the <a href="hxa.htm#L06E">BIT--</a> pseudo opcodes (ie., BIT--, RBIT--, SBIT-- or UBIT--)</li>
  <li><em>data</em> is typically a fully or partially evaluated expression</li>
  </ul>
 <h4>Return Value</h4>
@@ -516,13 +517,13 @@ a:hover {background-color:#FFF}
 <ul> <li>to actually save anything for later output, this method <em>must</em> be called by the handler</li>
  </ul>
 <hr>
-<a id="L1A7"></a>
+<a id="L1AC"></a>
 <h4><b>UM.error()</b></h4>
 <h4>Usage</h4>
 <ul> <li><b>UM.error</b> ( msgndx <em>[, cause]</em> )</li>
  </ul>
 <h4>Parameters</h4>
-<ul> <li><em>msgndx</em> is a key into the dictionary of <a href="#L1AD">assembler messages</a></li>
+<ul> <li><em>msgndx</em> is a key into the dictionary of <a href="#L1B3">assembler messages</a></li>
  <li><em>cause</em> is an optional <a href="hxa.htm#L009">string_lit</a>  which provides additional information (most often the token causing the error)</li>
  </ul>
 <h4>Return Value</h4>
@@ -532,26 +533,26 @@ a:hover {background-color:#FFF}
 <ul> <li>the methods <b>UM.warn()</b>  and <b>UM.fatal</b>  are also available, and have identical signatures</li>
  <li>all three methods add to the counts necessary to halt assembly</li>
  </ul>
-<a id="L1A8"></a><h3>CPU Handlers</h3>
-<a id="L1A9"></a><h4>HXA_T Handler</h4>
+<a id="L1AD"></a><h3>CPU Handlers</h3>
+<a id="L1AE"></a><h4>HXA_T Handler</h4>
 <p><a href="../source/cpu_hxa_t.py">Source File</a></p>
 <p><b>T_XX</b>  processors are an imaginary family of test processors. They were created for the purpose of testing all the modules of HXA which do not depend upon any particular real processor. They currently share only three attributes with real processors:</p>
 <ul> <li>a program counter size (8- to 32-bits)</li>
  <li>a native byte ordering convention (MSB or LSB)</li>
  <li>a native byte size (8-, 16- or 32-bits)</li>
  </ul>
-<p>Although primarily created to test HXA, this handler can also be used to assemble real processor instruction sets implemented as <a href="hxa.htm#L07D">macro</a> <a href="hxa.htm#L05C">include</a> files.</p>
+<p>Although primarily created to test HXA, this handler can also be used to assemble real processor instruction sets implemented as <a href="hxa.htm#L07F">macro</a> <a href="hxa.htm#L05E">include</a> files.</p>
 <h4>Additional Pre-defined Labels</h4>
 <ul> <li>"__HXA_T__", <em>TRUE</em> : generic name</li>
  </ul>
 <h4>CPU Descriptor</h4>
-<p>A T_XX <a href="hxa.htm#L069">cpu descriptor</a> <em>is</em> its name. That is, in the T_XX family there is no distinction between a cpu <em>name</em> and a cpu <em>descriptor</em>. The descriptor is thus publicly exposed (as opposed to real processors, which generally hide their descriptors).</p>
+<p>A T_XX <a href="hxa.htm#L06B">cpu descriptor</a> <em>is</em> its name. That is, in the T_XX family there is no distinction between a cpu <em>name</em> and a cpu <em>descriptor</em>. The descriptor is thus publicly exposed (as opposed to real processors, which generally hide their descriptors).</p>
 <h4>Instruction Set</h4>
 <p>None.</p>
 <h4>ASSUME Pseudo Opcode</h4>
 <p>T_XX cpus simply echo all ASSUME <em>flag</em> and <em>argument</em> values to <em>stdout</em>.</p>
 <p>Generally the return value is <em>TRUE</em>. It is <em>False</em> only if the argument value contains the string "printable".</p>
-<a id="L1AA"></a><h4>HXA65 Handler</h4>
+<a id="L1AF"></a><h4>HXA65 Handler</h4>
 <p><a href="../source/cpu_hxa65.py">Source File</a></p>
 <p>The 6502 processor was created by MOS Technology in the late 1970s. It powered many home computers from Acorn, Apple, Atari, BBC, Commodore and others through the 1980s. Now controlled by Western Design Center, its descendants remain popular today in many embedded applications.</p>
 <p>This handler supports the 6502, 65C02, R65C02, W65C02S 8-bit processors and the W65C816S 16-bit processor. It also supports any processor with an instruction set identical to one of these, such as the 6510 and 8502.</p>
@@ -585,7 +586,7 @@ a:hover {background-color:#FFF}
 <h4>Zero Page Addressing</h4>
 <p>Many 6502-family instructions have both absolute and zero page addressing forms. In source code both forms look alike, but in object code the zero page form is usually shorter and faster.</p>
 <p>The HXA65 module normally assembles the zero page form only if during pass one the operand address is calculated to be in the range $0000 to $00FF (ie., on page zero). If the operand address cannot be resolved during pass one, or is greater than $00FF, HXA65 assembles the absolute form.</p>
-<p>For timing or size purposes it can occasionally be desirable to override HXA65's automatic selection of zero page address mode. <a href="#L1AB">Forced address mode</a> can be used to force absolute mode on an otherwise zero page address (and vice-versa, though this is rarer).</p>
+<p>For timing or size purposes it can occasionally be desirable to override HXA65's automatic selection of zero page address mode. <a href="#L1B0">Forced address mode</a> can be used to force absolute mode on an otherwise zero page address (and vice-versa, though this is rarer).</p>
 <p>On some systems and some processors it is possible to change the default location of zero page. HXA65 can adapt to this using the ASSUME pseudo opcode (below).</p>
 <h4>Extended Address Modes</h4>
 <p>HXA65 accepts additional address modes for several standard instruction mnemonics. These generate exactly the same object code as the standard mnemonics. They are intended mainly to make some tasks easier or to make the sometimes-odd W65C816S standard syntax more closely resemble that of the other supported microprocessors. Note that these extensions are <em>not</em> portable.</p>
@@ -600,7 +601,7 @@ a:hover {background-color:#FFF}
 <table><caption><b>JML</b>  - W65C816S Only</caption> <thead><tr> <th>Syntax</th><th>Mode</th><th>Type</th> </tr></thead><tbody> <tr><td>JML ($1234)</td><td>absolute indirect</td><td>standard</td></tr> <tr><td>JML $123456</td><td>long absolute</td><td>extended</td></tr> </tbody></table>
 <p>The W65C816S <b>JML</b>  ("jump long") instruction officially has only one address mode, absolute indirect. The JMP ("jump") instruction officially is assigned the long absolute address mode.</p>
 <p>However, this can cause a problem for HXA65 when dealing with long forward jumps. Any <a href="hxa.htm#L02A">forward reference</a> in an expression means the destination address cannot be resolved during pass one. Therefore HXA65 will generate the official default address mode, which is absolute (16-bit) rather than long (24-bit).</p>
-<p>In fact, it is officially impossible to use the JMP instruction to create a long forward jump without also either using <a href="#L1AB">forced address mode</a> or pre-defining the destination address via an <a href="hxa.htm#L075">equate</a>.</p>
+<p>In fact, it is officially impossible to use the JMP instruction to create a long forward jump without also either using <a href="#L1B0">forced address mode</a> or pre-defining the destination address via an <a href="hxa.htm#L077">equate</a>.</p>
 <p>Alternatively, HXA allows the JML instruction be used for the same purpose. If the operand of the JML instruction is not indirect (ie., surrounded by balanced parentheses), HXA65 will generate a "JMP long absolute" opcode.</p>
 <p>This may be the safer option if there is any possibility at all of confusing a <em>program bank</em> address with a <em>data bank</em> address. HXA65 always generates a 16-bit address rather than a 24-bit address if it thinks the address is in the data bank, but a 16-bit JMP generates its 24-bit effective address using the program bank.</p>
 <table><caption><b>JSR</b>  - W65C816S Only</caption> <thead><tr> <th>Syntax</th><th>Mode</th><th>Type</th> </tr></thead><tbody> <tr><td>JSR $1234</td><td>absolute</td><td>standard</td></tr> <tr><td>JSR ($1234,X)</td><td>absolute X-indexed indirect</td><td>standard</td></tr> <tr><td>JSR $123456</td><td>long absolute</td><td>extended</td></tr> </tbody></table>
@@ -617,7 +618,7 @@ a:hover {background-color:#FFF}
 <p>The <b>WDM</b>  instruction is reserved for possible future expansion by WDC. Although it is only one byte, it requires a "signature" byte to follow it. It currently acts as a two byte NOP.</p>
 <p>HXA allows this signature byte to be specified as an immediate or zero page address operand in addition to an implied one. The zero page mode is designed to make the instruction resemble the standard W65C816S COP instruction syntax.</p>
 <h4>ASSUME Pseudo Opcode</h4>
-<a id="L1AB"></a>
+<a id="L1B0"></a>
 <h4>Forced Address Mode</h4>
 <h4>Usage</h4>
 <ul> <li><b>ASSUME</b>  addr:absolute</li>
@@ -677,7 +678,43 @@ a:hover {background-color:#FFF}
 <h4>Description</h4>
 <p>At startup the W65C816S microprocessor is in 8-bit emulator mode When programmatically switched to 16-bit native mode, the sizes of the accumulator and index registers can be controlled by manipulating two bits in the status register. One bit ("M") controls the accumulator size and the other ("X") controls the X- and Y-index register sizes.</p>
 <p>While in general a programmer must know which register sizes the W65C816S is in, it doesn't matter much to HXA65. The assembled object code produced doesn't change - except in the case of immediate address mode. HXA65 must store an immediate value as either 8- or 16-bits, but doesn't itself know which is appropriate at any given time. These four assumptions allow a programmer to tell it which size to use.</p>
-<a id="L1AC"></a><h3>Future Development</h3>
+<a id="L1B1"></a><h4>HXA68 Handler</h4>
+<p><a href="../source/cpu_hxa68.py">Source File</a></p>
+<p>The 6800 processor was created by Motorola and first introduced in 1974.</p>
+<p>This handler supports the 6800, 6801 and 6803 8-bit processors. The 6801 and 6803 have the same instruction set, which is a superset of the 6800 instruction set.</p>
+<h4>Additional Pre-defined Labels</h4>
+<ul> <li>"__HXA68__", <em>TRUE</em> : generic name</li>
+ <li>"A", <em>TRUE</em> : register name</li>
+ <li>"B", <em>TRUE</em> : register name</li>
+ <li>"X", <em>TRUE</em> : register name</li>
+ <li>"S", <em>TRUE</em> : register name</li>
+ <li>"P", <em>TRUE</em> : register name</li>
+ <li>"PC", <em>TRUE</em> : register name</li>
+ <li>"D", <em>TRUE</em> : register name</li>
+ </ul>
+<h4>CPU Descriptor</h4>
+<p>"T_16_M"</p>
+<h4>Instruction Set</h4>
+<p>All defined mnemonics of each supported processor instruction set are available. In addition, HXA68 supports several mnemonic aliases recommended by Motorola.</p>
+<table><caption>Mnemonic Aliases</caption> <thead><tr> <th>Standard</th><th>Alias</th> <tr><td>ASL</td><td>LSL</td></tr> <tr><td>ASLD</td><td>LSLD</td></tr> <tr><td>BCC</td><td>BHS</td></tr> <tr><td>BCS</td><td>BLO</td></tr> </tbody></table>
+<h4>Accumulator and Inherent Address Modes</h4>
+<p>Both <em>accumulator</em> and <em>inherent</em> address modes are characterized by a blank epression field. Although no instruction has both of these address modes, all which do have one of them will be assembled whenever its expression field is blank. It's hard to think of a case in which this leads to an error in the final program, but it will happen.</p>
+<h4>Direct and Extended Addressing</h4>
+<p>Many instructions have both direct and extended addressing forms. In source code both forms look alike, but in object code the direct form is usually shorter and faster.</p>
+<p>The HXA68 module normally assembles the direct form only if during pass one the operand address is calculated to be in the range $0000 to $00FF (ie., on page zero of memory). If the operand address cannot be resolved during pass one, or is greater than $00FF, HXA65 assembles the extended form.</p>
+<p>For timing or size purposes it can occasionally be desirable to override HXA68's automatic selection of direct address mode. Forced address mode can be used to force extended mode on what otherwise would be a direct mode address (and vice-versa, though this is rarer).</p>
+<h4>ASSUME Pseudo Opcode</h4>
+<h4>Forced Address Mode</h4>
+<h4>Usage</h4>
+<ul> <li><b>ASSUME</b>  addr:direct</li>
+ <li><b>ASSUME</b>  addr:extended</li>
+ </ul>
+<h4>Description</h4>
+<p>The two forced address modes permit a programmer to override the address mode which would otherwise be selected by HXA68. In general, direct instructions can be forced to extended, and vice versa, on all supported microprocessors. If an instruction does not support the mode it is being forced to, HXA68 flags the attempt as an error.</p>
+<p>When address forcing is applied, HXA does not perform any range-checking on the expression following the instruction. When stored it must fit into 32 bits, but if it is larger than the bits allowed, it is silently truncated. Forcing the same address mode as HXA68 would itself select thus has the effect of preventing any potential operand size error.</p>
+<p>Note that in cases where multiple address modes are possible, HXA65 defaults to choosing 16-bit extended mode operands whenever it cannot resolve the associated expression on the first pass (ie., the expression contains a <a href="hxa.htm#L02A">forward reference</a>). Address forcing can be used in these cases to provide a "hint" as to the correct size to choose.</p>
+<p>Address forcing applies for only a single instruction source code line. It must be applied to every instruction for which forcing is desired.</p>
+<a id="L1B2"></a><h3>Future Development</h3>
 <p>An informal list of enhancements or changes being considered (there is no guarantee any of these will actually happen).</p>
 <hr>
 <h4><b>Loop..Until pseudo ops</b></h4>
@@ -687,12 +724,16 @@ a:hover {background-color:#FFF}
 <p>a) operator tokens</p>
 <p>These are currently strings, and expression evaluation may fail if a user string happens to match one. They could be made more difficult to accidentally match (by including unprintable characters, say) or their type could be changed (to numeric values, perhaps).</p>
 <p>b) numeric function arguments</p>
-<p>The sub-expressions which comprise function arguments in the RPN form are not range-checked. This is so that the VAL() function can return an out-of-range result which can come back in-range as part of a larger expression (and which will trigger an error if it doesn't). However since range checking only occurs once for every complete expression (at the end), an out-of-range intermediate result can be created and used for any numeric function argument. For some functions this won't matter as they will not be used if they are out of range (eg., MID$()). But any which do not range check might produce questionable results</p>
+<p>The sub-expressions which comprise function arguments in the RPN form are not range-checked. This is so that the VAL() function can return an out-of-range result which can come back in-range as part of a larger expression (and which will trigger an error if it doesn't). However since range checking only occurs at the end of the second pass (when creating final output values), an out-of-range intermediate result can be created and used for any numeric function argument. For some functions this won't matter as they will not be used if they are out of range (eg., MID$()). But any which do not range check might produce questionable results</p>
 <p>c) EXIT block nesting clearing</p>
 <p>EXIT skips to the end of a macro, repeat or while block and silently closes any still-open IF blocks within the block. This behavior is necessary to allow the unconditional EXIT to be used within an IF block. However this unconditional nature means that it will also "cover up" an "IF without ENDIF" problem in the block body.</p>
 <p>On the one hand that's somewhat helpful, as the error then can't hurt anything outside the block (such as unexpectedly cutting off assembly for hundreds of lines).</p>
 <p>On the other hand, it's an undetected error. Moreover, unlike any other source code error in the skipped over portion, it's one that is actively covered up by HXA.</p>
-<p>On the other other hand, it's an error that has no practical effect. If EXIT <em>is</em> executed HXA reacts the same way whether or not there is an unbalanced IF block. If EXIT <em>is not</em> executed HXA will detect an unbalanced block.</p>
+<p>On the other other hand, it's an error that has no practical effect. If EXIT <em>is</em> executed, HXA reacts the same way whether or not there is an unbalanced IF block. If EXIT <em>is not</em> executed, HXA will detect an unbalanced block.</p>
+<p>d) "#" comments</p>
+<p>HXA considers the first "#(pseudo-opcode)" and "#(mnemonic)" on a source line to be legal. In general, HXA treats the first "#" character immediately followed by any alphanumeric sequence of characters to be legal. So if the first "#" character is actually meant to be a comment marker at the end of a source line, it must be surrounded by whitespace to be correctly removed, so that the line contains only source code. Otherwise the un-removed comment will be passed to the source code dispatcher.</p>
+<p>This non-removal does not usually cause HXA to behave any differently, but it is an annoying quirk.</p>
+<p>The other comment markers have no special meaning to HXA. When marking comments at the end of a source code line, they can be followed by anything at all.</p>
 <hr>
 <h4>Link files</h4>
 <p>Not likely to be compatible with any existing format, if only because they tend to be tied to specfic processors (although what if a "such-and-such file" was recognized as a "processor mnemonic" and that HXA variant included an ability to output that format?)</p>
@@ -778,7 +819,9 @@ a:hover {background-color:#FFF}
 <p>Add an ASSUME float:(format) to the list of acceptable assumptions. CPU handler modules would implement their own recognized formats.</p>
 <h4>INCRAW pseudo op</h4>
 <p>Include files in .RAW format.</p>
-<a id="L1AD"></a><h3>Assembler Messages</h3>
+<h4>Support for the 6809 processor</h4>
+<p>Source compatiable with the 6800, but not binary compatible.</p>
+<a id="L1B3"></a><h3>Assembler Messages</h3>
 <table><caption>Default Message Texts</caption> <thead><tr><th>Index</th><th>Text</th></tr></thead><tbody>
 <p><tr><td colspan="2">&nbsp;</td></tr> <tr><th colspan="2">Internal Error/Debug</th></tr> <tr><td colspan="2">&nbsp;</td></tr> <tr><td>BadMsg</td><td>Expanded text not found</td></tr> <tr><td>NoWay</td><td>Can't happen</td></tr> <tr><td>Debug</td><td>Debug called by</td></tr></p>
 <p><tr><td colspan="2">&nbsp;</td></tr> <tr><th colspan="2">General Status</th></tr> <tr><td colspan="2">&nbsp;</td></tr> <tr><td>Fread</td><td>Reading</td></tr> <tr><td>Fwrite</td><td>Writing</td></tr> <tr><td>BegOne</td><td>Pass One started</td></tr> <tr><td>EndOne</td><td>Pass One ended</td></tr> <tr><td>BegTwo</td><td>Pass Two started</td></tr> <tr><td>EndTwo</td><td>Pass Two ended</td></tr> <tr><td>Quit</td><td>Assembly halted</td></tr></p>
@@ -796,7 +839,7 @@ a:hover {background-color:#FFF}
 <p><tr><td colspan="2">&nbsp;</td></tr> <tr><th colspan="2">Over Internal Limit</th></tr> <tr><td colspan="2">&nbsp;</td></tr> <tr><td>maxwarn</td><td>Warning count</td></tr> <tr><td>maxerr</td><td>Error count</td></tr> <tr><td>maxloop</td><td>Loop body count</td></tr> <tr><td>maxdepth</td><td>Block nesting depth</td></tr> <tr><td>maxputback</td><td>Putback line count</td></tr> <tr><td>maxseg</td><td>Segment count</td></tr> <tr><td>maxstack</td><td>User stack depth</td></tr></p>
 <p><tr><td colspan="2">&nbsp;</td></tr> <tr><th colspan="2">Output Line Prefix</th></tr> <tr><td colspan="2">&nbsp;</td></tr> <tr><td>OutPfx</td><td>; &ast;&ast;&ast;</td></tr> <tr><td>ErrPfx</td><td>; >>>>></td></tr> <tr><td>ErrPfx2</td><td>; -</td></tr> <tr><td>ErrPfx3</td><td>;</td></tr> <tr><td>ErrPfx4</td><td>; >>> In</td></tr> <tr><td>InfoPfx</td><td>&ast;&ast;&ast;&ast;&ast;</td></tr> <tr><td>EquIfx</td><td>=</td></tr> <tr><td>InIfx</td><td>in</td></tr></p>
 <p><tr><td colspan="2">&nbsp;</td></tr> <tr><th colspan="2">Miscellaneous</th></tr> <tr><td colspan="2">&nbsp;</td></tr> <tr><td>UniqVal</td><td>Value already set</td></tr> <tr><td>OddVal</td><td>Unusual value</td></tr> <tr><td>OddUse</td><td>Unusual use</td></tr> <tr><td>NoEffect</td><td>No effect</td></tr> <tr><td>TimerReset</td><td>Timer reset to zero</td></tr> <tr><td>StkEmpty</td><td>User stack empty</td></tr> <tr><td>StkNotEmpty</td><td>User stack not empty</td></tr> <tr><td>TotTime</td><td>Total Time</td></tr> </tbody></table></p>
-<a id="L1AE"></a><h3>History</h3>
+<a id="L1B4"></a><h3>History</h3>
 <h4>v0.10 - October 2004</h4>
 <p><b>All Versions</b></p>
 <ul> <li>initial release</li>
@@ -1235,7 +1278,7 @@ a:hover {background-color:#FFF}
 <p><em>Extended</em></p>
 <ul> <li>all error messages now indicate how HXA treated the source line, eg., as a mnemonic, pseudo opcode, macro invocation, etc.</li>
  </ul>
-<h4>v1.000 Â– December 2023</h4>
+<h4>v1.000 – December 2023</h4>
 <p><b>All Versions</b></p>
 <p><em>Added</em></p>
 <ul> <li>command-line name of a dynamically loaded CPU instruction mnemonic module</li>
@@ -1253,7 +1296,7 @@ a:hover {background-color:#FFF}
  <li>WARNON and WARNOFF pseudo ops to control console display of warning messages</li>
  <li>ABS(), DIR$(), ISLABEL(), ISMACRO(), ROOTFILE$(), and SGN() functions and aliases</li>
  <li>'printable' and 'objstr' assumptions</li>
- <li>'ascii', 'latin-1', 'utf-8', 'utf-16', 'utf-16be', 'utf-16le', 'utf-32', 'utf-32be' and 'utef-32le' assumption flags</li>
+ <li>'ascii', 'latin-1', 'utf-8', 'utf-16', 'utf-16be', 'utf-16le', 'utf-32', 'utf-32be' and 'utf-32le' assumption flags</li>
  </ul>
 <p><em>Extended</em></p>
 <ul> <li>there is no limit on the integer value a numeric expression can have, as long as no effort is made to store more than 32 bits of it</li>
@@ -1276,5 +1319,20 @@ a:hover {background-color:#FFF}
 <ul> <li>MS-DOS no longer explicitly supported</li>
  <li>implicit string concatenation by placing two string operands adjacent to each other (not functional!)</li>
  <li>all caches removed</li>
+ </ul>
+<h4>v1.100 - June 2024</h4>
+<p><b>All Versions</b></p>
+<p><em>Added</em></p>
+<ul> <li>RND() and SEED() functions</li>
+ <li>FCB, FDB, FCC and RMB aliases for BIT08, BIT16, STRING, and DS pseudo opcodes</li>
+ <li>REVFCB, REVFDB and REVFCC aliases for BIT08R, BIT16R and STRINGR pseudo opcodes</li>
+ </ul>
+<p><em>Bug Fix - Output File Names</em></p>
+<ul> <li>then: output filenames checked only for conflicts with other output filenames</li>
+ <li>now: output filenames checked for conflicts with all input and output filenames</li>
+ </ul>
+<p><b>HXA68 Version</b></p>
+<p><em>Added</em></p>
+<ul> <li>cpu handler to support 6800 and 6801/6803 processors</li>
  </ul>
 </div></section></body></html>
