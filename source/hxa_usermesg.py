@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - User Messages (Error and Informational)
+# Hobby Cross-Assembler (HXA) V1.100 - User Messages (Error and Informational)
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03	(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 07/08/24
 
 # preferred public function prefix: "UM"
 
@@ -466,43 +466,44 @@ def _showstumble(type, key, cause=None):
 
 # -----------------------------
 
-def showerrcnt(type, count, bitflag):
-	''' show error count (if any) '''
-	if count > 0:
-		_msgout( f'{count} {expandtext(type)}' )
-		return bitflag
-	else:
-		return 0
+def geterr():
+	''' return current error count '''
+	return _UM.errcnt
 
-def checkerr():
-	''' check warning/error counts '''
+def geterrcode():
+	'''get errcode'''
 	# errcode is bit-mapped (SET= TRUE, CLEAR= FALSE)
 	# - bit 0 : warning(s) happened  (but assembly continued)
 	# - bit 1 : error(s) happened	(assembly stopped after current pass complete)
 	# - bit 2 : fatal error happened (assembly stopped immediately)
-	errcode = 0
-	errcode |= showerrcnt( 'HaveWarn',  _UM.warncnt - _UM.warntot, 1 )
-	errcode |= showerrcnt( 'HaveErr',   _UM.errcnt, 2 )
-	errcode |= showerrcnt( 'HaveFatal', _UM.fatalcnt, 4 )
-	errcode |= 1 if _UM.warntot else 0
+	errcode = 1 if _UM.warncnt or _UM.warntot else 0
+	errcode |= 2 if _UM.errcnt else 0
+	errcode |= 4 if _UM.fatalcnt else 0
+	return errcode
+
+def showerrcnt():
+	'''show warning/error/fatal counts'''
+
+	def _showerrcnt(type, count):
+		''' show error count (if any) '''
+		if count > 0:
+			_msgout( f'{count} {expandtext(type)}' )
+
+	_showerrcnt( 'HaveWarn',  _UM.warncnt - _UM.warntot )
+	_showerrcnt( 'HaveErr',   _UM.errcnt )
+	_showerrcnt( 'HaveFatal', _UM.fatalcnt )
 
 	# save total warn count through this pass
 	# - next pass will show only warn count from that pass
 	_UM.warntot += _UM.warncnt
 
-	return errcode
-
 def quitonerr():
 	'''quit on anything but a warning'''
-	e = checkerr()
-	if e > 1:
+	showerrcnt()
+	if geterrcode() > 1:
 		info( 'Quit' )
-		OS.writeerr( e )
-		sys.exit( e )
-
-def geterr():
-	''' return current error count '''
-	return _UM.errcnt
+		OS.writeerr()
+		sys.exit( geterrcode() )
 
 # -----------------------------
 # fatal error
@@ -530,12 +531,15 @@ def error(key, cause=None):
 
 def errlabel(key, label=None):
 	if label is not None:
-		error( key, SYM.unmakeauto(label) )
+		error( key, SYM.unmakeauto(str(label)).upper() )
 	else:
 		noway( key )
 
+def nofile(name):
+	errlabel( 'NoFile', name )
+
 def reserved(name):
-	error( 'RsrvName', name.upper() )
+	errlabel( 'RsrvName', name )
 
 def undefined(name):
 	errlabel( 'UndefName', name )

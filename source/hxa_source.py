@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Source Text Management
+# Hobby Cross-Assembler (HXA) V1.100 - Source Text Management
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 05/16/03		(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 06/20/24
 
 # preferred public function prefix: "SRC"
 
@@ -84,7 +84,16 @@ _listOpt = {
 class SRCvariables(object):
 
 	def __init__(self):
-	
+
+		# constants
+
+		self.HASCOMMENT	 = re.compile( '[ ](;|//|#)' )
+		self.UNIREMOVE	 = re.compile( '([ ]+)(;|//)' )
+		self.SINGLESHARP = re.compile( '([ ]+)#([ ]|$)' )
+		self.DOUBLESHARP = re.compile( '#.*?([ ]+)#' )
+
+		# variables
+
 		self.masterline = 0			# total number of lines read from all files
 		self.mastermax = 0			# maximum value of 'masterline' (for listing)
 
@@ -244,10 +253,24 @@ def recall(masterline):
 # -----------------------------
 
 def stripcomment(text):
-	'''remove any comment starting somewhere after first non-whitespace char '''
-	# only '*' is not a not legal comment markers now
-	# '#' has to be surrounded by whitespace, though
-	m = re.search( '[^ \t]([ \t]+)(;|//|#([ \t]|$))', text )
+	'''remove any trailing comment starting somewhere after first non-whitespace char '''
+	# does any legal comment marker appear ?
+	# ';', '//', and '#' are legal now, but not '*'
+	if _SRC.HASCOMMENT.search(text) is None:
+		return text
+
+	# does a ';' or '//' comment marker appear ?
+	m = _SRC.UNIREMOVE.search( text )
+	if m is None:
+		# how many '#' chars, then ?
+		match text.count('#'):
+			case 1:
+				# surrounded by whitepace ?
+				m = _SRC.SINGLESHARP.search( text )
+			case _:
+				# where does the second one start ?
+				m = _SRC.DOUBLESHARP.search( text )
+
 	return text if m is None else text[:m.start(1)]
 
 def ignore(text):
@@ -341,10 +364,11 @@ def nextline():
 		_SRC.explines += _SRC.offset
 		_SRC.offset = _SRC.putback = 0				# reset
 
-	text = stripcomment( text )
-
 	# replace tabs with spaces (tabs are not significant after this)
-	return ( True, text.lstrip().replace('\t', ' ') )
+	text = text.strip().replace('\t', ' ')
+
+	# remove comment starting after first non-space character
+	return ( True, stripcomment(text) )
 
 def pseudoline(text = ''):
 	'''insert a "line" after last actual source line'''
@@ -518,7 +542,7 @@ def _xreflistline(master, offset):
 
 # -----------------------------
 
-def list(errcode):
+def list( ):
 
 	def _exp(key):
 		return UM.expandtext(key)
@@ -739,12 +763,18 @@ def list(errcode):
 	def _fmtcnt(cnt):
 		return str(cnt) if cnt > 0 else ' '
 
+	def _fmthex(val):
+		return f'{val:02X}' if isinstance(val, int) else 'None'
+
+	def _fmtdec(val):
+		return val if isinstance(val, int) else 0
+
 	def _listlabels():
 		'''list user labels'''
 
 		def _listnum(template, name, val, refcnt):
 			'''list numeric label'''
-			_listline( template.format(_fmtname(name), _fmtcnt(refcnt), f'{val:02X}', val) )
+			_listline( template.format(_fmtname(name), _fmtcnt(refcnt), _fmthex(val), _fmtdec(val)) )
 
 		def _liststr(template, name, val, refcnt):
 			''' list string label'''
@@ -877,7 +907,7 @@ def list(errcode):
 
 	# do we have a listing file ?
 
-	if makeformats() and OS.openlist(errcode):
+	if makeformats() and OS.openlist():
 
 		_initlist()
 

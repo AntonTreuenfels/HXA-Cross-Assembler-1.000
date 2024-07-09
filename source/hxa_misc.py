@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Miscellaneous 
+# Hobby Cross-Assembler (HXA) V1.100 - Miscellaneous 
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,12 +28,12 @@
 # source language: Python 3.11.4
 
 # first created: 01/24/03	(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 06/21/24
 
 # preferred public function prefix: UTIL
 
 # -----------------------------
-import time
+from time import time_ns
 # other HXA modules
 import hxa_usermesg as UM
 # -----------------------------
@@ -102,7 +102,7 @@ def isrunning(name):
 def readtimer(name):
 	# read timer value (in nanoseconds from epoch)
 	if name in _MSC.timer:
-		endtime = time.time_ns() if isrunning(name) else _MSC.timer[name][1]
+		endtime = time_ns() if isrunning(name) else _MSC.timer[name][1]
 		return endtime - _MSC.timer[ name ][ 0 ]
 	else:
 		UM.undefined( name )
@@ -144,7 +144,7 @@ def dostarttimer(label, name):
 		UM.warn( 'TimerReset' )
 
 	# note current time (in nanoseconds from epoch)
-	_MSC.timer[ name ] = [ time.time_ns() ]
+	_MSC.timer[ name ] = [ time_ns() ]
 
 # -----------------------------
 # psop: STOPTIMER name
@@ -155,7 +155,7 @@ def dostoptimer(label, name):
 	if not name in _MSC.timer:
 		UM.undefined( name )
 	elif isrunning(name):
-		_MSC.timer[ name ].append( time.time_ns() )
+		_MSC.timer[ name ].append( time_ns() )
 	else:
 		UM.noeffect( name )
 

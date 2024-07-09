@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Top Level Executive
+# Hobby Cross-Assembler (HXA) V1.100 - Top Level Executive
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,12 +28,12 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03		(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 07/07/24
 
 # preferred public function prefix: none (other modules cannot call this module)
+# - it is only imported as part of testing a "cpu_" module
 
 # -----------------------------
-import re
 import sys
 # other HXA modules
 import hxa_pseudo as PSOP
@@ -57,8 +57,8 @@ import hxa_misc as UTIL
 # - and no, we're not likely to get 99,999 major version numbers :-)
 # - HXA versions implemented in TAWK are all less than '1.00'
 
-verNum = 0x00001002
-verStr = '1.002'
+verNum = 0x00001100
+verStr = '1.100'
 
 # pre-defined symbols
 
@@ -239,7 +239,7 @@ def doline(text):
 			else:
 				UM.error( 'NeedOpcode', token1 )
 
-	# first token is not a label, psop, macro or opcode
+	# first token is not a label, psop, macro or mnemonic
 	else:
 		UM.error( 'NeedToken', token0 )
 
@@ -247,64 +247,85 @@ def doline(text):
 # Setup
 # -----------------------------
 
-sourcefile, handler = checkargs()
+def setup():
+	sourcefile, handler = checkargs()
 
-rootfile = doinits( sourcefile, handler )
+	rootfile = doinits( sourcefile, handler )
 
-UM.info('Version')
+	UM.info('Version')
+
+	return rootfile
 
 # -----------------------------
 # Pass One
 # -----------------------------
 
-beginpass( 'One' )
+def passone(rootfile):
+	beginpass( 'One' )
 
-# push root file on file stack
-OS.pushfile( rootfile, 0, 0 )
+	# push root file on file stack
+	OS.pushfile( rootfile, 0, 0 )
 
-# while file stack not empty...
-while OS.popfile():
+	# while file stack not empty...
+	while OS.popfile():
 
-	# while a file has not been completely read...
-	ok, text = SRC.nextline()
-	while ok:
-		doline( text )
+		# while a file has not been completely read...
 		ok, text = SRC.nextline()
+		while ok:
+			doline( text )
+			ok, text = SRC.nextline()
 
-MAC.endsource()
-UTIL.endsource()
-endpass( 'One' )
+	MAC.endsource()
+	UTIL.endsource()
+	endpass( 'One' )
 
 # -----------------------------
 # Pass Two
 # -----------------------------
 
-beginpass( 'Two' )
+def passtwo():
+	beginpass( 'Two' )
 
-if PC.makeabsolute():
-	SYM.makeabsolute()
-	CG.resolve()
+	if PC.makeabsolute():
+		SYM.makeabsolute()
+		CG.resolve()
 
-endpass( 'Two' )
+	endpass( 'Two' )
 
 # -----------------------------
 # Write Files
 # -----------------------------
 
-# 0 -> okay, 1..7 -> warning/error of some kind
-errcode = UM.checkerr()
+def writefiles():
 
-# listing
-SRC.list( errcode )
+	# no list or object files if already have error(s)
+	# - but even if none now, errors can happen during file writing...
+	if UM.geterrcode() < 2:
+		# listing
+		SRC.list()
 
-# object
-CG.putobject( errcode )
+		# object
+		CG.putobject()
 
-# warnings/errors
-OS.writeerr( errcode )
+	# error
+	UM.showerrcnt()
+	OS.writeerr()
 
 # -----------------------------
-# Done
+# Main
 # -----------------------------
 
-sys.exit( errcode )
+def main():
+
+	root = setup()
+	passone( root )
+	passtwo()
+	writefiles()
+
+	# 0 -> okay, 1..7 -> warning/error of some kind
+	sys.exit( UM.geterrcode() )
+
+# -------------------------------
+
+if __name__  == "__main__":
+	main()

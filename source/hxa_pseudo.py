@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002- Pseudo Opcode Handler
+# Hobby Cross-Assembler (HXA) V1.100- Pseudo Opcode Handler
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/08/03	(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 06/26/24
 
 # preferred public function prefix: PSOP
 
@@ -78,7 +78,9 @@ def dopsnull(label=None, expr=None):
 
 def doassume(label, fields):
 	''' handle ASSUME psop '''
+	# make the [flag, value] list lowercase
 	f = [ x.lower() for x in fields ]
+	# then separate the two items
 	flag, val = f
 	if not STR.doassume(flag, val):
 		if not CG.doassume(flag, val):
@@ -254,6 +256,9 @@ _psAlias = {
 	'ends':	'endsegment',
 	'endseg': 'endsegment',
 	'endw': 'endwhile',
+	'fcb':	'bit08',
+	'fcc':	'string',
+	'fdb':	'bit16', 	
 	'hexbyblock': 'hexbyblk',	# candidate for removal
 	'mac':	'macro',
 	'nodata':	'uninitialized',
@@ -261,8 +266,12 @@ _psAlias = {
 	'objbyblock': 'objbyblk',	# candidate for removal
 	'onexpand':	'putback',		# candidate for removal
 	'org':	'absorg',
+	'revfcb':	'bit08r',
+	'revfcc': 'stringr',
+	'revfdb':	'bit16r',
 	'putstr' : 'putbacks',
 	'revstr':	'stringr',
+	'rmb':	'ds',
 	'srecbyblock': 'srecbyblk',	# candidate for removal
 	'str':	'string',
 }

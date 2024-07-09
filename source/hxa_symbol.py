@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Symbol Table Management
+# Hobby Cross-Assembler (HXA) V1.100 - Symbol Table Management
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.7.1
 
 # first created: 03/08/03	(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 07/08/24
 
 # preferred public function prefix: SYM
 
@@ -46,8 +46,8 @@ from hxa_expressions import isfunc
 
 # public constants
 
-# for ease of consistent definition, all recognized symbol/label patterns
-# are defined here (even if not used in this module)
+# for ease of consistent definition, all recognized symbol/label patterns are defined here
+# - if not used in this module, then it must be copied to where it's used :(usually hxa_expressions.py)
 
 # global numeric - [A-Z_]([.]?[A-Z_0-9])*[:]?
 # global string  - [A-Z_]([.]?[A-Z_0-9])*[$][:]?
@@ -61,11 +61,11 @@ from hxa_expressions import isfunc
 # anonymous numeric - [:]|[+][-]?|[-][+]?
 # anonymous string  - (none)
 
-strLabel  = '([]@][0-9]*|[_A-Z])([.]?[_A-Z0-9])*[$][:]?'	# string label
+strLabel  = '([]@][0-9]*|[_A-Z])([.]?[_A-Z0-9])*[$][:]?'	# string label (not used here)
 
-glbLabel  = '[_A-Z]([.]?[_A-Z0-9])*[$]?[:]?'		# global label
+glbLabel  = '[_A-Z]([.]?[_A-Z0-9])*[$]?[:]?'				# global label
 
-anonLabel = [ ':', '+', '-', '+-', '-+' ]			# anonymous label (in label field)
+anonLabel = [ ':', '+', '-', '+-', '-+' ]					# anonymous label (in label field)
 
 # legal label - all the forms available to the user (in label field)
 # - global, local and variable numeric labels
@@ -79,7 +79,7 @@ symLabel = '[]@_A-Z]([.]?[_A-Z0-9])*[$]?[:]?|:|[-][+]?|[+][-]?'
 # - global, local and variable string labels
 # - anonymous labels (different than in label field)
 
-symExpr  = '[]@_A-Z]([.]?[_A-Z0-9])*[$]?[:]?|:([+]+|[-]+)'
+symExpr  = '[]@_A-Z]([.]?[_A-Z0-9])*[$]?[:]?|:([+]+|[-]+)'	# (not used here)
 
 # ...except one...which is legal only when it is a lone operand...
 
@@ -99,6 +99,20 @@ macReplacePrefix = '?'								# macLabel prefix
 class SYMvariables(object):
 
 	def __init__(self):
+
+		# constants
+
+		self.ISLABEL	= re.compile( symLabel, flags=re.IGNORECASE )
+		self.ISGLOBAL	= re.compile( glbLabel, flags=re.IGNORECASE )
+		self.ISMACRPL	= re.compile( macLabel )
+		self.ISMACEQU	= re.compile( equLabel )
+
+		self.ISFWDANON	= re.compile( '[+]+' )
+		self.ISBAKANON	= re.compile( '[-]+' )
+
+		self.ISANONEXPR	= re.compile( anonExpr )
+
+		# variables
 
 		self.reserved = [ ]							# reserved symbols
 		self.labels = {}							# user defined symbols
@@ -121,40 +135,40 @@ def _normalize(this):
 # -----------------------------
 
 def islabel(this):
-	''' check if token is a label '''
-	return bool( re.fullmatch(symLabel, this, flags=re.IGNORECASE) )
+	'''is token a label ?'''
+	return bool( _SYM.ISLABEL.fullmatch(this) )
 
 def isglobal(label):
-	'''global label?'''
-	return bool( re.fullmatch(glbLabel, label, flags=re.IGNORECASE) )
+	'''is label a global label ?'''
+	return bool( _SYM.ISGLOBAL.fullmatch(label) )
 
 def isstr(label):
-	'''string label?'''
+	'''is label a string label ?'''
 	return label.endswith( ('$', '$:') )
 
 def isvar(label):
-	'''variable label?'''
-	return label.startswith(']')
+	'''is label a variable label ?'''
+	return label.startswith( ']' )
 
 def _islocal(label):
-	'''local label?'''
-	return label.startswith('@')
+	'''is label a local label?'''
+	return label.startswith( '@' )
 
 def isauto(label):
-	'''anonymous label?'''
-	return label.startswith('&')			# internal form
+	'''is label an anonymous label ?'''
+	return label.startswith( '&' )			# internal form
 
 def isreserved(label):
-	''' reserved symbol? '''
+	'''is label a reserved symbol ?'''
 	return _normalize(label) in _SYM.reserved or PSOP.ispseudo(label) or CG.isop(label) or isfunc(label)
 
 def ismacroreplace(label):
-	''' macro text replacement label? '''
-	return bool( re.fullmatch(macLabel, label) )
+	'''is label a macro text replacement label ?'''
+	return bool( _SYM.ISMACRPL.fullmatch(label) )
 
 def ismacroequate(label):
-	''' macro eval/assign label? '''
-	return bool( re.fullmatch(equLabel, label) )
+	'''is label a macro eval/assign label ?'''
+	return bool( _SYM.ISMACEQU.fullmatch(label) )
 
 # -----------------------------
 
@@ -203,7 +217,7 @@ def _makelocal(label):
 
 def unmakeauto(this):
 	'''remove internal auto prefix (if any; for error reporting)'''
-	return re.sub('&[0-9]+[_]?', '', str(this)).upper()
+	return re.sub( '&[0-9]+[_]?', '', str(this) )
 
 # -----------------------------
 
@@ -222,17 +236,17 @@ def normalize(label):
 		return _makelocal( label )
 
 	# forward anonymous ?
-	m = re.search( '[+]+', label )
+	m = _SYM.ISFWDANON.search( label )
 	if m is not None:
 		return _makeforward( _SYM.fwdcnt + (m.end() - m.start()) )
 
 	# backward anonymous ?
-	m = re.search( '[-]+', label )
+	m = _SYM.ISBAKANON.search( label )
 	if m is not None:
 		return _makebackward( _SYM.bakcnt + 1 - (m.end() - m.start()) )
 
 	# must be variable or global 
-	return _normalize(label)
+	return _normalize( label )
 
 # -----------------------------
 
@@ -321,7 +335,7 @@ def warnanon(label):
 def checkloneanon(expr):
 	'''check for lone anonymous label in expression field'''
 	# we don't want to confuse them with unary prefix operators
-	return expr if re.fullmatch(anonExpr, expr) is None else f':{expr}'
+	return expr if _SYM.ISANONEXPR.fullmatch(expr) is None else f':{expr}'
 
 def labelhere(label):
 	''' add label with value of current program counter '''

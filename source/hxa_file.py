@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - File Manipulation
+# Hobby Cross-Assembler (HXA) V1.100 - File Manipulation
 
 # (c) 2021-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 11/05/21
-# last revision: 02/05/24
+# last revision: 07/07/24
 
 # preferred public function prefix: "OS"
 
@@ -138,7 +138,7 @@ def _open(fname, mode):
 		# UTF-8 encoding for reading text files, else use OS default encoding
 		fobj = open( fname, mode, encoding='UTF-8' ) if mode == 'rt' else open( fname, mode )
 	except FileNotFoundError:
-		UM.error( "NoFile", fname )
+		UM.nofile( fname )
 	except Exception:
 		UM.error( 'NotOpen', fname )
 	else:
@@ -156,7 +156,7 @@ def _exists(fname):
 	if os.path.isfile( fname ):
 		return True
 	else:
-		UM.error( 'NoFile', fname )
+		UM.nofile( fname )
 		return False
 
 def _closeread():
@@ -206,7 +206,7 @@ def _readbin(maxchunk):
 
 def sourcefile(masterline):
 	''' find the name of the source file associated with a masterline '''
-	# 'fileseq': [ (master0, file0), (master1, file1), ... ]
+	# 'fileseq': [ (file0, master0), (file1, master1), ... ]
 	# - 'masterx' is alway one less than the actual first master line of the
 	# associated file
 	#  master0 = 0 and masterline > 0, so this search should always succeed
@@ -316,7 +316,7 @@ def doreadonce(label, expr):
 			UM.warn( "CircInc", _OS.currfile )
 
 		# has the current file been INCLUDED before now ?
-		currseq = [fseq[0] for fseq in _OS.fileseq]
+		currseq = getfinputs()
 		# last file in sequence is current file, so we don't look at that one
 		currseq.pop()
 		if _OS.currfile in currseq:
@@ -339,7 +339,7 @@ def doinclude(label, name):
 	# silent check if this file should not be read again
 	elif not fname in _OS.readonce:
 		# check for duplicate filenames (including path and device)
-		if fname in [fseq[0] for fseq in _OS.fileseq]:
+		if fname in getfinputs():
 			UM.warn( "DupName", fname )
 
 		# stack current file
@@ -402,6 +402,21 @@ def doincbin(label, name, offset, count):
 # output file handling
 # -----------------------------
 
+def getfinputs():
+	'''get set of input files'''
+	# there may be duplicates, but we don't care
+	return [ fseq[0] for fseq in _OS.fileseq ]
+
+def getfoutputs():
+	'''get set of output files'''
+	# not used much, but at least we're being consistent !
+	return [ fout[0] for fout in _OS.fnames.values() if fout[0] is not None ]
+
+def ignorefname(fname, token):
+	'''ignore an output filename'''
+	UM.warn( "DupName", fname.upper() )
+	UM.ignored( token.upper() )
+
 # -----------------------------
 # psop: ERRFILE  [name]
 # psop: LISTFILE [name]
@@ -458,22 +473,23 @@ def dofile(psop, name):
 	# we're going to check these
 	path, pname = os.path.split( fname )
 
-	# do we need to check for proper template ?
-	if not '#' in fname:
-		validchars = r'[-._0-9A-Za-z\xA1-\xFF]{1,32}'
-
-	else:
-		validchars = r'[-._#0-9A-Za-z\xA1-\xFF]{1,32}'
-		# any use like this an error , even if filesystem permits it
-		if '#'in path or pname.startswith('#') or re.search(r'#[^#]+#', pname):
-			UM.error( "BadSegTmplt", pname if '#' in pname else fname )
-			return
+	# any use like this an error , even if filesystem permits it
+	if '#'in path or pname.startswith('#') or re.search(r'#[^#]+#', pname):
+		UM.error( "BadSegTmplt", pname if '#' in pname else fname )
+		return
 
 	# check for (superficially) valid filename
 	# - basically just checks to see if it consists 8-bit characters valid in most filesystems
-	# - does not check that the path is valid in either characters or total length
+	# - does not guarantee that the name is valid in either characters or total length
+	validchars = r'[-._#0-9A-Za-z\xA1-\xFF]{1,32}'
 	if not re.fullmatch(validchars, pname):
 		UM.odduse( pname )
+
+	# is this name already used for another file ?
+	# - checking now shows correct warning line
+	if fname in getfoutputs() or fname in getfinputs():
+		ignorefname( fname, psop )
+		return
 
 	# set this name as the output filename for this psop
 	_OS.fnames[ psop ][ 0 ] = fname
@@ -521,12 +537,12 @@ def _openout(ftype, segnum=1):
 	# an open file here is a mistake (we silently fix it)
 	closeout()
 
+	# can we output this file type ?
+	if not outputdefined(ftype):
+		return False
+
 	# final check of filename
 	outname, dext = _OS.fnames[ ftype ]
-	
-	# is there a filename ?
-	if outname is None:
-		return False
 
 	# Motorola ?
 	fname, fext = os.path.splitext( outname )
@@ -548,8 +564,14 @@ def _openout(ftype, segnum=1):
 		outname = f'{fname}_{PC.getsegname(segnum)}.{dext}'
 
 	fname = _normalize( outname )
-	wtype = 'wb' if ftype.startswith('obj') else 'wt'
+	# is this name the same as an input file ?
+	# - won't show correct warning line because we're at end of source now
+	# - but last input file may have been named *after* last output file
+	if fname in getfinputs():
+		ignorefname( fname, ftype )
+		return False
 
+	wtype = 'wb' if ftype.startswith('obj') else 'wt'
 	_OS.outobj = _open( fname, wtype )
 
 	return True if _OS.outobj is not None else False
@@ -566,10 +588,9 @@ def errwrite(this):
 	''' save error text for later writing to error file (if any) '''
 	_OS.errtext.append( this )
 
-def writeerr(errcode):
+def writeerr():
 	'''write error file (if any)'''
-	# any warnings/errors/fatal or echo ?
-	if (errcode > 0 or len(_OS.errtext) > 2) and _openout('errfile'):
+	if (UM.geterrcode() > 0 or len(_OS.errtext) > 2) and _openout('errfile'):
 		hdr = makeheader( 'ErrFile' )
 		for line in hdr:
 			writeout( line )
@@ -581,10 +602,10 @@ def writeerr(errcode):
 # listing file
 # -----------------------------
 
-def openlist(errcode):
+def openlist():
 	''' open listing file (if any) '''
 	# no errors/fatal ?
-	return errcode < 2 and _openout('listfile')
+	return _openout('listfile')
 
 # -----------------------------
 # assembly output files

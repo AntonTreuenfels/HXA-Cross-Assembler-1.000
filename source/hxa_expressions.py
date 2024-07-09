@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Expression Parsing and Evaluation
+# Hobby Cross-Assembler (HXA) V1.100 - Expression Parsing and Evaluation
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 04/09/03	(in Thompson AWK 4.0)
-# last revision: 02/05/24
+# last revision: 06/21/24
 
 # preferred public function prefix: EXP
 
@@ -42,6 +42,7 @@
 
 # -----------------------------
 import re
+from random import seed, randint
 # other HXA modules
 import hxa_macro as MAC
 import hxa_codegen as CG
@@ -52,20 +53,6 @@ import hxa_source as SRC
 import hxa_strings as STR
 import hxa_misc as UTIL
 import hxa_usermesg as UM
-# -----------------------------
-
-# private constants
-
-# character, string and regular expression literal operand patterns
-# - basic pattern is:
-# delimiter
-# (1) any single char except delimiter or backslash, or 
-# (2) backslash plus next char as a pair
-# delimiter
-
-chrLiteral   = r"'([^\'\\]|\\.)+'"			# character literal (cannot be null)
-strLiteral   = r'"([^\"\\]|\\.)*"'			# string literal (can be null string)
-regexLiteral = r'/([^\/\\]|\\.)+/i?'		# regex literal (cannot be null)
 
 # -----------------------------
 
@@ -74,6 +61,21 @@ regexLiteral = r'/([^\/\\]|\\.)+/i?'		# regex literal (cannot be null)
 class EXPvariables(object):
 
 	def __init__(self):
+
+		# constants
+
+		# character, string and regular expression literal operand patterns
+		# - basic pattern is:
+		# delimiter, followed by
+		# (1) any single char except delimiter or backslash, or 
+		# (2) backslash plus next char as a pair, followed by
+		# delimiter
+
+		self.CHRLIT   = r"'([^\'\\]|\\.)+'"		# character literal (cannot be null)
+		self.STRLIT   = r'"([^\"\\]|\\.)*"'		# string literal (can be null string)
+		self.RGXLIT = r'/([^\/\\]|\\.)+/i?'		# regex literal (cannot be null)
+
+		# variables
 
 		# we put these here so both 'doeval()'and '_eval()' can see them
 		# - we'd really rather nest '_eval()' within 'doeval()'
@@ -213,8 +215,20 @@ def fncPop():
 	return ( True, UTIL.dopop() )
 
 def fncRfn():
-	''' root file name '''
+	'''root file name'''
 	return  ( True, OS.rootfn() )
+
+def fncRnd(lo, hi=0):
+	'''random integer in the range lo <= N <= hi'''
+	return ( True, randint(min(lo, hi), max(lo, hi)) )
+
+def fncSeed(val=None):
+	'''seed the random number generator'''
+	if val is None:
+		seed()
+		val = randint( 0, 2**31 )
+	seed( val )
+	return( True, val )
 
 def fncSegbeg(name):
 	'''absolute start address of segment'''
@@ -270,6 +284,8 @@ def fncXlt(chr):
 	return( True, STR.xlate(chr) )
 
 # function dispatch (and description) dictionary
+# function dictionary
+# user name : ( internal name, minargs, maxargs, argument / return types )
 
 _fncDispatch = {
 	'ABS':		(fncAbs, 1, 1, 'n2n'),
@@ -292,7 +308,9 @@ _fncDispatch = {
 	'ORD':		(fncOrd, 1, 2, 'sn2n' ),
 	'PEEK$':	(fncPeek, 0, 1, 'n2s' ),
 	'POP$':		(fncPop, 0, 0, '2s' ),
+	'RND':		( fncRnd, 1, 2, 'nn2n' ),
 	'ROOTFILE$':	(fncRfn, 0, 0, '2s' ),
+	'SEED':		(fncSeed, 0, 1, 'n2n' ),
 	'SEGBEG':	(fncSegbeg, 1, 1, 'g2n' ),
 	'SEGEND':	(fncSegend, 1, 1, 'g2n' ),
 	'SEGLEN':	(fncSeglen, 1, 1, 'g2n' ),
@@ -759,30 +777,6 @@ def doparse(this, want):
 		else:
 			UM.noway( 'popuntil', op )
 
-	def _convertuint(ulit, base, significant):
-		'''convert unsigned literal to internal form'''
-		# isolate the significant portion of 'ulit'
-		# - if no match, digits are all zeroes
-		m = re.search( significant, ulit.upper() )
-
-		uint = int( m.group(), base ) if m is not None else 0
-
-		_addoperand( uint, 'numlit' )
-		return True
-
-	def _startswith(regex):
-		'''test if expression starts with given regular expression'''
-		nonlocal expr, token
-
-		m = re.match( regex, expr, flags=re.IGNORECASE )
-		if m is None:
-			token = None
-			return False
-		else:
-			token = m.group()						# what we matched
-			expr = expr[len(token):]				# "chop off" what we matched
-			return True
-
 	# unary operator matching
 
 	_unPrefxOp = '[-+!~<>^]'
@@ -857,6 +851,30 @@ def doparse(this, want):
 		''' unconditionally push helper operator on parse stack '''
 		parsestk.append( (token, _helperPrec[token]) )
 
+	def _convertuint(ulit, base, significant):
+		'''convert unsigned literal to internal form'''
+		# isolate the significant portion of 'ulit'
+		# - if no match, digits are all zeroes
+		m = re.search( significant, ulit.upper() )
+
+		uint = int( m.group(), base ) if m is not None else 0
+
+		_addoperand( uint, 'numlit' )
+		return True
+
+	def _startswith(regex):
+		'''test if expression starts with given regular expression'''
+		nonlocal expr, token
+
+		m = re.match( regex, expr, flags=re.IGNORECASE )
+		if m is None:
+			token = None
+			return False
+		else:
+			token = m.group()						# what we matched
+			expr = expr[len(token):]				# "chop off" what we matched
+			return True
+
 	# initialize
 
 	expr = SYM.checkloneanon( this.strip() )		# save to new variable but retain original for error reports
@@ -906,16 +924,16 @@ def doparse(this, want):
 					ok = _convertuint( token, 10, '[1-9][0-9]*' )
 
 				# string literal ?
-				elif _startswith( strLiteral ):
+				elif _startswith( _EXP.STRLIT ):
 					_addoperand( token, 'strlit' )
 					_pushoperator( '$U*' )
 
 				# character literal ?
-				elif _startswith( chrLiteral ):
+				elif _startswith( _EXP.CHRLIT ):
 					_addoperand( STR.chrlit(token), 'numlit' )	# convert to number immediately
 
 				# regular expression literal ?
-				elif _startswith( regexLiteral ):
+				elif _startswith( _EXP.RGXLIT ):
 					_addoperand( token, 'rgxlit' )
 					_pushoperator( '/U*' )
 
@@ -1626,7 +1644,7 @@ def getoptstr(this):
 	''' return non-blank evaluated string expression or unevaluated raw string '''
 	if isinstance(this, str):
 		# starts with a string literal/label/function ?
-		if re.match(strLiteral, this) or re.match(SYM.strLabel, this, flags=re.IGNORECASE):
+		if re.match(_EXP.STRLIT, this) or re.match(SYM.strLabel, this, flags=re.IGNORECASE):
 			ok, val = getonlystr( this )
 			# can't evaluate
 			if not ok:
