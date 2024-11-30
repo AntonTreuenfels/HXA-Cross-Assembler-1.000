@@ -5,7 +5,7 @@
 ; by Anton Treuenfels
 
 ; first created: 01/05/08
-; last revised:  05/06/23
+; last revised:  11/30/24
 
 ; warning(s): 1
 ; - odd label
@@ -45,15 +45,15 @@
 
 ; -------------------------------
 
-;        .psalias    psnull=float
+;        .psalias    psnull=fpval
 
-        .float                      ; presumably an error in the original :)
+        .fpval                      ; presumably an error in the original :)
 
-        .float  1.0987E-32
-pi      .float  3.1415926
+        .fpval  1.0987E-32
+pi      .fpval  3.1415926
 
-        .float  2.1876E34, 3.4521
-table1  .float  56.01, 73.19, 84.23
+        .fpval  2.1876E34, 3.4521
+table1  .fpval  56.01, 73.19, 84.23
 
 ; -------------------------------
 
