@@ -12,7 +12,7 @@ Variants of HXA know very much about real processors but very little about real 
 Currently Supported Processors:
 
     T_XX Family : an imaginary series of test processors
-    6502 Family : 6502, 65C02, R65C02, W65C02S and W65C816S
+    6502 Family : 6502, 65C02, R65C02, W65C02S, W65C816S and HuC6280
     6800 Family : 6800, 6801, 6803
 
 Currently Supported Operating Systems:
