@@ -1,4 +1,4 @@
-# HXA-Cross-Assembler-1.000
+# HXA-Cross-Assembler-1.200
 A Cross Assembler in Python
 
 HXA is capable of producing absolute output files in Intel Hex, Motorola SRecord, raw hexadecimal and raw binary formats, as well as error and listing files (with optional cross-referencing).
@@ -17,4 +17,4 @@ Currently Supported Processors:
 
 Currently Supported Operating Systems:
 
-    any that can run Python 3.11.4
+    any that can run Python 3.11.4 or higher
