@@ -1,0 +1,200 @@
+; Hobby Cross-Assembler Test 603c
+; Miscellaneous\FLOAT
+; ok: BBC 5-byte floats
+
+; by Anton Treuenfels
+
+; first created: 10/03/24
+; last revised:  10/11/24
+
+; no errors to detect
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; float values taken from: http://8bs.com/basic/basic4-bf24.htm
+; - decimal values adjusted if necessary to produce ROM hex values
+; - if there are any differences, only the least significant mantissa byte is affected
+
+; using an alternate form of floating point constants that Python accepts
+
+        .assume float:bbc
+
+        ; same as assume float:esm4, float:esm4-be, float:cbm, float:apple2 and float:bbc-6502
+
+        ; some extreme values (by Windows calculator)
+        ; - more precise than the format can actually handle, but fine for what we want to do
+
+        .float  0, 0.0, 00.000                          # 00 00 00 00 00
+
+        .float  1.7014118342085515047455513491911e+38    # FF 7F FF FF FF   (2 - 2**-31) * 2**126
+        .float  2.9387358770557187699218413430556e-39    # 01 00 00 00 00    2**-128
+        .float  -2.9387358770557187699218413430556e-39   # 01 80 00 00 00  -(2**-128)
+        .float  -1.7014118342085515047455513491911e+38   # FF FF FF FF FF  -((2 - 2**-31) * 2**126)
+
+
+        .float  -1.570_800_781_5       # $BF24 81 C9 10 00 00
+        .float  4.454_455_112E-6       # $BF29 6F 15 77 7A 61
+        .float  1.570_796_326_79       # $BF2E 81 49 0F DA A2  PI/2
+        .float  0.636_619_772_3        # $BF33 80 22 F9 83 6E  2/PI
+        .float  0.017_453_292_519_9    # $BF38 7B 0E FA 35 12  PI/180      (degree)
+        .float  57.295_779_513         # $BF3D 86 65 2E E0 D3  1/(PI/180)  (radian = 1/degree)
+        .float  0.434_294_482          # $BF42 7F 5E 5B D8 AA  1/LN(10)
+        .float  2.718_281_828_4        # $BF47 82 2D F8 54 58  e
+        .float  0.693_147_180_65       # $BF4C 80 31 72 17 F8  LN(2)
+
+        ; continued fraction expansion series used by LOG()
+
+        .float  0.546_254_167_7        # $BF51 80 0B D7 50 29
+        .float  -0.051_388_286_13      # $BF56 7C D2 7C 86 05
+
+        .float  0.583_293_331_5        # $BF5B 80 15 52 B6 36
+        .float  -0.037_498_675_35      # $BF60 7C 99 98 36 04
+
+        .float  0.750_000_063_5        # $BF65 80 40 00 01 10
+        .float  0.333_333_34           # $BF6A 7F 2A AA AA E3
+
+        .float  -0.499_999_999_9       # $BF6F 7F FF FF FF FF
+
+        ; continued fraction expansion series used by SIN()/COS()
+
+        .float  -0.011_909_031_070     # $BF74 7A C3 1E 18 BE
+        .float  0.000_107_499_459_25   # $BF79 73 61 71 55 2D
+
+        .float  -0.017_164_024_585     # $BF7E 7B 8C 9B 91 88
+        .float  0.001_309_536_901      # $BF83 77 2B A4 C4 53
+
+        .float  0.0499_999_922_4       # $BF88 7C 4C CC CA B7
+        .float  -0.166_666_666_45      # $BF8D 7E AA AA AA A6
+
+        .float  1.0                    # $BF92 81 00 00 00 00
+
+        ; continued fraction expansion series used by ATN()
+
+        .float  -0.080_053_204_8       # $BF97 7D A3 F2 EF 44
+        .float  0.155_279_655_8        # $BF9C 7E 1F 01 A1 4D
+
+        .float  0.440_292_008_2        # $BFA1 7F 61 6D F4 3F
+        .float  0.215_397_412_7        # $BFA6 7E 5C 91 23 AC
+
+        .float  0.240_938_381_9        # $BFAB 7E 76 B8 8D 1A
+        .float  0.076_779_687_2        # $BFB0 7D 1D 3E AB 2C
+
+        .float  1.072_311_618_5        # $BFB5 81 09 41 81 D2
+        .float  0.956_538_982_9        # $BFBA 80 74 DF BD 20
+
+        .float  -0.513_841_611_7       # $BFBF 80 83 8B 1F B5
+        .float  -0.254_590_441_9       # $BFC4 7F 82 59 AD AB
+
+        .float  0.927_295_218_3        # $BFC9 80 6D 63 38 2C
+
+        ; continued fraction expansion series used by EXP()
+
+        .float  0.071_206_464          # $BFCE 7D 11 D4 B1 D1
+        .float  0.007_102_526_421      # $BFD3 79 68 BC 4F 59
+
+        .float  0.000_254_009_798_7    # $BFD8 75 05 2C 9E 39
+        .float  0.016_666_523_46       # $BFDD 7B 08 88 3B A6
+
+        .float  6.624_005_407e-7       # $BFE2 6C 31 CF D1 8C
+        .float  0.083_333_332_38       # $BFE7 7D 2A AA AA 89
+
+        .float  -0.499_999_997_3       # $BFEC 7F FF FF FF E8
+        .float  1                      # $BFF1 81 00 00 00 00
+
+        .float  1                      # $BFF6 81 00 00 00 00
+
+		; another BBC BASIC format, for another processor
+
+		.assume  float:bbc-z80
+
+        .float  0, 0.0, 00.000                          # 00 00 00 00 00
+
+        .float  1.7014118342085515047455513491911e+38    # FF 7F FF FF FF   (2 - 2**-31) * 2**126
+        .float  2.9387358770557187699218413430556e-39    # 01 00 00 00 00    2**-128
+        .float  -2.9387358770557187699218413430556e-39   # 01 80 00 00 00  -(2**-128)
+        .float  -1.7014118342085515047455513491911e+38   # FF FF FF FF FF  -((2 - 2**-31) * 2**126)
+
+
+        .float  -1.570_800_781_5       # $BF24 81 C9 10 00 00
+        .float  4.454_455_112E-6       # $BF29 6F 15 77 7A 61
+        .float  1.570_796_326_79       # $BF2E 81 49 0F DA A2  PI/2
+        .float  0.636_619_772_3        # $BF33 80 22 F9 83 6E  2/PI
+        .float  0.017_453_292_519_9    # $BF38 7B 0E FA 35 12  PI/180      (degree)
+        .float  57.295_779_513         # $BF3D 86 65 2E E0 D3  1/(PI/180)  (radian = 1/degree)
+        .float  0.434_294_482          # $BF42 7F 5E 5B D8 AA  1/LN(10)
+        .float  2.718_281_828_4        # $BF47 82 2D F8 54 58  e
+        .float  0.693_147_180_65       # $BF4C 80 31 72 17 F8  LN(2)
+
+        ; continued fraction expansion series used by LOG()
+
+        .float  0.546_254_167_7        # $BF51 80 0B D7 50 29
+        .float  -0.051_388_286_13      # $BF56 7C D2 7C 86 05
+
+        .float  0.583_293_331_5        # $BF5B 80 15 52 B6 36
+        .float  -0.037_498_675_35      # $BF60 7C 99 98 36 04
+
+        .float  0.750_000_063_5        # $BF65 80 40 00 01 10
+        .float  0.333_333_34           # $BF6A 7F 2A AA AA E3
+
+        .float  -0.499_999_999_9       # $BF6F 7F FF FF FF FF
+
+        ; continued fraction expansion series used by SIN()/COS()
+
+        .float  -0.011_909_031_070     # $BF74 7A C3 1E 18 BE
+        .float  0.000_107_499_459_25   # $BF79 73 61 71 55 2D
+
+        .float  -0.017_164_024_585     # $BF7E 7B 8C 9B 91 88
+        .float  0.001_309_536_901      # $BF83 77 2B A4 C4 53
+
+        .float  0.0499_999_922_4       # $BF88 7C 4C CC CA B7
+        .float  -0.166_666_666_45      # $BF8D 7E AA AA AA A6
+
+        .float  1.0                    # $BF92 81 00 00 00 00
+
+        ; continued fraction expansion series used by ATN()
+
+        .float  -0.080_053_204_8       # $BF97 7D A3 F2 EF 44
+        .float  0.155_279_655_8        # $BF9C 7E 1F 01 A1 4D
+
+        .float  0.440_292_008_2        # $BFA1 7F 61 6D F4 3F
+        .float  0.215_397_412_7        # $BFA6 7E 5C 91 23 AC
+
+        .float  0.240_938_381_9        # $BFAB 7E 76 B8 8D 1A
+        .float  0.076_779_687_2        # $BFB0 7D 1D 3E AB 2C
+
+        .float  1.072_311_618_5        # $BFB5 81 09 41 81 D2
+        .float  0.956_538_982_9        # $BFBA 80 74 DF BD 20
+
+        .float  -0.513_841_611_7       # $BFBF 80 83 8B 1F B5
+        .float  -0.254_590_441_9       # $BFC4 7F 82 59 AD AB
+
+        .float  0.927_295_218_3        # $BFC9 80 6D 63 38 2C
+
+        ; continued fraction expansion series used by EXP()
+
+        .float  0.071_206_464          # $BFCE 7D 11 D4 B1 D1
+        .float  0.007_102_526_421      # $BFD3 79 68 BC 4F 59
+
+        .float  0.000_254_009_798_7    # $BFD8 75 05 2C 9E 39
+        .float  0.016_666_523_46       # $BFDD 7B 08 88 3B A6
+
+        .float  6.624_005_407e-7       # $BFE2 6C 31 CF D1 8C
+        .float  0.083_333_332_38       # $BFE7 7D 2A AA AA 89
+
+        .float  -0.499_999_997_3       # $BFEC 7F FF FF FF E8
+        .float  1                      # $BFF1 81 00 00 00 00
+
+        .float  1                      # $BFF6 81 00 00 00 00
+
+; -------------------------------
+
+        .end                ; optional psop
+

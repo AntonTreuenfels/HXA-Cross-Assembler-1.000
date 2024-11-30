@@ -1,0 +1,419 @@
+; Hobby Cross-Assembler Test 603b
+; Miscellaneous\FLOAT
+; ok: IEEE double, single, half precision
+
+; by Anton Treuenfels
+
+; first created: 09/25/24
+; last revised:  10/09/24
+
+; no errors to detect
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+; double- and single-precision results checked against: https://baseconvert.com/ieee-754-floating-point
+
+
+        .assume float:ieee-double-be   ; big endian
+
+        ; same as assume float:ieee-double (default)
+
+        ; some extreme values
+
+        .float  0, 0.0, 00.000                              # 00 00 00 00 00 00 00 00
+
+        .float  1.797693134862315708145274237317e+308       # 7F EF FF FF FF FF FF FF  (2 - 2**-52) * 2**1023
+        .float  2.2250738585072013830902327173324e-308      # 00 10 00 00 00 00 00 00  2**-1022
+        .float  -2.2250738585072013830902327173324e-308     # 80 10 00 00 00 00 00 00  -(2**-1022)
+        .float  -1.797693134862315708145274237317e+308      # FF EF FF FF FF FF FF FF  -((2 - 2**-52) * 2**1023)
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        .float  3.141592653589793   # 40 09 21 fb 54 44 2d 18
+
+        .float   -32768.            # c0 e0 00 00 00 00 00 00
+
+        .float  1.0                 # 3f f0 00 00 00 00 00 00
+
+        # 4th degree polynomial
+
+        .float  0.412198583111132   # 3f da 61 76 2a 7a de d2    (2*(1/LN(2)))/7
+        .float  0.577078016355585   # 3f e2 77 6c 50 ef 9b fb    (2*(1/LN(2)))/5
+        .float  0.961796693925975   # 3f ee c7 09 dc 3a 03 f8    (2*(1/LN(2)))/3
+        .float  2.885390081777926   # 40 07 15 47 65 2b 82 fc    (2*(1/LN(2)))/1
+
+        .float  0.707106781186547   # 3f e6 a0 9e 66 7f 3b c8    1/SQR(2) == SQR(0.5) == SQR(2)/2
+
+        .float  1.414213562373095   # 3f f6 a0 9e 66 7f 3b cc    SQR(2)
+
+        .float -0.5                 # bf e0 00 00 00 00 00 00
+
+        .float  0.693147180559945   # 3f e6 2e 42 fe fa 39 ec    LN(2)
+
+        .float  10.0                # 40 24 00 00 00 00 00 00
+
+        # binary -> ASCII conversion
+
+        .float  99999999.90625      # 41 97 d7 83 ff a0 00 00
+        .float  999999999.25        # 41 cd cd 64 ff a0 00 00
+        .float  1e9                 # 41 cd cd 65 00 00 00 00
+
+        .float  0.5                 # 3f e0 00 00 00 00 00 00
+
+        .float  1.442695040888963   # 3f f7 15 47 65 2b 82 fc    1/LN(2)
+
+        # 8th degree polynomial
+
+        .float  1.525273380405e-5   # 3e ef fc bf c5 88 9a 16    (LN(2)**7)/7!
+        .float  1.540353039338e-4   # 3f 24 30 91 2f 86 c5 35    (LN(2)**6)/6!
+        .float  0.001333355814642   # 3f 55 d8 7f e7 8a 57 fb    (LN(2)**5)/5!
+        .float  0.009618129107628   # 3f 83 b2 ab 6f ba 4d 64    (LN(2)**4)/4!
+        .float  0.055504108664821   # 3f ac 6b 08 d7 04 a0 6c    (LN(2)**3)/3!
+        .float  0.240226506959100   # 3f ce bf bd ff 82 c5 75    (LN(2)**2)/2!
+        .float  0.693147180559945   # 3f e6 2e 42 fe fa 39 ec    (LN(2)**1)/1!
+        .float  1.0                 # 3f f0 00 00 00 00 00 00    (LN(2)**0)/0!
+
+        # RND()
+
+        .float 11879546             # 41 66 a8 8f 40 00 00 00
+        .float 3.927677739E-8       # 3e 65 16 28 c0 09 2c 8a
+
+        .float 1.5707963267948966   # 3f f9 21 fb 54 44 2d 18    PI/2
+        .float 6.2831853071795864   # 40 19 21 fb 54 44 2d 18    PI*2
+
+        .float 0.25                 # 3f d0 00 00 00 00 00 00
+
+        # 6th degree polynomial
+
+        .float  -15.0946425768229   # c0 2e 30 74 fd e8 86 ec    ((PI*2)**11)/11!
+        .float  42.05869394489765   # 40 45 07 83 48 7e e7 81    ((PI*2)**9)/9!
+        .float  -76.7058597530613   # c0 53 2d 2c ce 62 bd 80    ((PI*2)**7)/7!
+        .float  81.60524927607505   # 40 54 66 bc 67 75 aa e2    ((PI*2)**5)/5!
+        .float  -41.3417022403997   # c0 44 ab bc e6 25 be 4a    ((PI*2)**3)/3!
+        .float 6.2831853071795864   # 40 19 21 fb 54 44 2d 18    ((PI*2)**1)/1!
+
+        # 12th degree polynomial
+
+        .float  -0.04347826086956   # BF A6 42 C8 59 0B 1E 74    -1/23
+        .float  0.047619047619047   # 3F A8 61 86 18 61 85 BF    1/21
+        .float  -0.05263157894736   # BF AA F2 86 BC A1 AA 6B    -1/19
+        .float  0.058823529411764   # 3F AE 1E 1E 1E 1E 1D B8    1/17
+        .float  -0.06666666666666   # BF B1 11 11 11 11 0F 31    -1/15
+        .float  0.076923076923076   # 3F B3 B1 3B 13 B1 3A D1    1/13
+        .float  -0.09090909090909   # BF B7 45 D1 74 5D 17 04    -1/11
+        .float  0.111111111111111   # 3F BC 71 C7 1C 71 C7 14    1/9
+        .float  -0.14285714285714   # BF C2 49 24 92 49 24 2B    -1/7
+        .float  0.2                 # 3F C9 99 99 99 99 99 9A    1/5
+        .float  -0.33333333333333   # BF D5 55 55 55 55 55 19    -1/3
+        .float  1.0                 # 3f f0 00 00 00 00 00 00    1/1
+ 
+; -----------------------------------
+
+        .assume float:ieee-double-le   ; little endian
+
+        ; we'll just do a few to make sure byte order is reversed
+
+        .float  0, 0.0, 00.000      # 00 00 00 00 00 00 00 00
+
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        .float  3.141592653589793   # 40 09 21 fb 54 44 2d 18
+
+        .float   -32768.            # c0 e0 00 00 00 00 00 00
+
+        .float  1.0                 # 3f f0 00 00 00 00 00 00
+
+        # 4th degree polynomial
+
+        .float  0.412198583111132   # 3f da 61 76 2a 7a de d2    (2*(1/LN(2)))/7
+        .float  0.577078016355585   # 3f e2 77 6c 50 ef 9b fb    (2*(1/LN(2)))/5
+        .float  0.961796693925975   # 3f ee c7 09 dc 3a 03 f8    (2*(1/LN(2)))/3
+        .float  2.885390081777926   # 40 07 15 47 65 2b 82 fc    (2*(1/LN(2)))/1
+
+        .float  0.707106781186547   # 3f e6 a0 9e 66 7f 3b c8    1/SQR(2) == SQR(0.5) == SQR(2)/2
+
+        .float  1.414213562373095   # 3f f6 a0 9e 66 7f 3b cc    SQR(2)
+
+        .float -0.5                 # bf e0 00 00 00 00 00 00
+
+        .float  0.693147180559945   # 3f e6 2e 42 fe fa 39 ec    LN(2)
+
+        .float  10.0                # 40 24 00 00 00 00 00 00
+ 
+; -----------------------------------
+
+        .assume float:ieee-single-be   ; big endian
+
+        ; same as assume float:ieee-single
+
+        .float  0, 0.0, 00.000                              # 00 00 00 00
+
+        .float  3.4028234663852885981170418348452e+38       # 7F 7F FF FF  (2 - 2**-23) * 2**127
+        .float  1.1754943508222875079687365372222e-38       # 00 80 00 00  2**-126
+        .float  -1.1754943508222875079687365372222e-38      # 80 80 00 00  -(2**-126)
+        .float  -3.4028234663852885981170418348452e+38      # FF 7F FF FF  -((2 - 2**-23) * 2**127)
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        .float  3.141592653589793   # 40 49 0F DB
+
+        .float   -32768.            # c7 00 00 00
+
+        .float  1.0                 # 3f 80 00 00
+
+        # 4th degree polynomial
+
+        .float  0.412198583111132   # 3E D3 0B B1    (2*(1/LN(2)))/7
+        .float  0.577078016355585   # 3F 13 BB 63    (2*(1/LN(2)))/5
+        .float  0.961796693925975   # 3F 76 38 4F    (2*(1/LN(2)))/3
+        .float  2.885390081777926   # 40 38 AA 3B    (2*(1/LN(2)))/1
+
+        .float  0.707106781186547   # 3F 35 04 F3    1/SQR(2) == SQR(0.5) == SQR(2)/2
+
+        .float  1.414213562373095   # 3F B5 04 F3    SQR(2)
+
+        .float -0.5                 # BF 00 00 00
+
+        .float  0.693147180559945   # 3F 31 72 18    LN(2)
+
+        .float  10.0                # 41 20 00 00
+
+        # binary -> ASCII conversion
+
+        .float  99999999.90625      # 4C BE BC 20
+        .float  999999999.25        # 4E 6E 6B 28
+        .float  1e9                 # 4E 6E 6B 28
+
+        .float  0.5                 # 3F 00 00 00
+
+        .float  1.442695040888963   # 3F B8 AA 3B    1/LN(2)
+
+        # 8th degree polynomial
+
+        .float  1.525273380405e-5   # 37 7F E5 FE    (LN(2)**7)/7!
+        .float  1.540353039338e-4   # 39 21 84 89    (LN(2)**6)/6!
+        .float  0.001333355814642   # 3A AE C3 FF    (LN(2)**5)/5!
+        .float  0.009618129107628   # 3C 1D 95 5B    (LN(2)**4)/4!
+        .float  0.055504108664821   # 3D 63 58 47    (LN(2)**3)/3!
+        .float  0.240226506959100   # 3E 75 FD F0    (LN(2)**2)/2!
+        .float  0.693147180559945   # 3F 31 72 18    (LN(2)**1)/1!
+        .float  1.0                 # 3f 80 00 00    (LN(2)**0)/0!
+
+        # RND()
+
+        .float 11879546             # 4B 35 44 7A
+        .float 3.927677739E-8       # 33 28 B1 46
+
+        .float 1.5707963267948966   # 3F C9 0F DB    PI/2
+        .float 6.2831853071795864   # 40 C9 0F DB    PI*2
+
+        .float 0.25                 # 3E 80 00 00
+
+        # 6th degree polynomial
+
+        .float  -15.0946425768229   # C1 71 83 A8    ((PI*2)**11)/11!
+        .float  42.05869394489765   # 42 28 3C 1A    ((PI*2)**9)/9!
+        .float  -76.7058597530613   # C2 99 69 66    ((PI*2)**7)/7!
+        .float  81.60524927607505   # 42 A3 35 E3    ((PI*2)**5)/5!
+        .float  -41.3417022403997   # C2 25 5D E7    ((PI*2)**3)/3!
+        .float 6.2831853071795864   # 40 C9 0F DB    ((PI*2)**1)/1!
+
+        # 12th degree polynomial
+
+        .float  -0.04347826086956   # BD 32 16 43    -1/23
+        .float  0.047619047619047   # 3D 43 0C 31    1/21
+        .float  -0.05263157894736   # BD 57 94 36    -1/19
+        .float  0.058823529411764   # 3D 70 F0 F1    1/17
+        .float  -0.06666666666666   # BD 88 88 89    -1/15
+        .float  0.076923076923076   # 3D 9D 89 D9    1/13
+        .float  -0.09090909090909   # BD BA 2E 8C    -1/11
+        .float  0.111111111111111   # 3D E3 8E 39    1/9
+        .float  -0.14285714285714   # BE 12 49 25    -1/7
+        .float  0.2                 # 3E 4C CC CD    1/5
+        .float  -0.33333333333333   # BE AA AA AB    -1/3
+        .float  1.0                 # 3f 80 00 00    1/1
+
+; -----------------------------------
+
+        .assume float:ieee-single-le   ; little endian
+
+        ; we'll just do a few to make sure byte order is reversed
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        # binary -> ASCII conversion
+
+        .float  99999999.90625      # 4C BE BC 20
+        .float  999999999.25        # 4E 6E 6B 28
+        .float  1e9                 # 4E 6E 6B 28
+
+        .float  0.5                 # 3F 00 00 00
+
+        .float  1.442695040888963   # 3F B8 AA 3B    1/LN(2)
+
+        # 8th degree polynomial
+
+        .float  1.525273380405e-5   # 37 7F E5 FE    (LN(2)**7)/7!
+        .float  1.540353039338e-4   # 39 21 84 89    (LN(2)**6)/6!
+        .float  0.001333355814642   # 3A AE C3 FF    (LN(2)**5)/5!
+        .float  0.009618129107628   # 3C 1D 95 5B    (LN(2)**4)/4!
+        .float  0.055504108664821   # 3D 63 58 47    (LN(2)**3)/3!
+        .float  0.240226506959100   # 3E 75 FD F0    (LN(2)**2)/2!
+        .float  0.693147180559945   # 3F 31 72 18    (LN(2)**1)/1!
+        .float  1.0                 # 3f 80 00 00    (LN(2)**0)/0!
+
+        # RND()
+
+        .float 11879546             # 4B 35 44 7A
+        .float 3.927677739E-8       # 33 28 B1 46
+
+        .float 1.5707963267948966   # 3F C9 0F DB    PI/2
+        .float 6.2831853071795864   # 40 C9 0F DB    PI*2
+
+        .float 0.25                 # 3E 80 00 00
+
+; -----------------------------------
+
+; half precision results checked against: https://evanw.github.io/float-toy/
+ 
+ .assume float:ieee-half-be   ; big endian
+
+        ; same as assume float:ieee-half
+
+        .float  0, 0.0, 00.000      # 00 00
+
+        .float  65504               #  7B FF    (2 - 2**-10) * 2**15
+        .float  0.00006103515625    #  04 00    2**-14
+        .float  -0.00006103515625   #  84 00    -(2**-14)
+        .float  -65504              #  FB FF    -((2 - 2**-10) * 2**15)
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        .float  3.141592653589793   # 42 48
+
+        .float   -32768.            # F8 00
+
+        .float  1.0                 # 3C 00
+
+        # 4th degree polynomial
+
+        .float  0.412198583111132   # 36 98    (2*(1/LN(2)))/7
+        .float  0.577078016355585   # 38 9D    (2*(1/LN(2)))/5
+        .float  0.961796693925975   # 3B B1    (2*(1/LN(2)))/3
+        .float  2.885390081777926   # 41 C5    (2*(1/LN(2)))/1
+
+        .float  0.707106781186547   # 39 A8    1/SQR(2) == SQR(0.5) == SQR(2)/2
+
+        .float  1.414213562373095   # 3D A8    SQR(2)
+
+        .float -0.5                 # B8 00
+
+        .float  0.693147180559945   # 39 8B    LN(2)
+
+        .float  10.0                # 49 00
+
+                            # binary -> ASCII conversion
+ 
+;        .float  99999999.90625      # out of range
+;        .float  999999999.25        # out of range
+;        .float  1e9                 # out of range
+
+        .float  0.5                 # 38 00
+
+        .float  1.442695040888963   # 3D C5    1/LN(2)
+
+        # 8th degree polynomial
+
+;        .float  1.525273380405e-5   # out of range    (LN(2)**7)/7!
+        .float  1.540353039338e-4   # 09 0C    (LN(2)**6)/6!
+        .float  0.001333355814642   # 15 76    (LN(2)**5)/5!
+        .float  0.009618129107628   # 20 EC    (LN(2)**4)/4!
+        .float  0.055504108664821   # 2B 1A    (LN(2)**3)/3!
+        .float  0.240226506959100   # 33 AF    (LN(2)**2)/2!
+        .float  0.693147180559945   # 39 8B    (LN(2)**1)/1!
+        .float  1.0                 # 3C 00    (LN(2)**0)/0!
+
+        # RND()
+
+;        .float 11879546             # out of range
+;        .float 3.927677739E-8       # out of range
+
+        .float 1.5707963267948966   # 3E 48    PI/2
+        .float 6.2831853071795864   # 46 48    PI*2
+
+        .float 0.25                 # 34 00
+
+        # 6th degree polynomial
+
+        .float  -15.0946425768229   # CB 8C    ((PI*2)**11)/11!
+        .float  42.05869394489765   # 51 41    ((PI*2)**9)/9!
+        .float  -76.7058597530613   # D4 CB    ((PI*2)**7)/7!
+        .float  81.60524927607505   # 55 19    ((PI*2)**5)/5!
+        .float  -41.3417022403997   # D1 2A    ((PI*2)**3)/3!
+        .float 6.2831853071795864   # 46 48    ((PI*2)**1)/1!
+
+        # 12th degree polynomial
+
+        .float  -0.04347826086956   # A9 90    -1/23
+        .float  0.047619047619047   # 2A 18    1/21
+        .float  -0.05263157894736   # AA BC    -1/19
+        .float  0.058823529411764   # 2B 87    1/17
+        .float  -0.06666666666666   # AC 44    -1/15
+        .float  0.076923076923076   # 2C EC    1/13
+        .float  -0.09090909090909   # AD D1    -1/11
+        .float  0.111111111111111   # 2F 1C    1/9
+        .float  -0.14285714285714   # B0 92    -1/7
+        .float  0.2                 # 32 66    1/5
+        .float  -0.33333333333333   # B5 55    -1/3
+        .float  1.0                 # 3C 00    1/1
+
+; -------------------------------
+
+        .assume float:ieee-half-le   ; little endian
+
+        ; we'll just do a few to make sure byte order is reversed
+
+        ; for convenience, we'll re-use C64 values (but to more places)
+        ; - polynomial coefficients are Taylor's series, not minimax
+
+        # 6th degree polynomial
+
+        .float  -15.0946425768229   # CB 8C    ((PI*2)**11)/11!
+        .float  42.05869394489765   # 51 41    ((PI*2)**9)/9!
+        .float  -76.7058597530613   # D4 CB    ((PI*2)**7)/7!
+        .float  81.60524927607505   # 55 19    ((PI*2)**5)/5!
+        .float  -41.3417022403997   # D1 2A    ((PI*2)**3)/3!
+        .float 6.2831853071795864   # 46 48    ((PI*2)**1)/1!
+
+        # 12th degree polynomial
+
+        .float  -0.04347826086956   # A9 90    -1/23
+        .float  0.047619047619047   # 2A 18    1/21
+        .float  -0.05263157894736   # AA BC    -1/19
+        .float  0.058823529411764   # 2B 87    1/17
+        .float  -0.06666666666666   # AC 44    -1/15
+        .float  0.076923076923076   # 2C EC    1/13
+        .float  -0.09090909090909   # AD D1    -1/11
+        .float  0.111111111111111   # 2F 1C    1/9
+        .float  -0.14285714285714   # B0 92    -1/7
+        .float  0.2                 # 32 66    1/5
+        .float  -0.33333333333333   # B5 55    -1/3
+        .float  1.0                 # 3C 00    1/1
+
+; -------------------------------
+
+        .end                ; optional psop

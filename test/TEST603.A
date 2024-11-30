@@ -1,0 +1,131 @@
+; Hobby Cross-Assembler Test 603
+; Miscellaneous\FLOAT
+; ok: Microsoft and BBC BASICs format
+
+; by Anton Treuenfels
+
+; first created: 09/18/24
+; last revised:  10/11/24
+
+; no errors to detect
+
+        .listfile           ; optional psop
+        .errfile            ; optional psop
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; a made-up name for a common floating point format
+        ; - exp-sign-4-byte mantissa
+
+        .assume float:esm4
+
+        ; same as assume float:esm4-be, float:cbm, float:apple2, float:bbc and float:bbc-6502
+
+        ; some extreme values (by Windows calculator)
+        ; - more precise than the format can actually handle, but fine for what we want to do
+
+        .float  0, 0.0, 00.000                          # 00 00 00 00 00
+
+        .float  1.7014118342085515047455513491911e+38    # FF 7F FF FF FF   (2 - 2**-31) * 2**126
+        .float  2.9387358770557187699218413430556e-39    # 01 00 00 00 00    2**-128
+        .float  -2.9387358770557187699218413430556e-39   # 01 80 00 00 00  -(2**-128)
+        .float  -1.7014118342085515047455513491911e+38   # FF FF FF FF FF  -((2 - 2**-31) * 2**126)
+
+        # these are from the C64 BASIC ROM
+        # https://www.pagetable.com/c64ref/c64disasm/
+        # https://www.c64-wiki.com/wiki/Floating_point_arithmetic
+        # - decimal values adjusted if necessary to produce ROM hex values
+        # - if there are any differences, only the least significant mantissa byte is affected
+
+
+        # polynomial coefficients are minimax, not Taylor's series
+        # - they are designed to minimize the maximum error over a given range
+        # https://www.c64-wiki.com/wiki/POLY1
+        # https://www.lemon64.com/forum/viewtopic.php?t=56351
+
+        .float  3.141592653     # $AEA8 82 49 0F DA A1  PI
+
+        .float  -32768.0        # $B1A5 90 80 00 00 00
+
+        .float  1.0             # $B9BC 81 00 00 00 00
+
+        # 4th degree polynomial used by LOG()
+
+        .float  0.43425594189    # $B9C2 7F 5E 56 CB 79  (2*(1/LN(2)))/7
+        .float  0.57658454134    # $B9C7 80 13 9B 0B 64  (2*(1/LN(2)))/5
+        .float  0.96180075921    # $B9CC 80 76 38 93 16  (2*(1/LN(2)))/3
+        .float  2.88539007307    # $B9D1 82 38 AA 3B 20  (2*(1/LN(2)))/1
+
+        .float  0.70710678120    # $B9D6 80 35 04 F3 34  1/SQR(2)
+
+        .float  1.41421356239    # $B9DB 81 35 04 F3 34  SQR(2)
+
+        .float -0.5              # $B9E0 80 80 00 00 00
+
+        .float  0.69314718061    # $B9E5 80 31 72 17 F8  LN(2)
+
+        .float  10.0             # $BAF9 84 20 00 00 00
+
+        # used by binary -> ASCII conversion
+
+        .float  99999999.90625   # $BDB3 9B 3E BC 1F FD
+        .float  999999999.25     # $BDB8 9E 6E 6B 27 FD
+        .float  1e9              # $BDBD 9E 6E 6B 28 00
+
+        .float  0.5              # $BF11 80 00 00 00 00
+
+        .float  1.44269504089    # $BFBF 81 38 AA 3B 29  1/LN(2)
+
+        # 8th degree polynomial used by EXP()
+
+        .float  0.21498763701e-4    # $BFC5 71 34 58 3E 56  (LN(2)**7)/7!
+        .float  0.14352314037e-3    # $BFCA 74 16 7E B3 1B  (LN(2)**6)/7!
+        .float  0.0013422634825     # $BFCF 77 2F EE E3 85  (LN(2)**5)/5!
+        .float  0.0096140170136     # $BFD4 7A 1D 84 1C 2A  (LN(2)**4)/4!
+        .float  0.055505126870      # $BFD9 7C 63 59 58 0A  (LN(2)**3)/3!
+        .float  0.24022638462       # $BFDE 7E 75 FD E7 C6  (LN(2)**2)/2!
+        .float  0.69314718619       # $BFE3 80 31 72 18 10  (LN(2)**1)/1!
+        .float  1.0                 # $BFE8 81 00 00 00 00  (LN(2)**0)/0!
+
+        # used by RND()
+
+        .float  11879546        # $E08D 98 35 44 7A 00  multiplier
+        .float 3.927677739E-8   # $E092 68 28 B1 46 00  offset
+
+        .float 1.57079632679    # $E2E0 81 49 0F DA A2  PI/2
+        .float 6.283185307      # $E2E5 83 49 0F DA A2  PI*2
+
+        .float 0.25             # $E2EA 7F 00 00 00 00
+
+        # 6th degree polynomial used by SIN()
+
+        .float  -14.381390673   # $E2F0 84 E6 1A 2D 1B  ((PI*2)**11)/11!
+        .float  42.007797125    # $E2F5 86 28 07 FB F8  ((PI*2)**9)/9!
+        .float  -76.704170260   # $E2FA 87 99 68 89 01  ((PI*2)**7)/7!
+        .float  81.605223690    # $E2FF 87 23 35 DF E1  ((PI*2)**5)/5!
+        .float  -41.34170211    # $E304 86 A5 5D E7 28  ((PI*2)**3)/3!
+        .float  6.283185307     # $E309 83 49 0F DA A2  ((PI*2)**1)/1!
+
+        # 12th degree polynomial used by ATN()
+
+        .float  -0.68479391193E-3   # $E33F 76 B3 83 BD D3  -1/23
+        .float  0.4850942156E-2     # $E344 79 1E F4 A6 F5  1/21
+        .float -0.016111701845      # $E349 7B 83 FC B0 10  -1/19
+        .float  0.03420963805       # $E34E 7C 0C 1F 67 CA  1/17
+        .float  -0.05427913277      # $E353 7C DE 53 CB C1  -1/15
+        .float  0.07245719655       # $E358 7D 14 64 70 4C  1/13
+        .float  -0.0898023954       # $E35D 7D B7 EA 51 7A  -1/11
+        .float  0.11093241345       # $E362 7D 63 30 88 7E  1/9
+        .float  -0.1428398077       # $E367 7E 92 44 99 3A  -1/7
+        .float  0.1999991205        # $E36C 7E 4C CC 91 C7  1/5
+        .float  -0.3333333157       # $E371 7F AA AA AA 13  -1/3
+        .float 1.0                  # $E376 81 00 00 00 00  1/1
+
+; -------------------------------
+
+        .end                ; optional psop

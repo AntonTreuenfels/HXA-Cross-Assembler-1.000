@@ -1,0 +1,148 @@
+; Hobby Cross-Assembler Error Test 603e
+; Miscellaneous\FLOAT
+; error: not decimal and range limits
+
+; by Anton Treuenfels
+
+; first created: 10/12/24
+; last revised:  10/14/24
+
+; warning(s): 0
+
+; error(s): 41
+; - need decimal
+; - out of range
+; - too small
+; - too big
+
+; fatal: 0
+
+; -------------------------------
+
+        .listfile
+        .errfile
+
+        .maxerr 100
+
+; -------------------------------
+
+        .cpu    "T_16_L"    ; required psop
+        .org    $1000       ; required psop
+
+; -------------------------------
+
+        ; not decimal literals
+
+        .float "a string expression"
+
+        .float "32.0"
+
+        .float aSymbol
+
+        .float 12 * 24
+
+        ; non-finite Python values
+
+        .float NaN, Inf, Infinity
+
+        .float 'inf', +inf, '+infinity'
+
+        .float '-inf', -inf, '-infinity'
+
+; -------------------------------
+
+        ; we assume the native representation is IEEE-754 double
+
+        .assume float:ieee-double                      ; (default)
+
+        .float  1.796e+308                             ; ok
+        .float  1.797693134862315708145274237317e+308  ; largest positive: (2 - 2**-52) * 2**1023
+        .float  1.798e+308                             ; too big (infinity)
+
+        .float  1e310, 1e320, 1e330, 1e340             ; all of these become infinity (caught)
+
+        .float  1e-310, 1e-320                         ; both of these become subnormal (caught)
+
+        .float 1e-330, 1e-340                          ; both of these become zero (NOT caught)
+
+        .float  2.224e-308                             ; too small
+        .float  2.2250738585072013830902327173324e-308 ; smallest positive: 2**-1022
+        .float  2.226e-308                             ; ok
+
+        .float -1.796e+308                             ; ok
+        .float -1.797693134862315708145274237317e+308  ; largest negative: -((2 - 2**-52) * 2**1023)
+        .float -1.798e+308                             ; too big (negative infinity)
+
+        .float  -1e310, -1e320, -1e330, -1e340         ; all of these become negative infinity (caught)
+
+        .float  -1e-310, -1e-320                       ; both of these become subnormal (caught)
+
+        .float -1e-330, -1e-340                        ; both of these become zero (NOT caught)
+
+        .float -2.224e-308                             ; too small
+        .float -2.2250738585072013830902327173324e-308 ; smallest negative: -(2**-1022)
+        .float -2.226e-308                             ; ok
+
+; -------------------------------
+
+        .assume float:ieee-single
+
+        .float  3.402e+38                              ; ok
+        .float  3.4028234663852885981170418348452e+38  ; largest positive: (2 - 2**-23) * 2**127
+        .float  3.403e+38                              ; too big
+
+        .float  1.174e-38                              ; too small
+        .float  1.1754943508222875079687365372222e-38  ; smallest positive: 2**-126
+        .float  1.176e-38                              ; ok
+
+        .float -3.402e+38                              ; ok
+        .float -3.4028234663852885981170418348452e+38  ; largest negative: -((2 - 2**-23) * 2**127)
+        .float -3.403e+38                              ; too big
+
+        .float -1.174e-38                              ; too small
+        .float -1.1754943508222875079687365372222e-38  ; smallest negative: -(2**-126)
+        .float -1.176e-38                              ; ok
+
+; -------------------------------
+
+        .assume float:ieee-half
+
+        .float  65503                                  ; ok
+        .float  65504                                  ; largest positive: (2 - 2**-10) * 2**15
+        .float  65505                                  ; too big
+
+        .float  0.00006103515624                       ; too small
+        .float  0.00006103515625                       ; smallest postive: 2**-14
+        .float  0.00006103515626                       ; ok
+
+        .float -65503                                  ; ok
+        .float -65504                                  ; largest negative: -((2 - 2**-10) * 2**15)
+        .float -65505                                  ; too big
+
+        .float -0.00006103515624                       ; too small
+        .float -0.00006103515625                       ; smallest negative: -(2**-14)
+        .float -0.00006103515626                       ; ok
+
+; -------------------------------
+
+        .assume float:esm4
+
+        .float  1.700e+38                              ; ok
+        .float  1.7014118342085515047455513491911e+38  ; largest positive: (2 - 2**-31) * 2**126
+        .float  1.702e+38                              ; too big
+
+        .float  2.937e-39                              ; too small
+        .float  2.9387358770557187699218413430556e-39  ; smallest positive: 2**-128
+        .float  2.939e-39                              ; ok
+
+        .float -1.700e+38                              ; ok
+        .float -1.7014118342085515047455513491911e+38  ; largest negative: -((2 - 2**-31) * 2**126)
+        .float -1.702e+38                              ; too big
+
+        .float -2.937e-39                              ; too small
+        .float -2.9387358770557187699218413430556e-39  ; smallest negative: -(2**-128)
+        .float -2.939e-39                              ; ok
+
+; -------------------------------
+
+        .end
