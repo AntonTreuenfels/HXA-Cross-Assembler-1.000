@@ -2,7 +2,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="normal">
-<title>HXA 1.100 General Tests</title>
+<title>HXA 1.200 General Tests</title>
 <style>
 html {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAARElEQVQYV2M8c+bMfwY0YGJiwggTAjOQFYEkQXyYIrhKZEGYJpAiuAnIxiKbiGIcunUgPtwKZGNRTIC5lqAbYArR3QIAdA85lXmjDMQAAAAASUVORK5CYII=)}
 body {margin:0 auto; padding:0; max-width:82em}
@@ -24,290 +24,291 @@ a:hover {background-color:#FFF}
 </head><body><section><div id="toc">
 <p>Contents</p><hr>
 <ul><li>
-</li><li><a href="#L0AE">Test Templates</a>
+</li><li><a href="#L0B1">Test Templates</a>
 <ul><li>
-</li><li><a href="#L0AF">Templates</a>
+</li><li><a href="#L0B2">Templates</a>
 </li></ul>
-</li><li><a href="#L0B0">Comments</a>
+</li><li><a href="#L0B3">Comments</a>
 <ul><li>
-</li><li><a href="#L0B1">All Forms</a>
+</li><li><a href="#L0B4">All Forms</a>
 </li></ul>
-</li><li><a href="#L0B2">Required</a>
+</li><li><a href="#L0B5">Required</a>
 <ul><li>
-</li><li><a href="#L0B3">Set CPU</a>
-</li><li><a href="#L0B4">Set Program Counter</a>
+</li><li><a href="#L0B6">Set CPU</a>
+</li><li><a href="#L0B7">Set Program Counter</a>
 </li></ul>
-</li><li><a href="#L0B5">Messages</a>
+</li><li><a href="#L0B8">Messages</a>
 <ul><li>
-</li><li><a href="#L0B6">User Messages</a>
-</li><li><a href="#L0B7">Warn Count</a>
-</li><li><a href="#L0B8">Error Count</a>
-</li><li><a href="#L0B9">Assert Messages</a>
+</li><li><a href="#L0B9">User Messages</a>
+</li><li><a href="#L0BA">Warn Count</a>
+</li><li><a href="#L0BB">Error Count</a>
+</li><li><a href="#L0BC">Assert Messages</a>
 </li></ul>
-</li><li><a href="#L0BA">Output Files</a>
+</li><li><a href="#L0BD">Output Files</a>
 <ul><li>
-</li><li><a href="#L0BB">Same Directory</a>
-</li><li><a href="#L0BC">Other Directory</a>
-</li><li><a href="#L0BD">No Object Code</a>
-</li><li><a href="#L0BE">No List or Error Files</a>
-</li><li><a href="#L0BF">No Error File</a>
+</li><li><a href="#L0BE">Same Directory</a>
+</li><li><a href="#L0BF">Other Directory</a>
+</li><li><a href="#L0C0">No Object Code</a>
+</li><li><a href="#L0C1">No List or Error Files</a>
+</li><li><a href="#L0C2">No Error File</a>
 </li></ul>
-</li><li><a href="#L0C0">Pass Termination</a>
+</li><li><a href="#L0C3">Pass Termination</a>
 <ul><li>
-</li><li><a href="#L0C1">Termination</a>
+</li><li><a href="#L0C4">Termination</a>
 </li></ul>
-</li><li><a href="#L0C2">Customization</a>
+</li><li><a href="#L0C5">Customization</a>
 <ul><li>
-</li><li><a href="#L0C3">Pseudo Op Names</a>
-</li><li><a href="#L0C4">Pseudo Op Nullification</a>
-</li><li><a href="#L0C5">Assembler Messages</a>
-</li><li><a href="#L0C6">ASSUME Strings</a>
+</li><li><a href="#L0C6">Pseudo Op Names</a>
+</li><li><a href="#L0C7">Pseudo Op Nullification</a>
+</li><li><a href="#L0C8">Assembler Messages</a>
+</li><li><a href="#L0C9">ASSUME Strings</a>
 </li></ul>
-</li><li><a href="#L0C7">Expressions</a>
+</li><li><a href="#L0CA">Expressions</a>
 <ul><li>
-</li><li><a href="#L0C8">Numeric Literals</a>
-</li><li><a href="#L0C9">Numeric Data Definition</a>
-</li><li><a href="#L0CA">Ranged Numeric Data Definition</a>
-</li><li><a href="#L0CB">Character Literals</a>
-</li><li><a href="#L0CC">String Literals</a>
-</li><li><a href="#L0CD">XLATE() and XLATE</a>
-</li><li><a href="#L0CE">Global Labels</a>
-</li><li><a href="#L0CF">Local Labels</a>
-</li><li><a href="#L0D0">Variable Labels</a>
-</li><li><a href="#L0D1">Branch Target Labels</a>
-</li><li><a href="#L0D2">All Label Forms</a>
-</li><li><a href="#L0D3">String Labels</a>
-</li><li><a href="#L0D4">Pre-Defined Labels</a>
-</li><li><a href="#L0D5">Program Counter Reference</a>
-</li><li><a href="#L0D6">Program Counter Relative Numeric Data Definition</a>
-</li><li><a href="#L0D7">Unary Operators</a>
-</li><li><a href="#L0D8">Numeric Binary Operators</a>
-</li><li><a href="#L0D9">String Binary Operators</a>
-</li><li><a href="#L0DA">Regular Expression Operators</a>
-</li><li><a href="#L0DB">String Expressions</a>
-</li><li><a href="#L0DC">Logical Short Circuit</a>
-</li><li><a href="#L0DD">Ternary Conditional</a>
-</li><li><a href="#L0DE">Expression Evaluation</a>
-</li><li><a href="#L0DF">Assign Label Value</a>
+</li><li><a href="#L0CB">Numeric Literals</a>
+</li><li><a href="#L0CC">Numeric Data Definition</a>
+</li><li><a href="#L0CD">Ranged Numeric Data Definition</a>
+</li><li><a href="#L0CE">Character Literals</a>
+</li><li><a href="#L0CF">String Literals</a>
+</li><li><a href="#L0D0">XLATE() and XLATE</a>
+</li><li><a href="#L0D1">Global Labels</a>
+</li><li><a href="#L0D2">Local Labels</a>
+</li><li><a href="#L0D3">Variable Labels</a>
+</li><li><a href="#L0D4">Branch Target Labels</a>
+</li><li><a href="#L0D5">All Label Forms</a>
+</li><li><a href="#L0D6">String Labels</a>
+</li><li><a href="#L0D7">Pre-Defined Labels</a>
+</li><li><a href="#L0D8">Program Counter Reference</a>
+</li><li><a href="#L0D9">Program Counter Relative Numeric Data Definition</a>
+</li><li><a href="#L0DA">Unary Operators</a>
+</li><li><a href="#L0DB">Numeric Binary Operators</a>
+</li><li><a href="#L0DC">String Binary Operators</a>
+</li><li><a href="#L0DD">Regular Expression Operators</a>
+</li><li><a href="#L0DE">String Expressions</a>
+</li><li><a href="#L0DF">Logical Short Circuit</a>
+</li><li><a href="#L0E0">Ternary Conditional</a>
+</li><li><a href="#L0E1">Expression Evaluation</a>
+</li><li><a href="#L0E2">Assign Label Value</a>
 </li></ul>
-</li><li><a href="#L0E0">Macros</a>
+</li><li><a href="#L0E3">Macros</a>
 <ul><li>
-</li><li><a href="#L0E1">Macro Definition</a>
-</li><li><a href="#L0E2">Nested Macros</a>
-</li><li><a href="#L0E3">EXIT from Macro</a>
-</li><li><a href="#L0E4">EXITIF from Macro</a>
-</li><li><a href="#L0E5">DEFINED() and UNDEF</a>
-</li><li><a href="#L0E6">Macros and Labels</a>
-</li><li><a href="#L0E7">Odd Macro Arguments</a>
-</li><li><a href="#L0E8">Default Macro Arguments</a>
-</li><li><a href="#L0E9">PUTBACK pseudo op</a>
-</li><li><a href="#L0EA">PUTBACKS pseudo op</a>
-</li><li><a href="#L0EB">Assignable Formal Arguments</a>
+</li><li><a href="#L0E4">Macro Definition</a>
+</li><li><a href="#L0E5">Nested Macros</a>
+</li><li><a href="#L0E6">EXIT from Macro</a>
+</li><li><a href="#L0E7">EXITIF from Macro</a>
+</li><li><a href="#L0E8">DEFINED() and UNDEF</a>
+</li><li><a href="#L0E9">Macros and Labels</a>
+</li><li><a href="#L0EA">Odd Macro Arguments</a>
+</li><li><a href="#L0EB">Default Macro Arguments</a>
+</li><li><a href="#L0EC">PUTBACK pseudo op</a>
+</li><li><a href="#L0ED">PUTBACKS pseudo op</a>
+</li><li><a href="#L0EE">Assignable Formal Arguments</a>
 </li></ul>
-</li><li><a href="#L0EC">Local Scope</a>
+</li><li><a href="#L0EF">Local Scope</a>
 <ul><li>
-</li><li><a href="#L0ED">Nesting Depth</a>
+</li><li><a href="#L0F0">Nesting Depth</a>
 </li></ul>
-</li><li><a href="#L0EE">Repeats</a>
+</li><li><a href="#L0F1">Repeats</a>
 <ul><li>
-</li><li><a href="#L0EF">Repeat Definition</a>
-</li><li><a href="#L0F0">Macros and Repeats</a>
-</li><li><a href="#L0F1">EXIT from Repeat</a>
-</li><li><a href="#L0F2">EXIT from Nested Macro/Repeats</a>
-</li><li><a href="#L0F3">Repeat Count</a>
+</li><li><a href="#L0F2">Repeat Definition</a>
+</li><li><a href="#L0F3">Macros and Repeats</a>
+</li><li><a href="#L0F4">EXIT from Repeat</a>
+</li><li><a href="#L0F5">EXIT from Nested Macro/Repeats</a>
+</li><li><a href="#L0F6">Repeat Count</a>
 </li></ul>
-</li><li><a href="#L0F4">Whiles</a>
+</li><li><a href="#L0F7">Whiles</a>
 <ul><li>
-</li><li><a href="#L0F5">While Definition</a>
-</li><li><a href="#L0F6">Macros and Whiles</a>
-</li><li><a href="#L0F7">EXIT from While</a>
-</li><li><a href="#L0F8">EXIT from Nested Macro/Whiles</a>
-</li><li><a href="#L0F9">While Count</a>
+</li><li><a href="#L0F8">While Definition</a>
+</li><li><a href="#L0F9">Macros and Whiles</a>
+</li><li><a href="#L0FA">EXIT from While</a>
+</li><li><a href="#L0FB">EXIT from Nested Macro/Whiles</a>
+</li><li><a href="#L0FC">While Count</a>
 </li></ul>
-</li><li><a href="#L0FA">Conditional Assembly</a>
+</li><li><a href="#L0FD">Conditional Assembly</a>
 <ul><li>
-</li><li><a href="#L0FB">IF..ELSEIF..ELSE..ENDIF Blocks</a>
-</li><li><a href="#L0FC">Odd Conditional Blocks</a>
-</li><li><a href="#L0FD">EXIT Inside Conditional</a>
-</li><li><a href="#L0FE">Deep Nesting</a>
-</li><li><a href="#L0FF">IFDEF and IFNDEF Blocks</a>
+</li><li><a href="#L0FE">IF..ELSEIF..ELSE..ENDIF Blocks</a>
+</li><li><a href="#L0FF">Odd Conditional Blocks</a>
+</li><li><a href="#L100">EXIT Inside Conditional</a>
+</li><li><a href="#L101">Deep Nesting</a>
+</li><li><a href="#L102">IFDEF and IFNDEF Blocks</a>
 </li></ul>
-</li><li><a href="#L100">File Inclusion</a>
+</li><li><a href="#L103">File Inclusion</a>
 <ul><li>
-</li><li><a href="#L101">Inclusion</a>
-</li><li><a href="#L102">Self Inclusion</a>
-</li><li><a href="#L103">File Label Scoping</a>
-</li><li><a href="#L104">Default Output File Names</a>
-</li><li><a href="#L105">Read Exclusion</a>
-</li><li><a href="#L106">Early Read Termination</a>
-</li><li><a href="#L107">Include File as Last Line of Root File</a>
+</li><li><a href="#L104">Inclusion</a>
+</li><li><a href="#L105">Self Inclusion</a>
+</li><li><a href="#L106">File Label Scoping</a>
+</li><li><a href="#L107">Default Output File Names</a>
+</li><li><a href="#L108">Read Exclusion</a>
+</li><li><a href="#L109">Early Read Termination</a>
+</li><li><a href="#L10A">Include File as Last Line of Root File</a>
 </li></ul>
-</li><li><a href="#L108">Binary File Inclusion</a>
+</li><li><a href="#L10B">Binary File Inclusion</a>
 <ul><li>
-</li><li><a href="#L109">Binary Inclusion</a>
+</li><li><a href="#L10C">Binary Inclusion</a>
 </li></ul>
-</li><li><a href="#L10A">Motorola SRecord Object</a>
+</li><li><a href="#L10D">Motorola SRecord Object</a>
 <ul><li>
-</li><li><a href="#L114">Basic Records</a>
-</li><li><a href="#L115">Start Records</a>
-</li><li><a href="#L116">Assume Wider Address Type</a>
-</li><li><a href="#L117">Assume Narrower Address Type</a>
-</li><li><a href="#L118">Named Output File</a>
-</li><li><a href="#L110">Assume Record Supressed</a>
-</li><li><a href="#L11A">Assume More Data</a>
-</li><li><a href="#L11B">Overlapping Addresses (Monolithic)</a>
+</li><li><a href="#L117">Basic Records</a>
+</li><li><a href="#L118">Start Records</a>
+</li><li><a href="#L119">Assume Wider Address Type</a>
+</li><li><a href="#L11A">Assume Narrower Address Type</a>
+</li><li><a href="#L11B">Named Output File</a>
+</li><li><a href="#L113">Assume Record Supressed</a>
+</li><li><a href="#L11D">Assume More Data</a>
+</li><li><a href="#L11E">Overlapping Addresses (Monolithic)</a>
 </li></ul>
-</li><li><a href="#L113">Intel Hexadecimal Object</a>
+</li><li><a href="#L116">Intel Hexadecimal Object</a>
 <ul><li>
-</li><li><a href="#L114">Basic Records</a>
-</li><li><a href="#L115">Start Records</a>
-</li><li><a href="#L116">Assume Wider Address Type</a>
-</li><li><a href="#L117">Assume Narrower Address Type</a>
-</li><li><a href="#L118">Named Output File</a>
-</li><li><a href="#L119">Output Greater than 64K</a>
-</li><li><a href="#L11A">Assume More Data</a>
-</li><li><a href="#L11B">Overlapping Addresses (Monolithic)</a>
-</li><li><a href="#L11C">Address Jumps Force New Address Records</a>
+</li><li><a href="#L117">Basic Records</a>
+</li><li><a href="#L118">Start Records</a>
+</li><li><a href="#L119">Assume Wider Address Type</a>
+</li><li><a href="#L11A">Assume Narrower Address Type</a>
+</li><li><a href="#L11B">Named Output File</a>
+</li><li><a href="#L11C">Output Greater than 64K</a>
+</li><li><a href="#L11D">Assume More Data</a>
+</li><li><a href="#L11E">Overlapping Addresses (Monolithic)</a>
+</li><li><a href="#L11F">Address Jumps Force New Address Records</a>
 </li></ul>
-</li><li><a href="#L11D">Segments</a>
+</li><li><a href="#L120">Segments</a>
 <ul><li>
-</li><li><a href="#L11E">Basic Definition</a>
-</li><li><a href="#L11F">Segments Re-Used</a>
-</li><li><a href="#L120">Legal Data Storage</a>
-</li><li><a href="#L121">Labels</a>
-</li><li><a href="#L122">Program Counter (Implicit)</a>
-</li><li><a href="#L123">Program Counter (Explicit)</a>
-</li><li><a href="#L124">"USESEGMENTS" psop</a>
-</li><li><a href="#L125">Segment Count</a>
-</li><li><a href="#L126">Intel Hexfile Output (Single File)</a>
-</li><li><a href="#L127">Intel Hexfile Output (By Segments, Default Names)</a>
-</li><li><a href="#L128">Intel Hexfile Output (By Segments, "###" Template)</a>
-</li><li><a href="#L129">Intel Hexfile Output (By Segment)</a>
-</li><li><a href="#L12A">Intel Hexfile Output (By Blocks, Default Names)</a>
-</li><li><a href="#L12B">Intel Hexfile Output (By Blocks, ".###" Template)</a>
-</li><li><a href="#L12C">Intel Hexfile Output (By Blocks, Overlapping)</a>
-</li><li><a href="#L12D">Motorola Hexfile Output (Single File)</a>
-</li><li><a href="#L12E">Motorola Hexfile Output (By Segments, Default Names)</a>
-</li><li><a href="#L12F">Motorola Hexfile Output (By Segments, "###." Template)</a>
-</li><li><a href="#L130">Motorola Hexfile Output (Default Names, No Header)</a>
-</li><li><a href="#L131">Motorola Hexfile Output (By Blocks, Default Names)</a>
-</li><li><a href="#L132">Motorola Hexfile Output (By Blocks, ".###" Template)</a>
-</li><li><a href="#L133">Object Output (By Segments, Default Names)</a>
-</li><li><a href="#L134">Object Output (By Segments, "####." Template)</a>
-</li><li><a href="#L135">Object Output (By Blocks, Default Names)</a>
-</li><li><a href="#L136">Object Output (By Blocks, ".###" Template)</a>
-</li><li><a href="#L137">Raw Hex Output (By Segments, Default Names)</a>
-</li><li><a href="#L138">Raw Hex Output (By Segments, "##." Template)</a>
-</li><li><a href="#L139">Raw Hex Output (By Blocks, Default Names)</a>
-</li><li><a href="#L13A">Raw Hex Output (By Blocks, ".###" Template)</a>
-</li><li><a href="#L13B">Uninitialized Segments</a>
-</li><li><a href="#L13C">Common Segments</a>
-</li><li><a href="#L13D">"RELORG" Pseudo Op</a>
-</li><li><a href="#L13E">"ABSEND" and "RELEND" Pseudo Ops</a>
-</li><li><a href="#L13F">Segment Map Identification</a>
-</li><li><a href="#L140">Nested Segments</a>
+</li><li><a href="#L121">Basic Definition</a>
+</li><li><a href="#L122">Segments Re-Used</a>
+</li><li><a href="#L123">Legal Data Storage</a>
+</li><li><a href="#L124">Labels</a>
+</li><li><a href="#L125">Program Counter (Implicit)</a>
+</li><li><a href="#L126">Program Counter (Explicit)</a>
+</li><li><a href="#L127">"USESEGMENTS" psop</a>
+</li><li><a href="#L128">Segment Count</a>
+</li><li><a href="#L129">Intel Hexfile Output (Single File)</a>
+</li><li><a href="#L12A">Intel Hexfile Output (By Segments, Default Names)</a>
+</li><li><a href="#L12B">Intel Hexfile Output (By Segments, "###" Template)</a>
+</li><li><a href="#L12C">Intel Hexfile Output (By Segment)</a>
+</li><li><a href="#L12D">Intel Hexfile Output (By Blocks, Default Names)</a>
+</li><li><a href="#L12E">Intel Hexfile Output (By Blocks, ".###" Template)</a>
+</li><li><a href="#L12F">Intel Hexfile Output (By Blocks, Overlapping)</a>
+</li><li><a href="#L130">Motorola Hexfile Output (Single File)</a>
+</li><li><a href="#L131">Motorola Hexfile Output (By Segments, Default Names)</a>
+</li><li><a href="#L132">Motorola Hexfile Output (By Segments, "###." Template)</a>
+</li><li><a href="#L133">Motorola Hexfile Output (Default Names, No Header)</a>
+</li><li><a href="#L134">Motorola Hexfile Output (By Blocks, Default Names)</a>
+</li><li><a href="#L135">Motorola Hexfile Output (By Blocks, ".###" Template)</a>
+</li><li><a href="#L136">Object Output (By Segments, Default Names)</a>
+</li><li><a href="#L137">Object Output (By Segments, "####." Template)</a>
+</li><li><a href="#L138">Object Output (By Blocks, Default Names)</a>
+</li><li><a href="#L139">Object Output (By Blocks, ".###" Template)</a>
+</li><li><a href="#L13A">Raw Hex Output (By Segments, Default Names)</a>
+</li><li><a href="#L13B">Raw Hex Output (By Segments, "##." Template)</a>
+</li><li><a href="#L13C">Raw Hex Output (By Blocks, Default Names)</a>
+</li><li><a href="#L13D">Raw Hex Output (By Blocks, ".###" Template)</a>
+</li><li><a href="#L13E">Uninitialized Segments</a>
+</li><li><a href="#L13F">Common Segments</a>
+</li><li><a href="#L140">"RELORG" Pseudo Op</a>
+</li><li><a href="#L141">"ABSEND" and "RELEND" Pseudo Ops</a>
+</li><li><a href="#L142">Segment Map Identification</a>
+</li><li><a href="#L143">Nested Segments</a>
 </li></ul>
-</li><li><a href="#L141">Program Counter Manipulation</a>
+</li><li><a href="#L144">Program Counter Manipulation</a>
 <ul><li>
-</li><li><a href="#L142">Define Uninitialized Storage</a>
-</li><li><a href="#L143">Fill Block With Constant Data</a>
-</li><li><a href="#L144">Pad To Specific Byte Boundary</a>
-</li><li><a href="#L145">Pad From Specific Byte Boundary</a>
+</li><li><a href="#L145">Define Uninitialized Storage</a>
+</li><li><a href="#L146">Fill Block With Constant Data</a>
+</li><li><a href="#L147">Pad To Specific Byte Boundary</a>
+</li><li><a href="#L148">Pad From Specific Byte Boundary</a>
 </li></ul>
-</li><li><a href="#L146">Program Listing</a>
+</li><li><a href="#L149">Program Listing</a>
 <ul><li>
-</li><li><a href="#L147">Listing</a>
-</li><li><a href="#L148">No Flags Specified</a>
-</li><li><a href="#L149">Long Lines (Wrapped)</a>
-</li><li><a href="#L14A">Long Lines (Truncated)</a>
-</li><li><a href="#L14B">Show Line Numbers</a>
-</li><li><a href="#L14C">Change Page Width</a>
-</li><li><a href="#L14D">Change Left Margin</a>
-</li><li><a href="#L14E">Pagination</a>
-</li><li><a href="#L14F">Change Line Spacing</a>
-</li><li><a href="#L150">Change Header</a>
-</li><li><a href="#L151">Macro Cross-Reference</a>
-</li><li><a href="#L152">Global Label Cross-Reference</a>
-</li><li><a href="#L153">Formfeed</a>
-</li><li><a href="#L154">Cross-Reference</a>
-</li><li><a href="#L155">Show Assembly Statistics</a>
+</li><li><a href="#L14A">Listing</a>
+</li><li><a href="#L14B">No Flags Specified</a>
+</li><li><a href="#L14C">Long Lines (Wrapped)</a>
+</li><li><a href="#L14D">Long Lines (Truncated)</a>
+</li><li><a href="#L14E">Show Line Numbers</a>
+</li><li><a href="#L14F">Change Page Width</a>
+</li><li><a href="#L150">Change Left Margin</a>
+</li><li><a href="#L151">Pagination</a>
+</li><li><a href="#L152">Change Line Spacing</a>
+</li><li><a href="#L153">Change Header</a>
+</li><li><a href="#L154">Macro Cross-Reference</a>
+</li><li><a href="#L155">Global Label Cross-Reference</a>
+</li><li><a href="#L156">Formfeed</a>
+</li><li><a href="#L157">Cross-Reference</a>
+</li><li><a href="#L158">Show Assembly Statistics</a>
 </li></ul>
-</li><li><a href="#L156">Functions</a>
+</li><li><a href="#L159">Functions</a>
 <ul><li>
-</li><li><a href="#L157">VER() and VER$()</a>
-</li><li><a href="#L158">LEN()</a>
-</li><li><a href="#L159">INDEX()</a>
-</li><li><a href="#L15A">MID$()</a>
-</li><li><a href="#L15B">VAL()</a>
-</li><li><a href="#L15C">STR$()</a>
-</li><li><a href="#L15D">INDEXR()</a>
-</li><li><a href="#L15E">TOLOWER$() and TOUPPER$()</a>
-</li><li><a href="#L15F">FORWARD()</a>
-</li><li><a href="#L160">CHR$() and ORD()</a>
-</li><li><a href="#L161">MATCH$()</a>
-</li><li><a href="#L162">SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()</a>
-</li><li><a href="#L163">CPU$()</a>
-</li><li><a href="#L164">TIME$()</a>
-</li><li><a href="#L165">MESG$()</a>
-</li><li><a href="#L166">FILE$()</a>
-</li><li><a href="#L167">LABEL()</a>
-</li><li><a href="#L168">ISMACRO()</a>
-</li><li><a href="#L169">ABS()</a>
-</li><li><a href="#L16A">ROOTFILE$()</a>
-</li><li><a href="#L16B">SGN()</a>
-</li><li><a href="#L16C">SEED() and RND()</a>
-</li><li><a href="#L16D">Function Evaluation</a>
+</li><li><a href="#L15A">VER() and VER$()</a>
+</li><li><a href="#L15B">LEN()</a>
+</li><li><a href="#L15C">INDEX()</a>
+</li><li><a href="#L15D">MID$()</a>
+</li><li><a href="#L15E">VAL()</a>
+</li><li><a href="#L15F">STR$()</a>
+</li><li><a href="#L160">INDEXR()</a>
+</li><li><a href="#L161">TOLOWER$() and TOUPPER$()</a>
+</li><li><a href="#L162">FORWARD()</a>
+</li><li><a href="#L163">CHR$() and ORD()</a>
+</li><li><a href="#L164">MATCH$()</a>
+</li><li><a href="#L165">SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()</a>
+</li><li><a href="#L166">CPU$()</a>
+</li><li><a href="#L167">TIME$()</a>
+</li><li><a href="#L168">MESG$()</a>
+</li><li><a href="#L169">FILE$()</a>
+</li><li><a href="#L16A">LABEL()</a>
+</li><li><a href="#L16B">ISMACRO()</a>
+</li><li><a href="#L16C">ABS()</a>
+</li><li><a href="#L16D">ROOTFILE$()</a>
+</li><li><a href="#L16E">SGN()</a>
+</li><li><a href="#L16F">SEED() and RND()</a>
+</li><li><a href="#L170">Function Evaluation</a>
 </li></ul>
-</li><li><a href="#L16E">Custom Byte Order</a>
+</li><li><a href="#L171">Custom Byte Order</a>
 <ul><li>
-</li><li><a href="#L16F">Assume Non-Default Order</a>
+</li><li><a href="#L172">Assume Non-Default Order</a>
 </li></ul>
-</li><li><a href="#L170">Nonstandard Byte</a>
+</li><li><a href="#L173">Nonstandard Byte</a>
 <ul><li>
-</li><li><a href="#L171">16-bit BYTE</a>
-</li><li><a href="#L172">16-bit String Literals</a>
-</li><li><a href="#L173">16-bit Motorola Basic TRecord</a>
-</li><li><a href="#L174">16-bit Intel Basic Hex Record</a>
-</li><li><a href="#L175">16-bit FILL and PADTO</a>
-</li><li><a href="#L176">16-bit PADFROM</a>
-</li><li><a href="#L177">16-bit HEX and INCBIN</a>
-</li><li><a href="#L178">32-bit BYTE</a>
-</li><li><a href="#L179">32-bit String Literals</a>
-</li><li><a href="#L17A">32-bit Motorola Basic URecord</a>
-</li><li><a href="#L17B">32-bit Intel Basic Hex Record</a>
-</li><li><a href="#L17C">32-bit FILL and PADTO</a>
-</li><li><a href="#L17D">32-bit PADFROM</a>
-</li><li><a href="#L17E">32-bit HEX and INCBIN</a>
+</li><li><a href="#L174">16-bit BYTE</a>
+</li><li><a href="#L175">16-bit String Literals</a>
+</li><li><a href="#L176">16-bit Motorola Basic TRecord</a>
+</li><li><a href="#L177">16-bit Intel Basic Hex Record</a>
+</li><li><a href="#L178">16-bit FILL and PADTO</a>
+</li><li><a href="#L179">16-bit PADFROM</a>
+</li><li><a href="#L17A">16-bit HEX and INCBIN</a>
+</li><li><a href="#L17B">32-bit BYTE</a>
+</li><li><a href="#L17C">32-bit String Literals</a>
+</li><li><a href="#L17D">32-bit Motorola Basic URecord</a>
+</li><li><a href="#L17E">32-bit Intel Basic Hex Record</a>
+</li><li><a href="#L17F">32-bit FILL and PADTO</a>
+</li><li><a href="#L180">32-bit PADFROM</a>
+</li><li><a href="#L181">32-bit HEX and INCBIN</a>
 </li></ul>
-</li><li><a href="#L17F">Miscellaneous</a>
+</li><li><a href="#L182">Miscellaneous</a>
 <ul><li>
-</li><li><a href="#L180">Timers</a>
-</li><li><a href="#L181">Numbers and BIT--</a>
-</li><li><a href="#L182">HEX</a>
-</li><li><a href="#L183">User Messages w/ String Expressions</a>
-</li><li><a href="#L184">Reserved Names</a>
-</li><li><a href="#L185">User Stack</a>
+</li><li><a href="#L183">Timers</a>
+</li><li><a href="#L184">Numbers and BIT--</a>
+</li><li><a href="#L185">HEX</a>
+</li><li><a href="#L186">FLOAT</a>
+</li><li><a href="#L187">User Messages w/ String Expressions</a>
+</li><li><a href="#L188">Reserved Names</a>
+</li><li><a href="#L189">User Stack</a>
 </li></ul>
 </li></ul>
-</div><div id="content"><h2>Hobby Cross Assembler 1.100</h2>
+</div><div id="content"><h2>Hobby Cross Assembler 1.200</h2>
 <h3>General Tests</h3>
 <p>Copyright (&copy;) 2004-2024 by Anton Treuenfels</p>
-<a id="L0AE"></a><h3>Test Templates</h3>
-<a id="L0AF"></a><h4>Templates</h4>
+<a id="L0B1"></a><h3>Test Templates</h3>
+<a id="L0B2"></a><h4>Templates</h4>
 <ul> <li><A HREF="..\test\test000.a">..\test\test000.a</A></li>
  <li>ok: tests should succeed; check response to correct input</li>
  <li><A HREF="..\test\test000e.a">..\test\test000e.a</A></li>
  <li>error: tests should fail; check response to incorrect input</li>
  </ul>
-<a id="L0B0"></a><h3>Comments</h3>
-<a id="L0B1"></a><h4>All Forms</h4>
+<a id="L0B3"></a><h3>Comments</h3>
+<a id="L0B4"></a><h4>All Forms</h4>
 <ul> <li><A HREF="..\test\test001.a">..\test\test001.a</A></li>
  <li>ok: comments</li>
  <li><A HREF="..\test\test001e.a">..\test\test001e.a</A></li>
  <li>error: comments</li>
  </ul>
-<a id="L0B2"></a><h3>Required</h3>
-<a id="L0B3"></a><h4>Set CPU</h4>
+<a id="L0B5"></a><h3>Required</h3>
+<a id="L0B6"></a><h4>Set CPU</h4>
 <ul> <li><A HREF="..\test\test002.a">..\test\test002.a</A></li>
  <li>ok: "CPU" psop (16-bit Processor)</li>
  <li><A HREF="..\test\test002b.a">..\test\test002b.a</A></li>
@@ -325,7 +326,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test002h.a">..\test\test002h.a</A></li>
  <li>warn/error/fatal: pc width too large</li>
  </ul>
-<a id="L0B4"></a><h4>Set Program Counter</h4>
+<a id="L0B7"></a><h4>Set Program Counter</h4>
 <ul> <li><A HREF="..\test\test003.a">..\test\test003.a</A></li>
  <li>ok: "ORG" psop</li>
  <li><A HREF="..\test\test003b.a">..\test\test003b.a</A></li>
@@ -357,8 +358,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test003p.a">..\test\test003p.a</A></li>
  <li>error\fatal: 32-bit PC out of range (too big; by pc advance)</li>
  </ul>
-<a id="L0B5"></a><h3>Messages</h3>
-<a id="L0B6"></a><h4>User Messages</h4>
+<a id="L0B8"></a><h3>Messages</h3>
+<a id="L0B9"></a><h4>User Messages</h4>
 <ul> <li><A HREF="..\test\test005.a">..\test\test005.a</A></li>
  <li>echo\ok: "ECHO" psop</li>
  <li><A HREF="..\test\test005e.a">..\test\test005e.a</A></li>
@@ -376,7 +377,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test005k.a">..\test\test005k.a</A></li>
  <li>warn: "WARN" psop</li>
  </ul>
-<a id="L0B7"></a><h4>Warn Count</h4>
+<a id="L0BA"></a><h4>Warn Count</h4>
 <ul> <li><A HREF="..\test\test006e.a">..\test\test006e.a</A></li>
  <li>warn\fatal: "MAXWARN" psop set to negative value</li>
  <li><A HREF="..\test\test006f.a">..\test\test006f.a</A></li>
@@ -386,7 +387,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test006h.a">..\test\test006h.a</A></li>
  <li>warn\fatal: "MAXWARN" psop set to three</li>
  </ul>
-<a id="L0B8"></a><h4>Error Count</h4>
+<a id="L0BB"></a><h4>Error Count</h4>
 <ul> <li><A HREF="..\test\test007e.a">..\test\test007e.a</A></li>
  <li>warn\error\fatal: "MAXERR" psop set to negative value</li>
  <li><A HREF="..\test\test007f.a">..\test\test007f.a</A></li>
@@ -396,7 +397,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test007h.a">..\test\test007h.a</A></li>
  <li>error\fatal: "MAXERR" psop set to three</li>
  </ul>
-<a id="L0B9"></a><h4>Assert Messages</h4>
+<a id="L0BC"></a><h4>Assert Messages</h4>
 <ul> <li><A HREF="..\test\test008.a">..\test\test008.a</A></li>
  <li>ok: "ASSERT" psop</li>
  <li><A HREF="..\test\test008e.a">..\test\test008e.a</A></li>
@@ -406,8 +407,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test008g.a">..\test\test008g.a</A></li>
  <li>error: failures detected on first pass (BDD1)</li>
  </ul>
-<a id="L0BA"></a><h3>Output Files</h3>
-<a id="L0BB"></a><h4>Same Directory</h4>
+<a id="L0BD"></a><h3>Output Files</h3>
+<a id="L0BE"></a><h4>Same Directory</h4>
 <ul> <li><A HREF="..\test\test010.a">..\test\test010.a</A></li>
  <li>ok: specified names</li>
  <li><A HREF="..\test\test010b.a">..\test\test010b.a</A></li>
@@ -427,7 +428,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test010i.a">..\test\test010i.a</A></li>
  <li>warn: output filename same as input filename (first pass)</li>
  </ul>
-<a id="L0BC"></a><h4>Other Directory</h4>
+<a id="L0BF"></a><h4>Other Directory</h4>
 <ul> <li><A HREF="..\test\test011.a">..\test\test011.a</A></li>
  <li>ok: specified name</li>
  <li><A HREF="..\test\test011b.a">..\test\test011b.a</A></li>
@@ -437,20 +438,20 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test011f.a">..\test\test011f.a</A></li>
  <li>error: non-existent error directory</li>
  </ul>
-<a id="L0BD"></a><h4>No Object Code</h4>
+<a id="L0C0"></a><h4>No Object Code</h4>
 <ul> <li><A HREF="..\test\test014.a">..\test\test014.a</A></li>
  <li>ok: no object code</li>
  </ul>
-<a id="L0BE"></a><h4>No List or Error Files</h4>
+<a id="L0C1"></a><h4>No List or Error Files</h4>
 <ul> <li><A HREF="..\test\test014b.a">..\test\test014b.a</A></li>
  <li>ok: no output files</li>
  </ul>
-<a id="L0BF"></a><h4>No Error File</h4>
+<a id="L0C2"></a><h4>No Error File</h4>
 <ul> <li><A HREF="..\test\test014c.a">..\test\test014c.a</A></li>
  <li>ok: error found but no error file to write</li>
  </ul>
-<a id="L0C0"></a><h3>Pass Termination</h3>
-<a id="L0C1"></a><h4>Termination</h4>
+<a id="L0C3"></a><h3>Pass Termination</h3>
+<a id="L0C4"></a><h4>Termination</h4>
 <ul> <li><A HREF="..\test\test015.a">..\test\test015.a</A></li>
  <li>ok: "END" psop</li>
  <li><A HREF="..\test\test015e.a">..\test\test015e.a</A></li>
@@ -460,8 +461,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test015g.a">..\test\test015g.a</A></li>
  <li>error: "END" w/ resolvable start expression out of range</li>
  </ul>
-<a id="L0C2"></a><h3>Customization</h3>
-<a id="L0C3"></a><h4>Pseudo Op Names</h4>
+<a id="L0C5"></a><h3>Customization</h3>
+<a id="L0C6"></a><h4>Pseudo Op Names</h4>
 <ul> <li><A HREF="..\test\test020.a">..\test\test020.a</A></li>
  <li>ok: "PSALIAS" pseudo-op</li>
  <li><A HREF="..\test\test020b.a">..\test\test020b.a</A></li>
@@ -469,19 +470,19 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test020e.a">..\test\test020e.a</A></li>
  <li>error: malformed "PSALIAS" pseudo-op</li>
  </ul>
-<a id="L0C4"></a><h4>Pseudo Op Nullification</h4>
+<a id="L0C7"></a><h4>Pseudo Op Nullification</h4>
 <ul> <li><A HREF="..\test\test021.a">..\test\test021.a</A></li>
  <li>ok: "PSNULL" pseudo op</li>
  <li><A HREF="..\test\test021e.a">..\test\test021e.a</A></li>
  <li>error: "PSNULL" pseudo op (when not used)</li>
  </ul>
-<a id="L0C5"></a><h4>Assembler Messages</h4>
+<a id="L0C8"></a><h4>Assembler Messages</h4>
 <ul> <li><A HREF="..\test\test022.a">..\test\test022.a</A></li>
  <li>ok: "MESGTEXT" pseudo-op</li>
  <li><A HREF="..\test\test022e.a">..\test\test022e.a</A></li>
  <li>warn\error: malformed "MESGTEXT" pseudo-op</li>
  </ul>
-<a id="L0C6"></a><h4>ASSUME Strings</h4>
+<a id="L0C9"></a><h4>ASSUME Strings</h4>
 <ul> <li><A HREF="..\test\test025.a">..\test\test025.a</A></li>
  <li>ok: "ASSUME" pseudo-op</li>
  <li><A HREF="..\test\test025b.a">..\test\test025b.a</A></li>
@@ -489,8 +490,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test025e.a">..\test\test025e.a</A></li>
  <li>error: unrecognized flag and arg value</li>
  </ul>
-<a id="L0C7"></a><h3>Expressions</h3>
-<a id="L0C8"></a><h4>Numeric Literals</h4>
+<a id="L0CA"></a><h3>Expressions</h3>
+<a id="L0CB"></a><h4>Numeric Literals</h4>
 <ul> <li><A HREF="..\test\test035.a">..\test\test035.a</A></li>
  <li>ok: Motorola, Intel and C formats (LSB Processor)</li>
  <li><A HREF="..\test\test035b.a">..\test\test035b.a</A></li>
@@ -502,7 +503,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test035g.a">..\test\test035g.a</A></li>
  <li>warn: out of range numbers (signed integers more than 32 bits in size)</li>
  </ul>
-<a id="L0C9"></a><h4>Numeric Data Definition</h4>
+<a id="L0CC"></a><h4>Numeric Data Definition</h4>
 <ul> <li><A HREF="..\test\test036.a">..\test\test036.a</A></li>
  <li>ok: "BIT--" pseudo ops</li>
  <li><A HREF="..\test\test036b.a">..\test\test036b.a</A></li>
@@ -510,7 +511,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test036e.a">..\test\test036e.a</A></li>
  <li>error: blank expression field(s)</li>
  </ul>
-<a id="L0CA"></a><h4>Ranged Numeric Data Definition</h4>
+<a id="L0CD"></a><h4>Ranged Numeric Data Definition</h4>
 <ul> <li><A HREF="..\test\test037.a">..\test\test037.a</A></li>
  <li>ok: "UBIT--" and "SBIT--" pseudo ops</li>
  <li><A HREF="..\test\test037b.a">..\test\test037b.a</A></li>
@@ -520,7 +521,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test037f.a">..\test\test037f.a</A></li>
  <li>error: values out of range (pass two)</li>
  </ul>
-<a id="L0CB"></a><h4>Character Literals</h4>
+<a id="L0CE"></a><h4>Character Literals</h4>
 <ul> <li><A HREF="..\test\test040.a">..\test\test040.a</A></li>
  <li>ok: character literals</li>
  <li><A HREF="..\test\test040b.a">..\test\test040b.a</A></li>
@@ -528,7 +529,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test040e.a">..\test\test040e.a</A></li>
  <li>error: malformed characters</li>
  </ul>
-<a id="L0CC"></a><h4>String Literals</h4>
+<a id="L0CF"></a><h4>String Literals</h4>
 <ul> <li><A HREF="..\test\test045.a">..\test\test045.a</A></li>
  <li>ok: string literals</li>
  <li><A HREF="..\test\test045b.a">..\test\test045b.a</A></li>
@@ -538,7 +539,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test045e.a">..\test\test045e.a</A></li>
  <li>error: malformed strings</li>
  </ul>
-<a id="L0CD"></a><h4>XLATE() and XLATE</h4>
+<a id="L0D0"></a><h4>XLATE() and XLATE</h4>
 <ul> <li><A HREF="..\test\test046.a">..\test\test046.a</A></li>
  <li>ok: character set re-mapping</li>
  <li><A HREF="..\test\test046b.a">..\test\test046b.a</A></li>
@@ -552,7 +553,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test046h.a">..\test\test046h.a</A></li>
  <li>error: reserved name</li>
  </ul>
-<a id="L0CE"></a><h4>Global Labels</h4>
+<a id="L0D1"></a><h4>Global Labels</h4>
 <ul> <li><A HREF="..\test\test050.a">..\test\test050.a</A></li>
  <li>ok: global labels</li>
  <li><A HREF="..\test\test050e.a">..\test\test050e.a</A></li>
@@ -564,7 +565,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test050h.a">..\test\test050h.a</A></li>
  <li>error: duplicate labels</li>
  </ul>
-<a id="L0CF"></a><h4>Local Labels</h4>
+<a id="L0D2"></a><h4>Local Labels</h4>
 <ul> <li><A HREF="..\test\test051.a">..\test\test051.a</A></li>
  <li>ok: local labels</li>
  <li><A HREF="..\test\test051b.a">..\test\test051b.a</A></li>
@@ -576,7 +577,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test051g.a">..\test\test051g.a</A></li>
  <li>error: duplicate labels</li>
  </ul>
-<a id="L0D0"></a><h4>Variable Labels</h4>
+<a id="L0D3"></a><h4>Variable Labels</h4>
 <ul> <li><A HREF="..\test\test052.a">..\test\test052.a</A></li>
  <li>ok: variable labels</li>
  <li><A HREF="..\test\test052e.a">..\test\test052e.a</A></li>
@@ -584,7 +585,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test052f.a">..\test\test052f.a</A></li>
  <li>warn\error: odd use (forward reference unsuccessfully resolved)</li>
  </ul>
-<a id="L0D1"></a><h4>Branch Target Labels</h4>
+<a id="L0D4"></a><h4>Branch Target Labels</h4>
 <ul> <li><A HREF="..\test\test053.a">..\test\test053.a</A></li>
  <li>ok: branch target labels</li>
  <li><A HREF="..\test\test053b.a">..\test\test053b.a</A></li>
@@ -598,29 +599,29 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test053g.a">..\test\test053g.a</A></li>
  <li>warn: odd use (with various pseudo ops)</li>
  </ul>
-<a id="L0D2"></a><h4>All Label Forms</h4>
+<a id="L0D5"></a><h4>All Label Forms</h4>
 <ul> <li><A HREF="..\test\test054.a">..\test\test054.a</A></li>
  <li>ok: label recognition; all forms</li>
  </ul>
-<a id="L0D3"></a><h4>String Labels</h4>
+<a id="L0D6"></a><h4>String Labels</h4>
 <ul> <li><A HREF="..\test\test055.a">..\test\test055.a</A></li>
  <li>ok: string and numeric labels (all forms)</li>
  <li><A HREF="..\test\test055e.a">..\test\test055e.a</A></li>
  <li>error: string labels</li>
  </ul>
-<a id="L0D4"></a><h4>Pre-Defined Labels</h4>
+<a id="L0D7"></a><h4>Pre-Defined Labels</h4>
 <ul> <li><A HREF="..\test\test056.a">..\test\test056.a</A></li>
  <li>ok: string and numeric labels</li>
  <li><A HREF="..\test\test056e.a">..\test\test056e.a</A></li>
  <li>error: string and numeric labels</li>
  </ul>
-<a id="L0D5"></a><h4>Program Counter Reference</h4>
+<a id="L0D8"></a><h4>Program Counter Reference</h4>
 <ul> <li><A HREF="..\test\test060.a">..\test\test060.a</A></li>
  <li>ok: program counter (w/aliases)</li>
  <li><A HREF="..\test\test060e.a">..\test\test060e.a</A></li>
  <li>error: "*" and "$" aliases not legal in label field</li>
  </ul>
-<a id="L0D6"></a><h4>Program Counter Relative Numeric Data Definition</h4>
+<a id="L0D9"></a><h4>Program Counter Relative Numeric Data Definition</h4>
 <ul> <li><A HREF="..\test\test067.a">..\test\test067.a</A></li>
  <li>ok: "RBIT--" pseudo ops</li>
  <li><A HREF="..\test\test067e.a">..\test\test067e.a</A></li>
@@ -628,7 +629,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test067f.a">..\test\test067f.a</A></li>
  <li>error: value out of program counter range</li>
  </ul>
-<a id="L0D7"></a><h4>Unary Operators</h4>
+<a id="L0DA"></a><h4>Unary Operators</h4>
 <ul> <li><A HREF="..\test\test080.a">..\test\test080.a</A></li>
  <li>ok: arithmetic, bitwise, logical</li>
  <li><A HREF="..\test\test080b.a">..\test\test080b.a</A></li>
@@ -638,7 +639,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test080f.a">..\test\test080f.a</A></li>
  <li>error: out-of-range values</li>
  </ul>
-<a id="L0D8"></a><h4>Numeric Binary Operators</h4>
+<a id="L0DB"></a><h4>Numeric Binary Operators</h4>
 <ul> <li><A HREF="..\test\test081.a">..\test\test081.a</A></li>
  <li>ok: arithmetic, bitwise, logical</li>
  <li><A HREF="..\test\test081e.a">..\test\test081e.a</A></li>
@@ -650,7 +651,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test081h.a">..\test\test081h.a</A></li>
  <li>error: bad shift values</li>
  </ul>
-<a id="L0D9"></a><h4>String Binary Operators</h4>
+<a id="L0DC"></a><h4>String Binary Operators</h4>
 <ul> <li><A HREF="..\test\test082.a">..\test\test082.a</A></li>
  <li>ok: logical</li>
  <li><A HREF="..\test\test082b.a">..\test\test082b.a</A></li>
@@ -664,7 +665,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test082g.a">..\test\test082g.a</A></li>
  <li>error: multiplication</li>
  </ul>
-<a id="L0DA"></a><h4>Regular Expression Operators</h4>
+<a id="L0DD"></a><h4>Regular Expression Operators</h4>
 <ul> <li><A HREF="..\test\test083.a">..\test\test083.a</A></li>
  <li>ok: logical</li>
  <li><A HREF="..\test\test083b.a">..\test\test083b.a</A></li>
@@ -676,13 +677,13 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test083f.a">..\test\test083f.a</A></li>
  <li>error: EQU psop</li>
  </ul>
-<a id="L0DB"></a><h4>String Expressions</h4>
+<a id="L0DE"></a><h4>String Expressions</h4>
 <ul> <li><A HREF="..\test\test084.a">..\test\test084.a</A></li>
  <li>ok: string concatenation</li>
  <li><A HREF="..\test\test084e.a">..\test\test084e.a</A></li>
  <li>error: string concatenation</li>
  </ul>
-<a id="L0DC"></a><h4>Logical Short Circuit</h4>
+<a id="L0DF"></a><h4>Logical Short Circuit</h4>
 <ul> <li><A HREF="..\test\test085.a">..\test\test085.a</A></li>
  <li>ok: "&&" and "||" Operators</li>
  <li><A HREF="..\test\test085b.a">..\test\test085b.a</A></li>
@@ -694,7 +695,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test085e.a">..\test\test085e.a</A></li>
  <li>error: unresolvable "&&" and "||" Operators</li>
  </ul>
-<a id="L0DD"></a><h4>Ternary Conditional</h4>
+<a id="L0E0"></a><h4>Ternary Conditional</h4>
 <ul> <li><A HREF="..\test\test086.a">..\test\test086.a</A></li>
  <li>ok: "?:" Operator</li>
  <li><A HREF="..\test\test086b.a">..\test\test086b.a</A></li>
@@ -706,7 +707,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test086g.a">..\test\test086g.a</A></li>
  <li>error: bad forward reference (pass 1)</li>
  </ul>
-<a id="L0DE"></a><h4>Expression Evaluation</h4>
+<a id="L0E1"></a><h4>Expression Evaluation</h4>
 <ul> <li><A HREF="..\test\test090.a">..\test\test090.a</A></li>
  <li>ok: expression evaluation</li>
  <li><A HREF="..\test\test090b.a">..\test\test090b.a</A></li>
@@ -720,7 +721,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test090h.a">..\test\test090h.a</A></li>
  <li>warn\error: multiple unresolved forward reference in single expression</li>
  </ul>
-<a id="L0DF"></a><h4>Assign Label Value</h4>
+<a id="L0E2"></a><h4>Assign Label Value</h4>
 <ul> <li><A HREF="..\test\test092.a">..\test\test092.a</A></li>
  <li>ok: "EQU" psop</li>
  <li><A HREF="..\test\test092b.a">..\test\test092b.a</A></li>
@@ -732,8 +733,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test092f.a">..\test\test092f.a</A></li>
  <li>error: "PLUSEQU" and "MINUSEQU" psops</li>
  </ul>
-<a id="L0E0"></a><h3>Macros</h3>
-<a id="L0E1"></a><h4>Macro Definition</h4>
+<a id="L0E3"></a><h3>Macros</h3>
+<a id="L0E4"></a><h4>Macro Definition</h4>
 <ul> <li><A HREF="..\test\test100.a">..\test\test100.a</A></li>
  <li>ok: basic macro definition and expansion</li>
  <li><A HREF="..\test\test100b.a">..\test\test100b.a</A></li>
@@ -749,7 +750,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test100h.a">..\test\test100h.a</A></li>
  <li>error: unresolved forward reference within macro (second pass)</li>
  </ul>
-<a id="L0E2"></a><h4>Nested Macros</h4>
+<a id="L0E5"></a><h4>Nested Macros</h4>
 <ul> <li><A HREF="..\test\test101.a">..\test\test101.a</A></li>
  <li>ok: nested macro definitions</li>
  <li><A HREF="..\test\test101b.a">..\test\test101b.a</A></li>
@@ -761,7 +762,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test101g.a">..\test\test101g.a</A></li>
  <li>error: unresolved forward reference within nested macro (first pass)</li>
  </ul>
-<a id="L0E3"></a><h4>EXIT from Macro</h4>
+<a id="L0E6"></a><h4>EXIT from Macro</h4>
 <ul> <li><A HREF="..\test\test103.a">..\test\test103.a</A></li>
  <li>ok: unconditional "EXIT" psop within macro</li>
  <li><A HREF="..\test\test103b.a">..\test\test103b.a</A></li>
@@ -769,7 +770,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test103e.a">..\test\test103e.a</A></li>
  <li>warn\error: unconditional "EXIT" outside of macro</li>
  </ul>
-<a id="L0E4"></a><h4>EXITIF from Macro</h4>
+<a id="L0E7"></a><h4>EXITIF from Macro</h4>
 <ul> <li><A HREF="..\test\test104.a">..\test\test104.a</A></li>
  <li>ok: conditional exit psop within macro (all TRUE)</li>
  <li><A HREF="..\test\test104b.a">..\test\test104b.a</A></li>
@@ -777,7 +778,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test104e.a">..\test\test104e.a</A></li>
  <li>warn\error: unconditional "EXIT" outside of macro</li>
  </ul>
-<a id="L0E5"></a><h4>DEFINED() and UNDEF</h4>
+<a id="L0E8"></a><h4>DEFINED() and UNDEF</h4>
 <ul> <li><A HREF="..\test\test105.a">..\test\test105.a</A></li>
  <li>ok: macro definition existence testing and deletion</li>
  <li><A HREF="..\test\test105e.a">..\test\test105e.a</A></li>
@@ -787,29 +788,29 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test105g.a">..\test\test105g.a</A></li>
  <li>error: illegal UNDEF variable name</li>
  </ul>
-<a id="L0E6"></a><h4>Macros and Labels</h4>
+<a id="L0E9"></a><h4>Macros and Labels</h4>
 <ul> <li><A HREF="..\test\test106.a">..\test\test106.a</A></li>
  <li>ok: macros with the same names as labels</li>
  <li><A HREF="..\test\test106e.a">..\test\test106e.a</A></li>
  <li>error: macros with the same names as labels</li>
  </ul>
-<a id="L0E7"></a><h4>Odd Macro Arguments</h4>
+<a id="L0EA"></a><h4>Odd Macro Arguments</h4>
 <ul> <li><A HREF="..\test\test107.a">..\test\test107.a</A></li>
  <li>ok: actual arguments which match formal argument names</li>
  </ul>
-<a id="L0E8"></a><h4>Default Macro Arguments</h4>
+<a id="L0EB"></a><h4>Default Macro Arguments</h4>
 <ul> <li><A HREF="..\test\test110.a">..\test\test110.a</A></li>
  <li>ok: macros with default argument values</li>
  <li><A HREF="..\test\test110e.a">..\test\test110e.a</A></li>
  <li>error: malformed macro defaults</li>
  </ul>
-<a id="L0E9"></a><h4>PUTBACK pseudo op</h4>
+<a id="L0EC"></a><h4>PUTBACK pseudo op</h4>
 <ul> <li><A HREF="..\test\test112.a">..\test\test112.a</A></li>
  <li>ok: "PUTBACK" psop</li>
  <li><A HREF="..\test\test112e.a">..\test\test112e.a</A></li>
  <li>warn\error: "PUTBACK" psop</li>
  </ul>
-<a id="L0EA"></a><h4>PUTBACKS pseudo op</h4>
+<a id="L0ED"></a><h4>PUTBACKS pseudo op</h4>
 <ul> <li><A HREF="..\test\test113.a">..\test\test113.a</A></li>
  <li>ok: "PUTBACKS" psop</li>
  <li><A HREF="..\test\test113e.a">..\test\test113e.a</A></li>
@@ -817,7 +818,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test113f.a">..\test\test113f.a</A></li>
  <li>fatal: maximum putback count exceeded</li>
  </ul>
-<a id="L0EB"></a><h4>Assignable Formal Arguments</h4>
+<a id="L0EE"></a><h4>Assignable Formal Arguments</h4>
 <ul> <li><A HREF="..\test\test115.a">..\test\test115.a</A></li>
  <li>ok: local and variable label names used as formal macro arguments</li>
  <li><A HREF="..\test\test115b.a">..\test\test115b.a</A></li>
@@ -827,8 +828,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test115f.a">..\test\test115f.a</A></li>
  <li>error: forward reference (fail) and backward reference (ok)</li>
  </ul>
-<a id="L0EC"></a><h3>Local Scope</h3>
-<a id="L0ED"></a><h4>Nesting Depth</h4>
+<a id="L0EF"></a><h3>Local Scope</h3>
+<a id="L0F0"></a><h4>Nesting Depth</h4>
 <ul> <li><A HREF="..\test\test125e.a">..\test\test125e.a</A></li>
  <li>warn\fatal: "MAXDEPTH" psop set to negative value</li>
  <li><A HREF="..\test\test125f.a">..\test\test125f.a</A></li>
@@ -838,8 +839,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test125h.a">..\test\test125h.a</A></li>
  <li>warn\fatal: "MAXDEPTH" psop set to three</li>
  </ul>
-<a id="L0EE"></a><h3>Repeats</h3>
-<a id="L0EF"></a><h4>Repeat Definition</h4>
+<a id="L0F1"></a><h3>Repeats</h3>
+<a id="L0F2"></a><h4>Repeat Definition</h4>
 <ul> <li><A HREF="..\test\test150.a">..\test\test150.a</A></li>
  <li>ok: basic repeat block definition and expansion</li>
  <li><A HREF="..\test\test150b.a">..\test\test150b.a</A></li>
@@ -851,7 +852,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test150g.a">..\test\test150g.a</A></li>
  <li>error: unresolved forward reference within repeat</li>
  </ul>
-<a id="L0F0"></a><h4>Macros and Repeats</h4>
+<a id="L0F3"></a><h4>Macros and Repeats</h4>
 <ul> <li><A HREF="..\test\test151.a">..\test\test151.a</A></li>
  <li>ok: repeats within macros</li>
  <li><A HREF="..\test\test151e.a">..\test\test151e.a</A></li>
@@ -863,20 +864,20 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test151h.a">..\test\test151h.a</A></li>
  <li>error: non-constant repeat control expression within macro expansion</li>
  </ul>
-<a id="L0F1"></a><h4>EXIT from Repeat</h4>
+<a id="L0F4"></a><h4>EXIT from Repeat</h4>
 <ul> <li><A HREF="..\test\test153.a">..\test\test153.a</A></li>
  <li>ok: unconditional "EXIT" psop within repeat block</li>
  </ul>
-<a id="L0F2"></a><h4>EXIT from Nested Macro/Repeats</h4>
+<a id="L0F5"></a><h4>EXIT from Nested Macro/Repeats</h4>
 <ul> <li><A HREF="..\test\test155.a">..\test\test155.a</A></li>
  <li>ok: unconditional "EXIT" from nested macro/repeat blocks</li>
  </ul>
-<a id="L0F3"></a><h4>Repeat Count</h4>
+<a id="L0F6"></a><h4>Repeat Count</h4>
 <ul> <li><A HREF="..\test\test157e.a">..\test\test157e.a</A></li>
  <li>fatal: too many repeats</li>
  </ul>
-<a id="L0F4"></a><h3>Whiles</h3>
-<a id="L0F5"></a><h4>While Definition</h4>
+<a id="L0F7"></a><h3>Whiles</h3>
+<a id="L0F8"></a><h4>While Definition</h4>
 <ul> <li><A HREF="..\test\test160.a">..\test\test160.a</A></li>
  <li>ok: basic while block definition and expansion (numeric control expressions)</li>
  <li><A HREF="..\test\test160b.a">..\test\test160b.a</A></li>
@@ -892,7 +893,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test160i.a">..\test\test160i.a</A></li>
  <li>error: storage expression goes out of range</li>
  </ul>
-<a id="L0F6"></a><h4>Macros and Whiles</h4>
+<a id="L0F9"></a><h4>Macros and Whiles</h4>
 <ul> <li><A HREF="..\test\test161.a">..\test\test161.a</A></li>
  <li>ok: whiles within macros</li>
  <li><A HREF="..\test\test161e.a">..\test\test161e.a</A></li>
@@ -904,20 +905,20 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test161h.a">..\test\test161h.a</A></li>
  <li>error: non-constant while control expression within macro expansion</li>
  </ul>
-<a id="L0F7"></a><h4>EXIT from While</h4>
+<a id="L0FA"></a><h4>EXIT from While</h4>
 <ul> <li><A HREF="..\test\test163.a">..\test\test163.a</A></li>
  <li>ok: unconditional "EXIT" psop within while block</li>
  </ul>
-<a id="L0F8"></a><h4>EXIT from Nested Macro/Whiles</h4>
+<a id="L0FB"></a><h4>EXIT from Nested Macro/Whiles</h4>
 <ul> <li><A HREF="..\test\test165.a">..\test\test165.a</A></li>
  <li>ok: unconditional "EXIT" from nested macro/while blocks</li>
  </ul>
-<a id="L0F9"></a><h4>While Count</h4>
+<a id="L0FC"></a><h4>While Count</h4>
 <ul> <li><A HREF="..\test\test167e.a">..\test\test167e.a</A></li>
  <li>fatal: too many whiles</li>
  </ul>
-<a id="L0FA"></a><h3>Conditional Assembly</h3>
-<a id="L0FB"></a><h4>IF..ELSEIF..ELSE..ENDIF Blocks</h4>
+<a id="L0FD"></a><h3>Conditional Assembly</h3>
+<a id="L0FE"></a><h4>IF..ELSEIF..ELSE..ENDIF Blocks</h4>
 <ul> <li><A HREF="..\test\test200.a">..\test\test200.a</A></li>
  <li>ok: IF..ELSEIF..ELSE..ENDIF conditionals</li>
  <li><A HREF="..\test\test200b.a">..\test\test200b.a</A></li>
@@ -933,19 +934,19 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test200h.a">..\test\test200h.a</A></li>
  <li>error: crossed macro/if blocks</li>
  </ul>
-<a id="L0FC"></a><h4>Odd Conditional Blocks</h4>
+<a id="L0FF"></a><h4>Odd Conditional Blocks</h4>
 <ul> <li><A HREF="..\test\test201.a">..\test\test201.a</A></li>
  <li>ok: odd but legal uses of conditional assembly blocks</li>
  </ul>
-<a id="L0FD"></a><h4>EXIT Inside Conditional</h4>
+<a id="L100"></a><h4>EXIT Inside Conditional</h4>
 <ul> <li><A HREF="..\test\test203.a">..\test\test203.a</A></li>
  <li>ok: "EXIT" from macros inside nested conditionals</li>
  </ul>
-<a id="L0FE"></a><h4>Deep Nesting</h4>
+<a id="L101"></a><h4>Deep Nesting</h4>
 <ul> <li><A HREF="..\test\test205.a">..\test\test205.a</A></li>
  <li>ok: recursive macros; depth = 128</li>
  </ul>
-<a id="L0FF"></a><h4>IFDEF and IFNDEF Blocks</h4>
+<a id="L102"></a><h4>IFDEF and IFNDEF Blocks</h4>
 <ul> <li><A HREF="..\test\test210.a">..\test\test210.a</A></li>
  <li>ok: IFDEF and INDEF conditionals (for symbols)</li>
  <li><A HREF="..\test\test210e.a">..\test\test210e.a</A></li>
@@ -953,8 +954,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test210f.a">..\test\test210f.a</A></li>
  <li>error: undetected errors</li>
  </ul>
-<a id="L100"></a><h3>File Inclusion</h3>
-<a id="L101"></a><h4>Inclusion</h4>
+<a id="L103"></a><h3>File Inclusion</h3>
+<a id="L104"></a><h4>Inclusion</h4>
 <ul> <li><A HREF="..\test\test250.a">..\test\test250.a</A></li>
  <li>ok: file inclusion; depth = 128</li>
  <li><A HREF="..\test\test250e.a">..\test\test250e.a</A></li>
@@ -966,23 +967,23 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test250h.a">..\test\test250h.a</A></li>
  <li>warn\error: correct filename reported for error</li>
  </ul>
-<a id="L102"></a><h4>Self Inclusion</h4>
+<a id="L105"></a><h4>Self Inclusion</h4>
 <ul> <li><A HREF="..\test\test250i.a">..\test\test250i.a</A></li>
  <li>warn: including self</li>
  </ul>
-<a id="L103"></a><h4>File Label Scoping</h4>
+<a id="L106"></a><h4>File Label Scoping</h4>
 <ul> <li><A HREF="..\test\test251.a">..\test\test251.a</A></li>
  <li>ok: local and variable labels</li>
  <li><A HREF="..\test\test251e.a">..\test\test251e.a</A></li>
  <li>error: global labels</li>
  </ul>
-<a id="L104"></a><h4>Default Output File Names</h4>
+<a id="L107"></a><h4>Default Output File Names</h4>
 <ul> <li><A HREF="..\test\test252.a">..\test\test252.a</A></li>
  <li>ok: default output file names set within include file</li>
  <li><A HREF="..\test\test252e.a">..\test\test252e.a</A></li>
  <li>warn: output filename same as input filename (output time)</li>
  </ul>
-<a id="L105"></a><h4>Read Exclusion</h4>
+<a id="L108"></a><h4>Read Exclusion</h4>
 <ul> <li><A HREF="..\test\test253.a">..\test\test253.a</A></li>
  <li>ok: "READONCE" psop</li>
  <li><A HREF="..\test\test253b.a">..\test\test253b.a</A></li>
@@ -994,7 +995,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test253g.a">..\test\test253g.a</A></li>
  <li>warn: previous inclusion</li>
  </ul>
-<a id="L106"></a><h4>Early Read Termination</h4>
+<a id="L109"></a><h4>Early Read Termination</h4>
 <ul> <li><A HREF="..\test\test255.a">..\test\test255.a</A></li>
  <li>ok: "END" psop (w/o start address)</li>
  <li><A HREF="..\test\test255b.a">..\test\test255b.a</A></li>
@@ -1010,12 +1011,12 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test255i.a">..\test\test255i.a</A></li>
  <li>warn\error\fatal: "END" psop in "IF" block (w/ start address)</li>
  </ul>
-<a id="L107"></a><h4>Include File as Last Line of Root File</h4>
+<a id="L10A"></a><h4>Include File as Last Line of Root File</h4>
 <ul> <li><A HREF="..\test\test257.a">..\test\test257.a</A></li>
  <li>ok: file inclusion; no END psop in any file</li>
  </ul>
-<a id="L108"></a><h3>Binary File Inclusion</h3>
-<a id="L109"></a><h4>Binary Inclusion</h4>
+<a id="L10B"></a><h3>Binary File Inclusion</h3>
+<a id="L10C"></a><h4>Binary Inclusion</h4>
 <ul> <li><A HREF="..\test\test260.a">..\test\test260.a</A></li>
  <li>ok: binary file inclusion</li>
  <li><A HREF="..\test\test260e.a">..\test\test260e.a</A></li>
@@ -1023,8 +1024,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test260f.a">..\test\test260f.a</A></li>
  <li>warn: odd argument values</li>
  </ul>
-<a id="L10A"></a><h3>Motorola SRecord Object</h3>
-<a id="L114"></a><h4>Basic Records</h4>
+<a id="L10D"></a><h3>Motorola SRecord Object</h3>
+<a id="L117"></a><h4>Basic Records</h4>
 <ul> <li><A HREF="..\test\test280.a">..\test\test280.a</A></li>
  <li>ok: 16-bit (header, data, count and EOF records)</li>
  <li><A HREF="..\test\test280b.a">..\test\test280b.a</A></li>
@@ -1032,7 +1033,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test280c.a">..\test\test280c.a</A></li>
  <li>ok: 32-bit (header, data, count and EOF records)</li>
  </ul>
-<a id="L115"></a><h4>Start Records</h4>
+<a id="L118"></a><h4>Start Records</h4>
 <ul> <li><A HREF="..\test\test281.a">..\test\test281.a</A></li>
  <li>ok: 16-bit (header, data, count and non-zero EOF records)</li>
  <li><A HREF="..\test\test281b.a">..\test\test281b.a</A></li>
@@ -1052,7 +1053,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test281j.a">..\test\test281j.a</A></li>
  <li>error: "END" w/ start expression within macro (unresolvable)</li>
  </ul>
-<a id="L116"></a><h4>Assume Wider Address Type</h4>
+<a id="L119"></a><h4>Assume Wider Address Type</h4>
 <ul> <li><A HREF="..\test\test282.a">..\test\test282.a</A></li>
  <li>ok: 16-bit to 24-bit</li>
  <li><A HREF="..\test\test282b.a">..\test\test282b.a</A></li>
@@ -1076,7 +1077,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test282l.a">..\test\test282l.a</A></li>
  <li>error: 16 bit to 24 bits, bad data address</li>
  </ul>
-<a id="L117"></a><h4>Assume Narrower Address Type</h4>
+<a id="L11A"></a><h4>Assume Narrower Address Type</h4>
 <ul> <li><A HREF="..\test\test283.a">..\test\test283.a</A></li>
  <li>ok: 32-bit to 24-bit</li>
  <li><A HREF="..\test\test283b.a">..\test\test283b.a</A></li>
@@ -1090,7 +1091,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test283g.a">..\test\test283g.a</A></li>
  <li>error: 32-bit to 24-bit, bad data address (late assumption)</li>
  </ul>
-<a id="L118"></a><h4>Named Output File</h4>
+<a id="L11B"></a><h4>Named Output File</h4>
 <ul> <li><A HREF="..\test\test284.a">..\test\test284.a</A></li>
  <li>ok: user-specified name</li>
  <li><A HREF="..\test\test284e.a">..\test\test284e.a</A></li>
@@ -1098,7 +1099,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test284f.a">..\test\test284f.a</A></li>
  <li>warn: cannot change name once set</li>
  </ul>
-<a id="L110"></a><h4>Assume Record Supressed</h4>
+<a id="L113"></a><h4>Assume Record Supressed</h4>
 <ul> <li><A HREF="..\test\test285.a">..\test\test285.a</A></li>
  <li>ok: assume no S0 (header) record (16-bit)</li>
  <li><A HREF="..\test\test285b.a">..\test\test285b.a</A></li>
@@ -1108,7 +1109,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test285d.a">..\test\test285d.a</A></li>
  <li>ok: assume no name in header (16-bit)</li>
  </ul>
-<a id="L11A"></a><h4>Assume More Data</h4>
+<a id="L11D"></a><h4>Assume More Data</h4>
 <ul> <li><A HREF="..\test\test286.a">..\test\test286.a</A></li>
  <li>ok: assume 32 hex data bytes per record (16-bit)</li>
  <li><A HREF="..\test\test286b.a">..\test\test286b.a</A></li>
@@ -1118,7 +1119,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test286e.a">..\test\test286e.a</A></li>
  <li>warn\error: malformed; out-of-range; unique value</li>
  </ul>
-<a id="L11B"></a><h4>Overlapping Addresses (Monolithic)</h4>
+<a id="L11E"></a><h4>Overlapping Addresses (Monolithic)</h4>
 <ul> <li><A HREF="..\test\test287.a">..\test\test287.a</A></li>
  <li>ok: 16-bit (header, data, count and EOF records)</li>
  <li><A HREF="..\test\test287b.a">..\test\test287b.a</A></li>
@@ -1126,8 +1127,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test287c.a">..\test\test287c.a</A></li>
  <li>ok: 32-bit (header, data, count and EOF records)</li>
  </ul>
-<a id="L113"></a><h3>Intel Hexadecimal Object</h3>
-<a id="L114"></a><h4>Basic Records</h4>
+<a id="L116"></a><h3>Intel Hexadecimal Object</h3>
+<a id="L117"></a><h4>Basic Records</h4>
 <ul> <li><A HREF="..\test\test290.a">..\test\test290.a</A></li>
  <li>ok: 16-bit (data and EOF records)</li>
  <li><A HREF="..\test\test290b.a">..\test\test290b.a</A></li>
@@ -1135,7 +1136,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test290c.a">..\test\test290c.a</A></li>
  <li>ok: 32-bit (data, EOF and extended linear address records)</li>
  </ul>
-<a id="L115"></a><h4>Start Records</h4>
+<a id="L118"></a><h4>Start Records</h4>
 <ul> <li><A HREF="..\test\test291.a">..\test\test291.a</A></li>
  <li>ok: 16-bit (data and EOF records)</li>
  <li><A HREF="..\test\test291b.a">..\test\test291b.a</A></li>
@@ -1155,7 +1156,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test291j.a">..\test\test291j.a</A></li>
  <li>error: "END" w/ start expression within macro</li>
  </ul>
-<a id="L116"></a><h4>Assume Wider Address Type</h4>
+<a id="L119"></a><h4>Assume Wider Address Type</h4>
 <ul> <li><A HREF="..\test\test292.a">..\test\test292.a</A></li>
  <li>ok: 16-bit to 20-bit</li>
  <li><A HREF="..\test\test292b.a">..\test\test292b.a</A></li>
@@ -1181,7 +1182,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test292m.a">..\test\test292m.a</A></li>
  <li>error: 20 bits to 32 bits; bad data address</li>
  </ul>
-<a id="L117"></a><h4>Assume Narrower Address Type</h4>
+<a id="L11A"></a><h4>Assume Narrower Address Type</h4>
 <ul> <li><A HREF="..\test\test293.a">..\test\test293.a</A></li>
  <li>ok: 32-bit to 20-bit</li>
  <li><A HREF="..\test\test293b.a">..\test\test293b.a</A></li>
@@ -1195,7 +1196,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test293g.a">..\test\test293g.a</A></li>
  <li>error: 32 bits to 20 bits; bad data address (late assumption)</li>
  </ul>
-<a id="L118"></a><h4>Named Output File</h4>
+<a id="L11B"></a><h4>Named Output File</h4>
 <ul> <li><A HREF="..\test\test294.a">..\test\test294.a</A></li>
  <li>ok: user-specified name</li>
  <li><A HREF="..\test\test294e.a">..\test\test294e.a</A></li>
@@ -1203,7 +1204,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test294f.a">..\test\test294f.a</A></li>
  <li>warn: cannot change name once set</li>
  </ul>
-<a id="L119"></a><h4>Output Greater than 64K</h4>
+<a id="L11C"></a><h4>Output Greater than 64K</h4>
 <ul> <li><A HREF="..\test\test295.a">..\test\test295.a</A></li>
  <li>ok: 20-bit (data, EOF and extended segment address records)</li>
  <li><A HREF="..\test\test295b.a">..\test\test295b.a</A></li>
@@ -1211,7 +1212,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test295e.a">..\test\test295e.a</A></li>
  <li>fatal: 16-bit</li>
  </ul>
-<a id="L11A"></a><h4>Assume More Data</h4>
+<a id="L11D"></a><h4>Assume More Data</h4>
 <ul> <li><A HREF="..\test\test296.a">..\test\test296.a</A></li>
  <li>ok: assume 32 hex data bytes per record (16-bit)</li>
  <li><A HREF="..\test\test296b.a">..\test\test296b.a</A></li>
@@ -1219,7 +1220,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test296c.a">..\test\test296c.a</A></li>
  <li>ok: assume 32 hex data bytes per record (32-bit)</li>
  </ul>
-<a id="L11B"></a><h4>Overlapping Addresses (Monolithic)</h4>
+<a id="L11E"></a><h4>Overlapping Addresses (Monolithic)</h4>
 <ul> <li><A HREF="..\test\test297.a">..\test\test297.a</A></li>
  <li>ok: 16-bit (data and EOF records)</li>
  <li><A HREF="..\test\test297b.a">..\test\test297b.a</A></li>
@@ -1227,7 +1228,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test297c.a">..\test\test297c.a</A></li>
  <li>ok:32-bit (data and EOF records)</li>
  </ul>
-<a id="L11C"></a><h4>Address Jumps Force New Address Records</h4>
+<a id="L11F"></a><h4>Address Jumps Force New Address Records</h4>
 <ul> <li><A HREF="..\test\test298.a">..\test\test298.a</A></li>
  <li>ok: 20-bit (data, EOF and extended segment address records)</li>
  <li><A HREF="..\test\test298b.a">..\test\test298b.a</A></li>
@@ -1235,8 +1236,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test298c.a">..\test\test298c.a</A></li>
  <li>ok: 16-bit (data records)</li>
  </ul>
-<a id="L11D"></a><h3>Segments</h3>
-<a id="L11E"></a><h4>Basic Definition</h4>
+<a id="L120"></a><h3>Segments</h3>
+<a id="L121"></a><h4>Basic Definition</h4>
 <ul> <li><A HREF="..\test\test300.a">..\test\test300.a</A></li>
  <li>ok: correct addresses of relative segment data (16-bit)</li>
  <li><A HREF="..\test\test300b.a">..\test\test300b.a</A></li>
@@ -1286,7 +1287,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test300x.a">..\test\test300x.a</A></li>
  <li>error\fatal: program counter in expression outside of any segment</li>
  </ul>
-<a id="L11F"></a><h4>Segments Re-Used</h4>
+<a id="L122"></a><h4>Segments Re-Used</h4>
 <ul> <li><A HREF="..\test\test301.a">..\test\test301.a</A></li>
  <li>ok: correct addresses of absolute and relative data (16-bit)</li>
  <li><A HREF="..\test\test301b.a">..\test\test301b.a</A></li>
@@ -1300,7 +1301,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test301g.a">..\test\test301g.a</A></li>
  <li>error\fatal: 32-bit relative segment exceeds max pc value (at fixup)</li>
  </ul>
-<a id="L120"></a><h4>Legal Data Storage</h4>
+<a id="L123"></a><h4>Legal Data Storage</h4>
 <ul> <li><A HREF="..\test\test302.a">..\test\test302.a</A></li>
  <li>ok: first named segment must be absolute before end of source</li>
  <li><A HREF="..\test\test302e.a">..\test\test302e.a</A></li>
@@ -1310,7 +1311,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test302g.a">..\test\test302g.a</A></li>
  <li>error\fatal: cannot store data outside of any segment</li>
  </ul>
-<a id="L121"></a><h4>Labels</h4>
+<a id="L124"></a><h4>Labels</h4>
 <ul> <li><A HREF="..\test\test303.a">..\test\test303.a</A></li>
  <li>ok: implicit assignment of program counter to numeric labels</li>
  <li><A HREF="..\test\test303b.a">..\test\test303b.a</A></li>
@@ -1322,7 +1323,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test303g.a">..\test\test303g.a</A></li>
  <li>warn: forward reference to variable label</li>
  </ul>
-<a id="L122"></a><h4>Program Counter (Implicit)</h4>
+<a id="L125"></a><h4>Program Counter (Implicit)</h4>
 <ul> <li><A HREF="..\test\test304.a">..\test\test304.a</A></li>
  <li>ok: implicit use of program counter (relative offsets)</li>
  <li><A HREF="..\test\test304e.a">..\test\test304e.a</A></li>
@@ -1338,13 +1339,13 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test304j.a">..\test\test304j.a</A></li>
  <li>warn/error/fatal: "END" psop cannot be used inside segment (labeled, with start address)</li>
  </ul>
-<a id="L123"></a><h4>Program Counter (Explicit)</h4>
+<a id="L126"></a><h4>Program Counter (Explicit)</h4>
 <ul> <li><A HREF="..\test\test305.a">..\test\test305.a</A></li>
  <li>ok: PC expressions in relative segments</li>
  <li><A HREF="..\test\test305e.a">..\test\test305e.a</A></li>
  <li>error: illegal forward reference to pc in relative segment</li>
  </ul>
-<a id="L124"></a><h4>"USESEGMENTS" psop</h4>
+<a id="L127"></a><h4>"USESEGMENTS" psop</h4>
 <ul> <li><A HREF="..\test\test306.a">..\test\test306.a</A></li>
  <li>ok: explicit declaration of segment use</li>
  <li><A HREF="..\test\test306b.a">..\test\test306b.a</A></li>
@@ -1352,11 +1353,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test306e.a">..\test\test306e.a</A></li>
  <li>fatal: explicit declaration of segment use after "ORG" used</li>
  </ul>
-<a id="L125"></a><h4>Segment Count</h4>
+<a id="L128"></a><h4>Segment Count</h4>
 <ul> <li><A HREF="..\test\test307e.a">..\test\test307e.a</A></li>
  <li>fatal: too many segments</li>
  </ul>
-<a id="L126"></a><h4>Intel Hexfile Output (Single File)</h4>
+<a id="L129"></a><h4>Intel Hexfile Output (Single File)</h4>
 <ul> <li><A HREF="..\test\test310.a">..\test\test310.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test310b.a">..\test\test310b.a</A></li>
@@ -1364,7 +1365,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test310c.a">..\test\test310c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L127"></a><h4>Intel Hexfile Output (By Segments, Default Names)</h4>
+<a id="L12A"></a><h4>Intel Hexfile Output (By Segments, Default Names)</h4>
 <ul> <li><A HREF="..\test\test311.a">..\test\test311.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test311b.a">..\test\test311b.a</A></li>
@@ -1372,7 +1373,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test311c.a">..\test\test311c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L128"></a><h4>Intel Hexfile Output (By Segments, "###" Template)</h4>
+<a id="L12B"></a><h4>Intel Hexfile Output (By Segments, "###" Template)</h4>
 <ul> <li><A HREF="..\test\test312.a">..\test\test312.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test312b.a">..\test\test312b.a</A></li>
@@ -1382,11 +1383,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test312e.a">..\test\test312e.a</A></li>
  <li>error: bad template names</li>
  </ul>
-<a id="L129"></a><h4>Intel Hexfile Output (By Segment)</h4>
+<a id="L12C"></a><h4>Intel Hexfile Output (By Segment)</h4>
 <ul> <li><A HREF="..\test\test313.a">..\test\test313.a</A></li>
  <li>ok: non-segmented program produces no output (16-bit)</li>
  </ul>
-<a id="L12A"></a><h4>Intel Hexfile Output (By Blocks, Default Names)</h4>
+<a id="L12D"></a><h4>Intel Hexfile Output (By Blocks, Default Names)</h4>
 <ul> <li><A HREF="..\test\test315.a">..\test\test315.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test315b.a">..\test\test315b.a</A></li>
@@ -1394,7 +1395,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test315c.a">..\test\test315c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L12B"></a><h4>Intel Hexfile Output (By Blocks, ".###" Template)</h4>
+<a id="L12E"></a><h4>Intel Hexfile Output (By Blocks, ".###" Template)</h4>
 <ul> <li><A HREF="..\test\test316.a">..\test\test316.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test316b.a">..\test\test316b.a</A></li>
@@ -1402,7 +1403,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test316c.a">..\test\test316c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L12C"></a><h4>Intel Hexfile Output (By Blocks, Overlapping)</h4>
+<a id="L12F"></a><h4>Intel Hexfile Output (By Blocks, Overlapping)</h4>
 <ul> <li><A HREF="..\test\test317.a">..\test\test317.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test317b.a">..\test\test317b.a</A></li>
@@ -1410,7 +1411,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test317c.a">..\test\test317c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L12D"></a><h4>Motorola Hexfile Output (Single File)</h4>
+<a id="L130"></a><h4>Motorola Hexfile Output (Single File)</h4>
 <ul> <li><A HREF="..\test\test320.a">..\test\test320.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test320b.a">..\test\test320b.a</A></li>
@@ -1418,7 +1419,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test320c.a">..\test\test320c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L12E"></a><h4>Motorola Hexfile Output (By Segments, Default Names)</h4>
+<a id="L131"></a><h4>Motorola Hexfile Output (By Segments, Default Names)</h4>
 <ul> <li><A HREF="..\test\test321.a">..\test\test321.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test321b.a">..\test\test321b.a</A></li>
@@ -1426,7 +1427,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test321c.a">..\test\test321c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L12F"></a><h4>Motorola Hexfile Output (By Segments, "###." Template)</h4>
+<a id="L132"></a><h4>Motorola Hexfile Output (By Segments, "###." Template)</h4>
 <ul> <li><A HREF="..\test\test322.a">..\test\test322.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test322b.a">..\test\test322b.a</A></li>
@@ -1434,7 +1435,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test322c.a">..\test\test322c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L130"></a><h4>Motorola Hexfile Output (Default Names, No Header)</h4>
+<a id="L133"></a><h4>Motorola Hexfile Output (Default Names, No Header)</h4>
 <ul> <li><A HREF="..\test\test323.a">..\test\test323.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test323b.a">..\test\test323b.a</A></li>
@@ -1442,7 +1443,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test323c.a">..\test\test323c.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  </ul>
-<a id="L131"></a><h4>Motorola Hexfile Output (By Blocks, Default Names)</h4>
+<a id="L134"></a><h4>Motorola Hexfile Output (By Blocks, Default Names)</h4>
 <ul> <li><A HREF="..\test\test325.a">..\test\test325.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test325b.a">..\test\test325b.a</A></li>
@@ -1450,7 +1451,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test325c.a">..\test\test325c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L132"></a><h4>Motorola Hexfile Output (By Blocks, ".###" Template)</h4>
+<a id="L135"></a><h4>Motorola Hexfile Output (By Blocks, ".###" Template)</h4>
 <ul> <li><A HREF="..\test\test326.a">..\test\test326.a</A></li>
  <li>ok: correct output sequence and start address (16-bit)</li>
  <li><A HREF="..\test\test326b.a">..\test\test326b.a</A></li>
@@ -1458,39 +1459,39 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test326c.a">..\test\test326c.a</A></li>
  <li>ok: correct output sequence and start address (32-bit)</li>
  </ul>
-<a id="L133"></a><h4>Object Output (By Segments, Default Names)</h4>
+<a id="L136"></a><h4>Object Output (By Segments, Default Names)</h4>
 <ul> <li><A HREF="..\test\test331.a">..\test\test331.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L134"></a><h4>Object Output (By Segments, "####." Template)</h4>
+<a id="L137"></a><h4>Object Output (By Segments, "####." Template)</h4>
 <ul> <li><A HREF="..\test\test332.a">..\test\test332.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L135"></a><h4>Object Output (By Blocks, Default Names)</h4>
+<a id="L138"></a><h4>Object Output (By Blocks, Default Names)</h4>
 <ul> <li><A HREF="..\test\test335.a">..\test\test335.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L136"></a><h4>Object Output (By Blocks, ".###" Template)</h4>
+<a id="L139"></a><h4>Object Output (By Blocks, ".###" Template)</h4>
 <ul> <li><A HREF="..\test\test336.a">..\test\test336.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L137"></a><h4>Raw Hex Output (By Segments, Default Names)</h4>
+<a id="L13A"></a><h4>Raw Hex Output (By Segments, Default Names)</h4>
 <ul> <li><A HREF="..\test\test341.a">..\test\test341.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L138"></a><h4>Raw Hex Output (By Segments, "##." Template)</h4>
+<a id="L13B"></a><h4>Raw Hex Output (By Segments, "##." Template)</h4>
 <ul> <li><A HREF="..\test\test342.a">..\test\test342.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L139"></a><h4>Raw Hex Output (By Blocks, Default Names)</h4>
+<a id="L13C"></a><h4>Raw Hex Output (By Blocks, Default Names)</h4>
 <ul> <li><A HREF="..\test\test345.a">..\test\test345.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L13A"></a><h4>Raw Hex Output (By Blocks, ".###" Template)</h4>
+<a id="L13D"></a><h4>Raw Hex Output (By Blocks, ".###" Template)</h4>
 <ul> <li><A HREF="..\test\test346.a">..\test\test346.a</A></li>
  <li>ok: 16-bit</li>
  </ul>
-<a id="L13B"></a><h4>Uninitialized Segments</h4>
+<a id="L13E"></a><h4>Uninitialized Segments</h4>
 <ul> <li><A HREF="..\test\test350.a">..\test\test350.a</A></li>
  <li>ok: basic definition</li>
  <li><A HREF="..\test\test350b.a">..\test\test350b.a</A></li>
@@ -1510,7 +1511,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test350i.a">..\test\test350i.a</A></li>
  <li>fatal: can't use in monolithic program</li>
  </ul>
-<a id="L13C"></a><h4>Common Segments</h4>
+<a id="L13F"></a><h4>Common Segments</h4>
 <ul> <li><A HREF="..\test\test352.a">..\test\test352.a</A></li>
  <li>ok: basic definition</li>
  <li><A HREF="..\test\test352b.a">..\test\test352b.a</A></li>
@@ -1524,7 +1525,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test352h.a">..\test\test352h.a</A></li>
  <li>fatal: can't use in monolithic program</li>
  </ul>
-<a id="L13D"></a><h4>"RELORG" Pseudo Op</h4>
+<a id="L140"></a><h4>"RELORG" Pseudo Op</h4>
 <ul> <li><A HREF="..\test\test354.a">..\test\test354.a</A></li>
  <li>ok: correct addresses of relative segment data (16-bit)</li>
  <li><A HREF="..\test\test354b.a">..\test\test354b.a</A></li>
@@ -1540,7 +1541,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test354g.a">..\test\test354g.a</A></li>
  <li>error\fatal: outside segment</li>
  </ul>
-<a id="L13E"></a><h4>"ABSEND" and "RELEND" Pseudo Ops</h4>
+<a id="L141"></a><h4>"ABSEND" and "RELEND" Pseudo Ops</h4>
 <ul> <li><A HREF="..\test\test356.a">..\test\test356.a</A></li>
  <li>ok: correct addresses of relative segment data (16-bit)</li>
  <li><A HREF="..\test\test356b.a">..\test\test356b.a</A></li>
@@ -1564,11 +1565,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test356k.a">..\test\test356k.a</A></li>
  <li>error: program counter pushed below zero</li>
  </ul>
-<a id="L13F"></a><h4>Segment Map Identification</h4>
+<a id="L142"></a><h4>Segment Map Identification</h4>
 <ul> <li><A HREF="..\test\test360.a">..\test\test360.a</A></li>
  <li>ok: correct identification of segment type</li>
  </ul>
-<a id="L140"></a><h4>Nested Segments</h4>
+<a id="L143"></a><h4>Nested Segments</h4>
 <ul> <li><A HREF="..\test\test370.a">..\test\test370.a</A></li>
  <li>ok: correct addresses of segment data (16-bit)</li>
  <li><A HREF="..\test\test370b.a">..\test\test370b.a</A></li>
@@ -1588,8 +1589,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test370j.a">..\test\test370j.a</A></li>
  <li>error: nested segments have nested local scopes</li>
  </ul>
-<a id="L141"></a><h3>Program Counter Manipulation</h3>
-<a id="L142"></a><h4>Define Uninitialized Storage</h4>
+<a id="L144"></a><h3>Program Counter Manipulation</h3>
+<a id="L145"></a><h4>Define Uninitialized Storage</h4>
 <ul> <li><A HREF="..\test\test400.a">..\test\test400.a</A></li>
  <li>ok: "DS" psop (monolithic)</li>
  <li><A HREF="..\test\test400b.a">..\test\test400b.a</A></li>
@@ -1623,7 +1624,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test400r.a">..\test\test400r.a</A></li>
  <li>fatal: cannot use DS in data segment</li>
  </ul>
-<a id="L143"></a><h4>Fill Block With Constant Data</h4>
+<a id="L146"></a><h4>Fill Block With Constant Data</h4>
 <ul> <li><A HREF="..\test\test402.a">..\test\test402.a</A></li>
  <li>ok: "FILL" psop</li>
  <li><A HREF="..\test\test402e.a">..\test\test402e.a</A></li>
@@ -1655,7 +1656,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test402r.a">..\test\test402r.a</A></li>
  <li>warn: odd label useage</li>
  </ul>
-<a id="L144"></a><h4>Pad To Specific Byte Boundary</h4>
+<a id="L147"></a><h4>Pad To Specific Byte Boundary</h4>
 <ul> <li><A HREF="..\test\test404.a">..\test\test404.a</A></li>
  <li>ok: "PADTO" pseudo op (monolithic)</li>
  <li><A HREF="..\test\test404b.a">..\test\test404b.a</A></li>
@@ -1685,7 +1686,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test404n.a">..\test\test404n.a</A></li>
  <li>error: PADTO cannot follow pad from segment</li>
  </ul>
-<a id="L145"></a><h4>Pad From Specific Byte Boundary</h4>
+<a id="L148"></a><h4>Pad From Specific Byte Boundary</h4>
 <ul> <li><A HREF="..\test\test406.a">..\test\test406.a</A></li>
  <li>ok: "PADFROM" pseudo op (segmented)</li>
  <li><A HREF="..\test\test406b.a">..\test\test406b.a</A></li>
@@ -1715,8 +1716,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test406n.a">..\test\test406n.a</A></li>
  <li>error\fatal: cannot make absolute (explicit segments)</li>
  </ul>
-<a id="L146"></a><h3>Program Listing</h3>
-<a id="L147"></a><h4>Listing</h4>
+<a id="L149"></a><h3>Program Listing</h3>
+<a id="L14A"></a><h4>Listing</h4>
 <ul> <li><A HREF="..\test\test450.a">..\test\test450.a</A></li>
  <li>ok: "LIST--" psops for OBJECT section</li>
  <li><A HREF="..\test\test450b.a">..\test\test450b.a</A></li>
@@ -1724,23 +1725,23 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test450e.a">..\test\test450e.a</A></li>
  <li>warn: unrecognized LIST options</li>
  </ul>
-<a id="L148"></a><h4>No Flags Specified</h4>
+<a id="L14B"></a><h4>No Flags Specified</h4>
 <ul> <li><A HREF="..\test\test451.a">..\test\test451.a</A></li>
  <li>ok: "LIST--" defaults</li>
  </ul>
-<a id="L149"></a><h4>Long Lines (Wrapped)</h4>
+<a id="L14C"></a><h4>Long Lines (Wrapped)</h4>
 <ul> <li><A HREF="..\test\test452.a">..\test\test452.a</A></li>
  <li>ok: source lines too long to list on one line</li>
  </ul>
-<a id="L14A"></a><h4>Long Lines (Truncated)</h4>
+<a id="L14D"></a><h4>Long Lines (Truncated)</h4>
 <ul> <li><A HREF="..\test\test453.a">..\test\test453.a</A></li>
  <li>ok: source lines too long to list on one line</li>
  </ul>
-<a id="L14B"></a><h4>Show Line Numbers</h4>
+<a id="L14E"></a><h4>Show Line Numbers</h4>
 <ul> <li><A HREF="..\test\test454.a">..\test\test454.a</A></li>
  <li>ok: prefix line numbers to listing</li>
  </ul>
-<a id="L14C"></a><h4>Change Page Width</h4>
+<a id="L14F"></a><h4>Change Page Width</h4>
 <ul> <li><A HREF="..\test\test455.a">..\test\test455.a</A></li>
  <li>ok: "PAGESIZE" psop (page width=132)</li>
  <li><A HREF="..\test\test455b.a">..\test\test455b.a</A></li>
@@ -1752,7 +1753,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test455e.a">..\test\test455e.a</A></li>
  <li>warn\error: bad values</li>
  </ul>
-<a id="L14D"></a><h4>Change Left Margin</h4>
+<a id="L150"></a><h4>Change Left Margin</h4>
 <ul> <li><A HREF="..\test\test457.a">..\test\test457.a</A></li>
  <li>ok: "MARGIN" psop (left margin=2, w/o line numbers)</li>
  <li><A HREF="..\test\test457b.a">..\test\test457b.a</A></li>
@@ -1766,7 +1767,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test457g.a">..\test\test457g.a</A></li>
  <li>warn: no printable width (recovers by changing page size)</li>
  </ul>
-<a id="L14E"></a><h4>Pagination</h4>
+<a id="L151"></a><h4>Pagination</h4>
 <ul> <li><A HREF="..\test\test459.a">..\test\test459.a</A></li>
  <li>ok: "PAGESIZE" and "MARGIN" psops (w/o line numbers)</li>
  <li><A HREF="..\test\test459b.a">..\test\test459b.a</A></li>
@@ -1776,7 +1777,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test459e.a">..\test\test459e.a</A></li>
  <li>warn\fatal: "PAGESIZE" and "MARGIN" psops (no printable length)</li>
  </ul>
-<a id="L14F"></a><h4>Change Line Spacing</h4>
+<a id="L152"></a><h4>Change Line Spacing</h4>
 <ul> <li><A HREF="..\test\test461.a">..\test\test461.a</A></li>
  <li>ok: "LINESPACE" psop (w/o pagination)</li>
  <li><A HREF="..\test\test461b.a">..\test\test461b.a</A></li>
@@ -1786,7 +1787,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test461e.a">..\test\test461e.a</A></li>
  <li>warn\error: bad values</li>
  </ul>
-<a id="L150"></a><h4>Change Header</h4>
+<a id="L153"></a><h4>Change Header</h4>
 <ul> <li><A HREF="..\test\test463.a">..\test\test463.a</A></li>
  <li>ok: "TITLE" psop (w/ string expression)</li>
  <li><A HREF="..\test\test463b.a">..\test\test463b.a</A></li>
@@ -1800,7 +1801,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test463g.a">..\test\test463g.a</A></li>
  <li>error: null title</li>
  </ul>
-<a id="L151"></a><h4>Macro Cross-Reference</h4>
+<a id="L154"></a><h4>Macro Cross-Reference</h4>
 <ul> <li><A HREF="..\test\test470.a">..\test\test470.a</A></li>
  <li>ok: w/o line numbers (source x-ref only)</li>
  <li><A HREF="..\test\test470b.a">..\test\test470b.a</A></li>
@@ -1808,13 +1809,13 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test470c.a">..\test\test470c.a</A></li>
  <li>ok: source and listing x-ref; listed and un-listed macro expansions</li>
  </ul>
-<a id="L152"></a><h4>Global Label Cross-Reference</h4>
+<a id="L155"></a><h4>Global Label Cross-Reference</h4>
 <ul> <li><A HREF="..\test\test472.a">..\test\test472.a</A></li>
  <li>ok: w/o line numbers (source x-ref only)</li>
  <li><A HREF="..\test\test472b.a">..\test\test472b.a</A></li>
  <li>ok: w/ line numbers (both source and listing x-ref)</li>
  </ul>
-<a id="L153"></a><h4>Formfeed</h4>
+<a id="L156"></a><h4>Formfeed</h4>
 <ul> <li><A HREF="..\test\test474.a">..\test\test474.a</A></li>
  <li>ok: "PAGE" psop (10-line page)</li>
  <li><A HREF="..\test\test474b.a">..\test\test474b.a</A></li>
@@ -1822,18 +1823,18 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test474c.a">..\test\test474c.a</A></li>
  <li>ok: "PAGE" psop (10-line page; no effect in unlisted section)</li>
  </ul>
-<a id="L154"></a><h4>Cross-Reference</h4>
+<a id="L157"></a><h4>Cross-Reference</h4>
 <ul> <li><A HREF="..\test\test476.a">..\test\test476.a</A></li>
  <li>ok: macros only, w/ line numbers</li>
  <li><A HREF="..\test\test476b.a">..\test\test476b.a</A></li>
  <li>ok: global labels only, w/ line numbers</li>
  </ul>
-<a id="L155"></a><h4>Show Assembly Statistics</h4>
+<a id="L158"></a><h4>Show Assembly Statistics</h4>
 <ul> <li><A HREF="..\test\test478.a">..\test\test478.a</A></li>
  <li>ok: "STATS" listing option</li>
  </ul>
-<a id="L156"></a><h3>Functions</h3>
-<a id="L157"></a><h4>VER() and VER$()</h4>
+<a id="L159"></a><h3>Functions</h3>
+<a id="L15A"></a><h4>VER() and VER$()</h4>
 <ul> <li><A HREF="..\test\test500.a">..\test\test500.a</A></li>
  <li>ok: HXA version number</li>
  <li><A HREF="..\test\test500e.a">..\test\test500e.a</A></li>
@@ -1843,7 +1844,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test500g.a">..\test\test500g.a</A></li>
  <li>error: not found</li>
  </ul>
-<a id="L158"></a><h4>LEN()</h4>
+<a id="L15B"></a><h4>LEN()</h4>
 <ul> <li><A HREF="..\test\test502.a">..\test\test502.a</A></li>
  <li>ok: string length</li>
  <li><A HREF="..\test\test502e.a">..\test\test502e.a</A></li>
@@ -1853,7 +1854,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test502g.a">..\test\test502g.a</A></li>
  <li>error: bad call</li>
  </ul>
-<a id="L159"></a><h4>INDEX()</h4>
+<a id="L15C"></a><h4>INDEX()</h4>
 <ul> <li><A HREF="..\test\test504.a">..\test\test504.a</A></li>
  <li>ok: substring position (from left)</li>
  <li><A HREF="..\test\test504e.a">..\test\test504e.a</A></li>
@@ -1863,7 +1864,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test504g.a">..\test\test504g.a</A></li>
  <li>error: bad call</li>
  </ul>
-<a id="L15A"></a><h4>MID$()</h4>
+<a id="L15D"></a><h4>MID$()</h4>
 <ul> <li><A HREF="..\test\test506.a">..\test\test506.a</A></li>
  <li>ok: substring extraction (by numeric index)</li>
  <li><A HREF="..\test\test506e.a">..\test\test506e.a</A></li>
@@ -1873,7 +1874,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test506g.a">..\test\test506g.a</A></li>
  <li>error: bad call</li>
  </ul>
-<a id="L15B"></a><h4>VAL()</h4>
+<a id="L15E"></a><h4>VAL()</h4>
 <ul> <li><A HREF="..\test\test508.a">..\test\test508.a</A></li>
  <li>ok: evaluate string expression as numeric</li>
  <li><A HREF="..\test\test508e.a">..\test\test508e.a</A></li>
@@ -1883,7 +1884,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test508g.a">..\test\test508g.a</A></li>
  <li>error: unresolved</li>
  </ul>
-<a id="L15C"></a><h4>STR$()</h4>
+<a id="L15F"></a><h4>STR$()</h4>
 <ul> <li><A HREF="..\test\test510.a">..\test\test510.a</A></li>
  <li>ok: evaluate numeric expression as string</li>
  <li><A HREF="..\test\test510e.a">..\test\test510e.a</A></li>
@@ -1891,17 +1892,17 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test510f.a">..\test\test510f.a</A></li>
  <li>error: forward reference in string context</li>
  </ul>
-<a id="L15D"></a><h4>INDEXR()</h4>
+<a id="L160"></a><h4>INDEXR()</h4>
 <ul> <li><A HREF="..\test\test512.a">..\test\test512.a</A></li>
  <li>ok: substring position (from right)</li>
  </ul>
-<a id="L15E"></a><h4>TOLOWER$() and TOUPPER$()</h4>
+<a id="L161"></a><h4>TOLOWER$() and TOUPPER$()</h4>
 <ul> <li><A HREF="..\test\test514.a">..\test\test514.a</A></li>
  <li>ok: convert string case</li>
  <li><A HREF="..\test\test514e.a">..\test\test514e.a</A></li>
  <li>error: assign result to numeric label</li>
  </ul>
-<a id="L15F"></a><h4>FORWARD()</h4>
+<a id="L162"></a><h4>FORWARD()</h4>
 <ul> <li><A HREF="..\test\test516.a">..\test\test516.a</A></li>
  <li>ok: check expression for forward reference</li>
  <li><A HREF="..\test\test516e.a">..\test\test516e.a</A></li>
@@ -1909,17 +1910,17 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test516f.a">..\test\test516f.a</A></li>
  <li>error: bad evaluation</li>
  </ul>
-<a id="L160"></a><h4>CHR$() and ORD()</h4>
+<a id="L163"></a><h4>CHR$() and ORD()</h4>
 <ul> <li><A HREF="..\test\test518.a">..\test\test518.a</A></li>
  <li>ok: convert numeric value to single-character string and vice-versa</li>
  </ul>
-<a id="L161"></a><h4>MATCH$()</h4>
+<a id="L164"></a><h4>MATCH$()</h4>
 <ul> <li><A HREF="..\test\test520.a">..\test\test520.a</A></li>
  <li>ok: substring extraction (by pattern match)</li>
  <li><A HREF="..\test\test520e.a">..\test\test520e.a</A></li>
  <li>error: substring position</li>
  </ul>
-<a id="L162"></a><h4>SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()</h4>
+<a id="L165"></a><h4>SEGBEG(), SEGEND(), SEGLEN() and SEGOFF()</h4>
 <ul> <li><A HREF="..\test\test522.a">..\test\test522.a</A></li>
  <li>ok: correct segment data (16-bit)</li>
  <li><A HREF="..\test\test522b.a">..\test\test522b.a</A></li>
@@ -1939,49 +1940,49 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test522j.a">..\test\test522j.a</A></li>
  <li>error: malformed (detected second pass)</li>
  </ul>
-<a id="L163"></a><h4>CPU$()</h4>
+<a id="L166"></a><h4>CPU$()</h4>
 <ul> <li><A HREF="..\test\test524.a">..\test\test524.a</A></li>
  <li>ok: name of current CPU</li>
  <li><A HREF="..\test\test524e.a">..\test\test524e.a</A></li>
  <li>warning: CPU not set</li>
  </ul>
-<a id="L164"></a><h4>TIME$()</h4>
+<a id="L167"></a><h4>TIME$()</h4>
 <ul> <li><A HREF="..\test\test526.a">..\test\test526.a</A></li>
  <li>ok: time and date</li>
  </ul>
-<a id="L165"></a><h4>MESG$()</h4>
+<a id="L168"></a><h4>MESG$()</h4>
 <ul> <li><A HREF="..\test\test528.a">..\test\test528.a</A></li>
  <li>ok: internal message texts</li>
  </ul>
-<a id="L166"></a><h4>FILE$()</h4>
+<a id="L169"></a><h4>FILE$()</h4>
 <ul> <li><A HREF="..\test\test530.a">..\test\test530.a</A></li>
  <li>ok: current file name</li>
  </ul>
-<a id="L167"></a><h4>LABEL()</h4>
+<a id="L16A"></a><h4>LABEL()</h4>
 <ul> <li><A HREF="..\test\test532.a">..\test\test532.a</A></li>
  <li>ok: symbol name existence testing</li>
  </ul>
-<a id="L168"></a><h4>ISMACRO()</h4>
+<a id="L16B"></a><h4>ISMACRO()</h4>
 <ul> <li><A HREF="..\test\test534.a">..\test\test534.a</A></li>
  <li>ok: macro name existence testing</li>
  </ul>
-<a id="L169"></a><h4>ABS()</h4>
+<a id="L16C"></a><h4>ABS()</h4>
 <ul> <li><A HREF="..\test\test536.a">..\test\test536.a</A></li>
  <li>ok: absolute value</li>
  </ul>
-<a id="L16A"></a><h4>ROOTFILE$()</h4>
+<a id="L16D"></a><h4>ROOTFILE$()</h4>
 <ul> <li><A HREF="..\test\test538.a">..\test\test538.a</A></li>
  <li>ok: name of root file</li>
  </ul>
-<a id="L16B"></a><h4>SGN()</h4>
+<a id="L16E"></a><h4>SGN()</h4>
 <ul> <li><A HREF="..\test\test540.a">..\test\test540.a</A></li>
  <li>ok: sign</li>
  </ul>
-<a id="L16C"></a><h4>SEED() and RND()</h4>
+<a id="L16F"></a><h4>SEED() and RND()</h4>
 <ul> <li><A HREF="..\test\test542.a">..\test\test542.a</A></li>
  <li>ok: random integers</li>
  </ul>
-<a id="L16D"></a><h4>Function Evaluation</h4>
+<a id="L170"></a><h4>Function Evaluation</h4>
 <ul> <li><A HREF="..\test\test550.a">..\test\test550.a</A></li>
  <li>ok: function evaluation</li>
  <li><A HREF="..\test\test550e.a">..\test\test550e.a</A></li>
@@ -1989,8 +1990,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test550f.a">..\test\test550f.a</A></li>
  <li>error: labels with same name as functions</li>
  </ul>
-<a id="L16E"></a><h3>Custom Byte Order</h3>
-<a id="L16F"></a><h4>Assume Non-Default Order</h4>
+<a id="L171"></a><h3>Custom Byte Order</h3>
+<a id="L172"></a><h4>Assume Non-Default Order</h4>
 <ul> <li><A HREF="..\test\test560.a">..\test\test560.a</A></li>
  <li>ok: non-default BIT16</li>
  <li><A HREF="..\test\test560b.a">..\test\test560b.a</A></li>
@@ -1998,8 +1999,8 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test560e.a">..\test\test560e.a</A></li>
  <li>warn\error: bad useage</li>
  </ul>
-<a id="L170"></a><h3>Nonstandard Byte</h3>
-<a id="L171"></a><h4>16-bit BYTE</h4>
+<a id="L173"></a><h3>Nonstandard Byte</h3>
+<a id="L174"></a><h4>16-bit BYTE</h4>
 <ul> <li><A HREF="..\test\test570.a">..\test\test570.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  <li><A HREF="..\test\test570b.a">..\test\test570b.a</A></li>
@@ -2009,11 +2010,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test570e.a">..\test\test570e.a</A></li>
  <li>error:non-existent data storage pseudo ops</li>
  </ul>
-<a id="L172"></a><h4>16-bit String Literals</h4>
+<a id="L175"></a><h4>16-bit String Literals</h4>
 <ul> <li><A HREF="..\test\test572.a">..\test\test572.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte, UTF-16</li>
  </ul>
-<a id="L173"></a><h4>16-bit Motorola Basic TRecord</h4>
+<a id="L176"></a><h4>16-bit Motorola Basic TRecord</h4>
 <ul> <li><A HREF="..\test\test574.a">..\test\test574.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  <li><A HREF="..\test\test574b.a">..\test\test574b.a</A></li>
@@ -2021,7 +2022,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test574c.a">..\test\test574c.a</A></li>
  <li>ok: 32-bit PC, 16-bit Byte</li>
  </ul>
-<a id="L174"></a><h4>16-bit Intel Basic Hex Record</h4>
+<a id="L177"></a><h4>16-bit Intel Basic Hex Record</h4>
 <ul> <li><A HREF="..\test\test575.a">..\test\test575.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  <li><A HREF="..\test\test575b.a">..\test\test575b.a</A></li>
@@ -2029,7 +2030,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test575c.a">..\test\test575c.a</A></li>
  <li>ok: 32-bit PC, 16-bit Byte</li>
  </ul>
-<a id="L175"></a><h4>16-bit FILL and PADTO</h4>
+<a id="L178"></a><h4>16-bit FILL and PADTO</h4>
 <ul> <li><A HREF="..\test\test576.a">..\test\test576.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  <li><A HREF="..\test\test576b.a">..\test\test576b.a</A></li>
@@ -2037,7 +2038,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test576c.a">..\test\test576c.a</A></li>
  <li>ok: 32-bit PC, 16-bit Byte</li>
  </ul>
-<a id="L176"></a><h4>16-bit PADFROM</h4>
+<a id="L179"></a><h4>16-bit PADFROM</h4>
 <ul> <li><A HREF="..\test\test577.a">..\test\test577.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  <li><A HREF="..\test\test577b.a">..\test\test577b.a</A></li>
@@ -2045,11 +2046,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test577c.a">..\test\test577c.a</A></li>
  <li>ok: 32-bit PC, 16-bit Byte</li>
  </ul>
-<a id="L177"></a><h4>16-bit HEX and INCBIN</h4>
+<a id="L17A"></a><h4>16-bit HEX and INCBIN</h4>
 <ul> <li><A HREF="..\test\test578.a">..\test\test578.a</A></li>
  <li>ok: 16-bit PC, 16-bit Byte</li>
  </ul>
-<a id="L178"></a><h4>32-bit BYTE</h4>
+<a id="L17B"></a><h4>32-bit BYTE</h4>
 <ul> <li><A HREF="..\test\test580.a">..\test\test580.a</A></li>
  <li>ok: 16-Bit PC, 32-Bit Byte</li>
  <li><A HREF="..\test\test580b.a">..\test\test580b.a</A></li>
@@ -2059,11 +2060,11 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test580e.a">..\test\test580e.a</A></li>
  <li>error:non-existent data storage pseudo ops</li>
  </ul>
-<a id="L179"></a><h4>32-bit String Literals</h4>
+<a id="L17C"></a><h4>32-bit String Literals</h4>
 <ul> <li><A HREF="..\test\test582.a">..\test\test582.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  </ul>
-<a id="L17A"></a><h4>32-bit Motorola Basic URecord</h4>
+<a id="L17D"></a><h4>32-bit Motorola Basic URecord</h4>
 <ul> <li><A HREF="..\test\test584.a">..\test\test584.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  <li><A HREF="..\test\test584b.a">..\test\test584b.a</A></li>
@@ -2073,7 +2074,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test584d.a">..\test\test584d.a</A></li>
  <li>ok: 32-bit PC, 32-bit Byte, 32-Byte Data Record</li>
  </ul>
-<a id="L17B"></a><h4>32-bit Intel Basic Hex Record</h4>
+<a id="L17E"></a><h4>32-bit Intel Basic Hex Record</h4>
 <ul> <li><A HREF="..\test\test585.a">..\test\test585.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  <li><A HREF="..\test\test585b.a">..\test\test585b.a</A></li>
@@ -2081,7 +2082,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test585c.a">..\test\test585c.a</A></li>
  <li>ok: 32-bit PC, 32-bit Byte</li>
  </ul>
-<a id="L17C"></a><h4>32-bit FILL and PADTO</h4>
+<a id="L17F"></a><h4>32-bit FILL and PADTO</h4>
 <ul> <li><A HREF="..\test\test586.a">..\test\test586.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  <li><A HREF="..\test\test586b.a">..\test\test586b.a</A></li>
@@ -2089,7 +2090,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test586c.a">..\test\test586c.a</A></li>
  <li>ok: 32-bit PC, 32-bit Byte</li>
  </ul>
-<a id="L17D"></a><h4>32-bit PADFROM</h4>
+<a id="L180"></a><h4>32-bit PADFROM</h4>
 <ul> <li><A HREF="..\test\test587.a">..\test\test587.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  <li><A HREF="..\test\test587b.a">..\test\test587b.a</A></li>
@@ -2097,28 +2098,38 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test587c.a">..\test\test587c.a</A></li>
  <li>ok: 32-bit PC, 32-bit Byte</li>
  </ul>
-<a id="L17E"></a><h4>32-bit HEX and INCBIN</h4>
+<a id="L181"></a><h4>32-bit HEX and INCBIN</h4>
 <ul> <li><A HREF="..\test\test588.a">..\test\test588.a</A></li>
  <li>ok: 16-bit PC, 32-bit Byte</li>
  </ul>
-<a id="L17F"></a><h3>Miscellaneous</h3>
-<a id="L180"></a><h4>Timers</h4>
+<a id="L182"></a><h3>Miscellaneous</h3>
+<a id="L183"></a><h4>Timers</h4>
 <ul> <li><A HREF="..\test\test600.a">..\test\test600.a</A></li>
  <li>ok: "--TIMER" pseudo ops</li>
  <li><A HREF="..\test\test600e.a">..\test\test600e.a</A></li>
  <li>error: "--TIMER" pseudo ops</li>
  </ul>
-<a id="L181"></a><h4>Numbers and BIT--</h4>
+<a id="L184"></a><h4>Numbers and BIT--</h4>
 <ul> <li><A HREF="..\test\test601.a">..\test\test601.a</A></li>
  <li>ok: numbers and "BYTE", "WORD", "REVWORD", "LONG" and "REVLONG" pseudo-ops</li>
  </ul>
-<a id="L182"></a><h4>HEX</h4>
+<a id="L185"></a><h4>HEX</h4>
 <ul> <li><A HREF="..\test\test602.a">..\test\test602.a</A></li>
  <li>ok: HEX pseudo op</li>
  <li><A HREF="..\test\test602e.a">..\test\test602e.a</A></li>
  <li>error: HEX pseudo op</li>
  </ul>
-<a id="L183"></a><h4>User Messages w/ String Expressions</h4>
+<a id="L186"></a><h4>FLOAT</h4>
+<ul> <li><A HREF="..\test\test603.a">..\test\test603.a</A></li>
+ <li>ok: Microsoft and BBC BASICs format</li>
+ <li><A HREF="..\test\test603b.a">..\test\test603b.a</A></li>
+ <li>ok: IEEE double, single, half precision</li>
+ <li><A HREF="..\test\test603c.a">..\test\test603c.a</A></li>
+ <li>ok: BBC 5-byte floats</li>
+ <li><A HREF="..\test\test603e.a">..\test\test603e.a</A></li>
+ <li>error: not decimal and range limits</li>
+ </ul>
+<a id="L187"></a><h4>User Messages w/ String Expressions</h4>
 <ul> <li><A HREF="..\test\test604.a">..\test\test604.a</A></li>
  <li>echo\ok: ECHO</li>
  <li><A HREF="..\test\test604e.a">..\test\test604e.a</A></li>
@@ -2134,7 +2145,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test604j.a">..\test\test604j.a</A></li>
  <li>fatal: FATAL</li>
  </ul>
-<a id="L184"></a><h4>Reserved Names</h4>
+<a id="L188"></a><h4>Reserved Names</h4>
 <ul> <li><A HREF="..\test\test605.a">..\test\test605.a</A></li>
  <li>ok: reserved name detection</li>
  <li><A HREF="..\test\test605e.a">..\test\test605e.a</A></li>
@@ -2144,7 +2155,7 @@ a:hover {background-color:#FFF}
  <li><A HREF="..\test\test605g.a">..\test\test605g.a</A></li>
  <li>error: user names which cannot match reserved names</li>
  </ul>
-<a id="L185"></a><h4>User Stack</h4>
+<a id="L189"></a><h4>User Stack</h4>
 <ul> <li><A HREF="..\test\test610.a">..\test\test610.a</A></li>
  <li>echo\ok: "PUSHS" pseudo op and "POP$()" function</li>
  <li><A HREF="..\test\test610b.a">..\test\test610b.a</A></li>
