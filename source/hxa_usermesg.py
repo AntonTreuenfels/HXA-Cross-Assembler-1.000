@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.100 - User Messages (Error and Informational)
+# Hobby Cross-Assembler (HXA) V1.200 - User Messages (Error and Informational)
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03	(in Thompson AWK 4.0)
-# last revision: 07/08/24
+# last revision: 10/14/24
 
 # preferred public function prefix: "UM"
 
@@ -121,6 +121,7 @@ _mesgText = {
 	'NeedXlt':		"Expecting translate pattern",
 	'NeedPos':		"Expecting positive value",
 	'NeedCond':		"Expecting conditional expression",
+	'NeedFloat':	"Expecting decimal literal",
 
 	# expression parse and evaluation messages
 

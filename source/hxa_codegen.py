@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - Object Code Management
+# Hobby Cross-Assembler (HXA) V1.200 - Object Code Management
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/22/03	(in Thompson AWK 4.0)
-# last revision: 07/07/24
+# last revision: 10/14/24
 
 # preferred public function prefix: CG
 
@@ -379,13 +379,14 @@ def doassume(flag, arg):
 # - 'string', byte array
 # - 'assert', 32-bit value				True if non-zero
 # - 'ds', 32-bit value					size of 'DS' psop
-# - 'bytes', byte array					result of 'FILL'
+# - 'bytes', byte array					most often from 'FILL','FLOAT' or 'HEX' psops
 # - 'lblequ', 32-bit value				address value of label on a line by itself
 # - 'numequ', 32-bit value				numeric result of 'EQU' psop
 # - 'org', 32-bit origin				program counter start address
 # - 'padding', None						'PADTO' or 'PADFROM' delay flag
 # - 'start', 32-bit start address		code execution start address (if any)
 # - 'strequ', byte array				string result of 'EQU' psop
+# - 'string', character string
 
 # things we can put in '_CG.datastore' that are not associated with actual object code
 # - numeric values can have an "address" actual object code cannot,

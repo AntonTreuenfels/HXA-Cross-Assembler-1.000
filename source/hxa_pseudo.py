@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.100- Pseudo Opcode Handler
+# Hobby Cross-Assembler (HXA) V1.200- Pseudo Opcode Handler
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 03/08/03	(in Thompson AWK 4.0)
-# last revision: 06/26/24
+# last revision: 10/14/24
 
 # preferred public function prefix: PSOP
 
@@ -43,6 +43,7 @@ import hxa_symbol as SYM
 import hxa_file as OS
 import hxa_expressions as EXP
 import hxa_strings as STR
+import hxa_float as FP
 import hxa_misc as UTIL
 
 # -----------------------------
@@ -82,8 +83,10 @@ def doassume(label, fields):
 	f = [ x.lower() for x in fields ]
 	# then separate the two items
 	flag, val = f
-	if not STR.doassume(flag, val):
-		if not CG.doassume(flag, val):
+	if not ( STR.doassume(flag, val) or
+			FP.doassume(flag, val) or
+			CG.doassume(flag, val)
+		):
 			UM.warn( 'BadAssume', fields )
 
 # built-in pseudo opcodes
@@ -239,6 +242,7 @@ _psOpcode = {
 	'fill':		( 'l', 'Ph', '!', PC.dofill ),
 	'hex':		( 'l', 'H', '+', CG.dohex ),
 	'pushs':	( 'i', 'S', '&', UTIL.dopushs ),
+	'float':	( 'l', 'R', '*,', FP.dofloat ),
 }
 
 # built-in (and user-defined) aliases for pseudo ops
@@ -266,10 +270,12 @@ _psAlias = {
 	'objbyblock': 'objbyblk',	# candidate for removal
 	'onexpand':	'putback',		# candidate for removal
 	'org':	'absorg',
-	'revfcb':	'bit08r',
-	'revfcc': 'stringr',
-	'revfdb':	'bit16r',
 	'putstr' : 'putbacks',
+	'res':	'ds',
+	'reserve':	'ds',
+	'revfcb':	'bit08r',
+	'revfcc':	'stringr',
+	'revfdb':	'bit16r',
 	'revstr':	'stringr',
 	'rmb':	'ds',
 	'srecbyblock': 'srecbyblk',	# candidate for removal
@@ -481,5 +487,5 @@ def dopseudo(label, psop, exprfield):
 				handler( firstarg, ''.join(argcat) )
 
 		# oops!
-		case '_':
+		case _:
 			UM.noway( basepsop )

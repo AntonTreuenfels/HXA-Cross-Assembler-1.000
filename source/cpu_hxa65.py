@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.000 - Instruction Set (65xx Version)
+# Hobby Cross-Assembler (HXA) v1.200 - Instruction Set (65xx Version)
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -23,12 +23,12 @@
 # 5248 Horizon Dr
 # Fridley, MN 55421
 
-# e-mail: atreuenfels@earthlink.net
+# e-mail: teamtempest@yahoo.com
 
 # source language: Python 3.11.4
 
 # first created: 01/18/03 (in Thompson AWK 4.0)
-# last revision: 06/14/24
+# last revision: 11/29/24
 
 # preferred public function prefix: 'CPU'
 
@@ -41,37 +41,42 @@ import hxa_expressions as EXP
 
 # Address modes:
 
-#								6502	65C02	R65C02  W65C02S W65C816S
+#								6502	65C02	R65C02	HUC6820	W65C02S W65C816S 
 
-# ab	- Absolute				X		X		X		X		X
-# abi	- Absolute Indirect		X		X		X		X		X
-# abx	- Absolute X			X		X		X		X		X
-# abxi  - Absolute X Indirect			X		X		X		X
-# aby	- Absolute Y			X		X		X		X		X
-# acc	- Accumulator			X		X		X		X		X
-# bmv	- Block Move											X
-# imm	- Immediate				X		X		X		X		X
-# imp	- Implied				X		X		X		X		X
-# lab	- Long Absolute											X
-# labi  - Long Absolute Indirect								X
-# labx  - Long Absolute X										X
-# lpcr  - Long PC Relative										X
-# lzpi  - Long Zero Page Indirect								X
-# lzpiy - Long Zero Page Indirect Y								X
-# pcr	- PC Relative			X		X		X		X		X
-# sr	- Stack Relative										X
-# sriy  - Stack Relative Indirect Y								X
-# zp	- Zero Page				X		X		X		X		X
-# zpi	- Zero Page Indirect			X		X		X		X
-# zpiy  - Zero Page Indirect Y	X		X		X		X		X
-# zptr  - Zero Page Test Relative				X		X
-# zpx	- Zero Page X			X		X		X		X		X
-# zpxi  - Zero Page X Indirect	X		X		X		X		X
-# zpy	- Zero Page Y			X		X		X		X		X
+# ab	Absolute					X		X		X		X		X		X
+# abi	Absolute Indirect			X		X		X		X		X		X
+# abimm Absolute Immediate									X
+# abimx Absolute Immediate X								X
+# abx	Absolute X					X		X		X		X		X		X
+# abxfr  Absolute Transfer Memory							X
+# abxi  Absolute X Indirect					X		X		X		X		X
+# aby	Absolute Y					X		X		X		X		X		X
+# acc	Accumulator					X		X		X		X		X		X
+# bmv	Block move															X
+# imm	Immediate					X		X		X		X		X		X
+# imp	Implied						X		X		X		X		X		X
+# lab	Long Absolute														X
+# labi  Long Absolute Indirect												X
+# labx  Long Absolute X														X
+# lpcr  Long PC Relative													X
+# lzpi  Long Zero Page Indirect												X
+# lzpiy Long Zero Page Indirect Y											X
+# pcr	PC Relative					X		X		X		X		X		X
+# sr	Stack Relative														X
+# sriy  Stack Relative Indirect Y											X
+# zp	Zero Page					X		X		X		X		X		X
+# zpi	Zero Page Indirect					X		X		X		X		X
+# zpimm Zero Page Immediate									X
+# zpimx Zero Page Immediate X								X
+# zpiy  Zero Page Indirect Y		X		X		X		X		X		X
+# zptr  Zero Page Test Relative						X		X		X
+# zpx	Zero Page X					X		X		X		X		X		X
+# zpxi  Zero Page X Indirect		X		X		X		X		X		X
+# zpy	Zero Page Y					X		X		X		X		X		X
 
 # Notes:
-# - the above address modes do not always correspond to official WDC
-# literature in either name or number, but
+# - the above address modes do not always correspond to manufacturer literature
+# in either name or number, but
 # - (a) they do cover everything we need, and 
 # - (b) we can do anything we want if it makes our lives easier
 # (and is kept completely internal to this file) !
@@ -112,9 +117,9 @@ import hxa_expressions as EXP
 # ab|zp|lab
 # ab|lab
 # ab|zp
-# aby|zpy
 # abx|zpx|labx
 # abx|zpx
+# aby|zpy
 
 # -----------------------------
 
@@ -124,10 +129,10 @@ import hxa_expressions as EXP
 # - the ROR instruction available after June 1976
 # - this is the base instruction set for all 65xx variants
 
-_ins6502 = [
+_ins6502 = {
  'ADC': [ ('ab', 0x6D), ('abx', 0x7D), ('aby', 0x79), ('imm', 0x69), ('zp', 0x65), ('zpiy', 0x71), ('zpx', 0x75), ('zpxi', 0x61) ],
  'AND': [ ('ab', 0x2D), ('abx', 0x3D), ('aby', 0x39), ('imm', 0x29), ('zp', 0x25), ('zpiy', 0x31), ('zpx', 0x35), ('zpxi', 0x21) ],
- 'ASL': [ ('ab', 0x0E), ('abx', 0x1E), ('acc', 0x0A), ('zp', 0x06), ('zpx', 0x16) ],
+ 'ASL': [ ('ab', 0x0E), ('abx', 0x1E), ('acc', 0x0A), ('imp', 0x0A), ('zp', 0x06), ('zpx', 0x16) ],
  'BCC': [ ('pcr', 0x90) ],
  'BCS': [ ('pcr', 0xB0) ],
  'BEQ': [ ('pcr', 0xF0) ],
@@ -159,15 +164,15 @@ _ins6502 = [
  'LDA': [ ('ab', 0xAD), ('abx', 0xBD), ('aby', 0xB9), ('imm', 0xA9), ('zp', 0xA5), ('zpiy', 0xB1), ('zpx', 0xB5), ('zpxi', 0xA1) ],
  'LDX': [ ('ab', 0xAE), ('aby', 0xBE), ('imm', 0xA2), ('zp', 0xA6), ('zpy', 0xB6) ],
  'LDY': [ ('ab', 0xAC), ('abx', 0xBC), ('imm', 0xA0), ('zp', 0xA4), ('zpx', 0xB4) ],
- 'LSR': [ ('ab', 0x4E), ('abx', 0x5E), ('acc', 0x4A), ('zp', 0x46), ('zpx', 0x56) ],
+ 'LSR': [ ('ab', 0x4E), ('abx', 0x5E), ('acc', 0x4A), ('imp', 0x4A), ('zp', 0x46), ('zpx', 0x56) ],
  'NOP': [ ('imp', 0xEA) ],
  'ORA': [ ('ab', 0x0D), ('abx', 0x1D), ('aby', 0x19), ('imm', 0x09), ('zp', 0x05), ('zpiy', 0x11), ('zpx', 0x15), ('zpxi', 0x01) ],
  'PHA': [ ('imp', 0x48) ],
  'PHP': [ ('imp', 0x08) ],
  'PLA': [ ('imp', 0x68) ],
  'PLP': [ ('imp', 0x28) ],
- 'ROL': [ ('ab', 0x2E), ('abx', 0x3E), ('acc', 0x2A), ('zp', 0x26), ('zpx', 0x36) ],
- 'ROR': [ ('ab', 0x6E), ('abx', 0x7E), ('acc', 0x6A), ('zp', 0x66), ('zpx', 0x76) ],
+ 'ROL': [ ('ab', 0x2E), ('abx', 0x3E), ('acc', 0x2A), ('imp', 0x2A), ('zp', 0x26), ('zpx', 0x36) ],
+ 'ROR': [ ('ab', 0x6E), ('abx', 0x7E), ('acc', 0x6A), ('imp', 0x6A), ('zp', 0x66), ('zpx', 0x76) ],
  'RTI': [ ('imp', 0x40) ],
  'RTS': [ ('imp', 0x60) ],
  'SBC': [ ('ab', 0xED), ('abx', 0xFD), ('aby', 0xF9), ('imm', 0xE9), ('zp', 0x0E5), ('zpiy', 0xF1), ('zpx', 0xF5), ('zpxi', 0xE1) ],
@@ -194,10 +199,10 @@ _ins65C02 = {
  'BRA': [ ('pcr', 0x80) ],
  'CMP': [ ('zpi', 0xD2) ],
  'DEA': [ ('imp', 0x3A) ],
- 'DEC': [ ('acc', 0x3A) ],
+ 'DEC': [ ('acc', 0x3A), ('imp', 0x3A) ],
  'EOR': [ ('zpi', 0x52) ],
  'INA': [ ('imp', 0x1A) ],
- 'INC': [ ('acc', 0x1A) ],
+ 'INC': [ ('acc', 0x1A), ('imp', 0x1A) ],
  'JMP': [ ('abxi', 0x7C) ],
  'LDA': [ ('zpi', 0xB2) ],
  'ORA': [ ('zpi', 0x12) ],
@@ -228,8 +233,34 @@ _insR65C02 = {
 # WDC W65C02S instruction set (additions to R65C02 only)
 
 _insW65C02S = {
-	'STP' : [ ('imp', 0xDB) ],
-	'WAI' : [ ('imp', 0xCB) ],
+ 'STP' : [ ('imp', 0xDB) ],
+ 'WAI' : [ ('imp', 0xCB) ],
+}
+
+# Hudson HuC6280 (additions to R65C02 only)
+
+_insHUC6280 = {
+ 'BSR': [ ('pcr', 0x44) ],
+ 'CLA': [ ('imp', 0x62) ],
+ 'CLX': [ ('imp', 0x82) ],
+ 'CLY': [ ('imp', 0xC2) ],
+ 'CSH': [ ('imp', 0xD4) ],
+ 'CSL': [ ('imp', 0x54) ],
+ 'SAX': [ ('imp', 0x22) ],
+ 'SAY': [ ('imp', 0x42) ],
+ 'SET': [ ('imp', 0xF4) ],
+ 'ST0': [ ('imm', 0x03) ],
+ 'ST1': [ ('imm', 0x13) ],
+ 'ST2': [ ('imm', 0x23) ],
+ 'SXY': [ ('imp', 0x02) ],
+ 'TAI': [ ('abxfr', 0xF3) ], 
+ 'TAM': [ ('imm', 0x53) ],
+ 'TDD': [ ('abxfr', 0xC3) ],
+ 'TIA': [ ('abxfr', 0xE3) ],
+ 'TII': [ ('abxfr', 0x73) ],
+ 'TIN': [ ('abxfr', 0xD3) ],
+ 'TMA': [ ('imm', 0x43) ],
+ 'TST': [ ('zpimm', 0x83), ('zpimx', 0xA3), ('abimm', 0x93), ('abimx', 0xB3) ],
 }
 
 # WDC W65C816S instruction set (additions to 65C02 and W65C02S only)
@@ -239,12 +270,12 @@ _insW65C816S = {
  'AND': [ ('lab', 0x2F), ('labx', 0x3F), ('sr', 0x23), ('sriy', 0x33), ('lzpi', 0x27), ('lzpiy', 0x37) ],
  'BRL': [ ('lpcr', 0x82) ],
  'CMP': [ ('lab', 0xCF), ('labx', 0xDF), ('sr', 0xC3), ('sriy', 0xD3), ('lzpi', 0xC7), ('lzpiy', 0xD7) ],
- 'COP': [ ('imm', 0x02), ('zp', 0x02) ], # add modes
+ 'COP': [ ('imm', 0x02), ('imp', 0x02), ('zp', 0x02) ], # add modes 
  'EOR': [ ('lab', 0x4F), ('labx', 0x5F), ('sr', 0x43), ('sriy', 0x53), ('lzpi', 0x47), ('lzpiy', 0x57) ],
  'JML': [ ('abi', 0xDC), ('lab', 0x5C), ('labi', 0xDC) ], # add modes
- 'JMP': [ ('lab', 0x5C), ('labi', 0xDC) ],
+ 'JMP': [ ('labi', 0xDC) ],
  'JSL': [ ('lab', 0x22) ],
- 'JSR': [ ('abxi', 0xFC), ('lab', 0x22) ], # add modes
+ 'JSR': [ ('abxi', 0xFC) ],
  'LDA': [ ('lab', 0xAF), ('labx', 0xBF), ('sr', 0xA3), ('sriy', 0xB3), ('lzpi', 0xA7), ('lzpiy', 0xB7) ],
  'MVN': [ ('bmv', 0x54) ],
  'MVP': [ ('bmv', 0x44) ],
@@ -271,7 +302,7 @@ _insW65C816S = {
  'TDC': [ ('imp', 0x7B) ],
  'TSA': [ ('imp', 0x3B) ], # alias TSC
  'TSC': [ ('imp', 0x3B) ],
- 'TXA': [ ('imp', 0x9B) ],
+ 'TXY': [ ('imp', 0x9B) ],
  'TYX': [ ('imp', 0xBB) ],
  'WDM': [ ('imm', 0x42), ('imp', 0x42), ('zp', 0x42) ], # add modes
  'XBA': [ ('imp', 0xEB) ],
@@ -294,6 +325,7 @@ class CPUvariables(object):
 
 		self.forcemode = None	# forced address mode flag
 
+		self.name = None		# cpu name
 		self.mnemonics = set()	# recognized menmonics
 		self.opcodes = dict()	# opcodes of mnemonics
 
@@ -317,15 +349,30 @@ def reserved():
 		('DP', True), ('SP', True), ('DB', True), ('PB', True)
 		]
 
+def _normalize(this):
+	'''normalize the 6500 family name'''
+	this = this.upper()
+	match this:
+		case '6510'|'8502':
+			return '6502'
+		case 'R6502':
+			return 'R65C02'
+		case 'W6502'|'W65C02':
+			return  'W65C02S'
+		case '65802'|'65C802'|'65816'| '65C816':
+			return 'W65C816S'
+		case _:
+			return this
+
 # required method
 def iscpu(this):
 	'''is token a recognized CPU ?'''
-	return this in [ '6502', '65C02', 'R65C02', 'W65C02S', 'W65C816S' ]
+	return _normalize(this) in [ '6502', '65C02', 'R65C02', 'W65C02S', 'W65C816S', 'HUC6280' ]
 
 # required method
 def getdescriptor(this):
 	'''return cpu descriptor'''
-	return 'T_24_L' if this == 'W65C816S' else 'T_16_L'
+	return 'T_24_L' if _normalize(this) == 'W65C816S' else 'T_16_L'
 
 # required method
 def setcpu(this):
@@ -344,10 +391,12 @@ def setcpu(this):
 	_CPU.acc16bit = _CPU.ndx16bit = False
 	_CPU.directpage = _CPU.databank = 0
 
+	_CPU.name = _normalize( this )
+
 	# all processors get the base instruction set
 	addins( _ins6502 )
 	# other processors add instructions
-	match this:
+	match _CPU.name:
 		case '65C02':
 			addins( _ins65C02 )
 		case 'R65C02':
@@ -362,6 +411,10 @@ def setcpu(this):
 			addins( _ins65C02 )
 			addins( _insW65C02S )
 			addins( _insW65C816S )
+		case 'HUC6280':
+			addins( _ins65C02 )
+			addins( _insR65C02 )
+			addins( _insHUC6280 )
 
 	return True
 
@@ -384,41 +437,72 @@ def save_data(type, expr):
 
 # -------------------------------
 
+# address modes that can be forced to another
+
+_forcible = {
+	'ab':		[ 'ab', 'zp', 'lab'],
+	'abi':		[ 'abi', 'zpi', 'labi' ],
+	'abimm':	[ 'abimm', 'zpimm', '@' ],
+	'abimx':	[ 'abimx', 'zpimx', '@' ],
+	'abx':		[ 'abx', 'zpx', 'labx' ],
+	'abxi':		[ 'abxi', 'zpxi', '@' ],
+	'aby':		[ 'aby', 'zpy', '@' ],
+
+	'lab':		[ 'ab', 'zp', 'lab'],
+	'labi':		[ 'abi', 'zpi', 'labi' ],
+	'labx':		[ 'abx', 'zpx', 'labx' ],
+	'lzpi':		[ 'abi', 'zpi', 'lzpi' ],
+	'lzpiy':	[ '@', 'zpiy', 'lzpiy' ],
+
+	'zp':		[ 'ab', 'zp', 'lab'],
+	'zpi':		[ 'abi', 'zpi', 'labi' ],
+	'zpimm':	[ 'abimm', 'zpimm', '@' ],
+	'zpimx':	[ 'abimx', 'zpimx', '@' ],
+	'zpiy':		[ '@', 'zpiy', 'lzpiy' ],
+	'zpx':		[ 'abx', 'zpx', 'labx' ],
+	'zpxi':		[ 'abxi', 'zpxi', '@' ],
+	'zpy':		[ 'aby', 'zpy', '@' ],
+
+	# simplest way to forbid forcing these modes ?
+
+	'pcr':		[ '@', '@', '@' ],
+	'lpcr':		[ '@', '@', '@' ],
+}
+
 def save_mnemonic_expr(mnemonic, addrmode, bitop, expr):
 	'''save mode if unforced, else save if forced mode is legal'''
+
 	if _CPU.forcemode:
-		# not a mode that can be forced ?
-		if not addrmode.startswith(('ab', 'zp', 'lab', 'lzp')):
+
+		# the existing mode can be forced to another ?
+		if addrmode not in _forcible:
 			return False
 
-		match _CPU.forcemode:
-			case 'zp':
-				bitop = 'bit08'
-				if addrmode.startswith('ab'):
-					addrmode = 'zp' + addrmode[2:]
-				elif addrmode.startswith('lab'):
-					addrmode = 'zp' + addrmode[3:]
-			case 'ab':
-				bitop = 'bit16'
-				if addrmode.startswith('zp'):
-					addrmode = 'ab' + addrmode[2:]
-				elif addrmode.startswith(('lab', 'lzp')):
-					addrmode = 'ab' + addrmode[3:]
-			case 'l':
-				bitop = 'bit24'
-				if addrmode.startswith(('ab', 'zp')):
-					addrmode = 'l' + addrmode
-			case _:
-				UM.noway( addrmode )
+		orgmode = addrmode
 
-		# a legal mode ?
-		if addrmode not in _CPU.opcodes[mnemonic]:
-			return False
+		ndx = { 'absolute':0, 'zeropage':1, 'direct':1, 'long':2 }[ _CPU.forcemode ]
+		addrmode = _forcible[ addrmode ][ ndx ]
+		# remove any range restriction
+		if addrmode.startswith(('zp', 'lzp')):
+			bitop = 'bit08'
+		elif addrmode.startswith(('ab', 'labi')):
+			bitop = 'bit16'
+		else:
+			bitop = 'bit24'
 
-	# save opcode and data
-	save_opcode( mnemonic, addrmode )
-	save_data( bitop, expr )
-	return True
+	# save opcode and data (if legal)
+	if addrmode in _CPU.opcodes[mnemonic]:
+		save_opcode( mnemonic, addrmode )
+		if expr is not None:
+			save_data( bitop, expr )
+		return True
+	# not a legal address mode for this mnemonic
+	else:
+		return False
+
+def save00(mnemonic, addrmode):
+	'''save opcode with no data'''
+	return save_mnemonic_expr( mnemonic, addrmode, None, None )
 
 def save08(mnemonic, addrmode, expr):
 	'''save opcode and 8-bit data'''
@@ -428,53 +512,43 @@ def save16(mnemonic, addrmode, expr):
 	'''save opcode and 16-bit data'''
 	return save_mnemonic_expr( mnemonic, addrmode, 'ubit16', expr )
 
-# -----------------------------
-
-def save00(mnemonic, addrmode):
-	'''save opcode with no data'''
-	if not _CPU.forcemode:
-		save_opcode( mnemonic, addrmode )
-		return True
-	else:	# these modes can't be forced
-		return False
+def save16f(mnemonic, addrmode, expr):
+	'''save opcode and forced 16-bit data'''
+	return save_mnemonic_expr( mnemonic, addrmode, 'bit16', expr )
 
 # -------------------------------
 
+# handle mnemonic with no following expression
+
 def zero_expr(mnemonic, allowed):
 	'''handle mnemonic with no following expression'''
-	# - all: acc (implicit), imp
-	if 'acc' in allowed:
-		return save00( mnemonic, 'acc' )
-	elif 'imp' in allowed:
-		return save00( mnemonic, 'imp' )
-	else:
-		return False
+	return save00( mnemonic, 'imp' )
 
 # -----------------------------
 
-def resolve(mnemonic, abmode, zpmode, lmode, expr):
-	'''try to resolve multiple possible address modes'''
-	# 'abmode' is default (as per WDC standard)
-	mode = abmode
-	bitop = 'ubit16'
-
+def resolveabzpl(mnemonic, abmode, zpmode, lmode, expr):
+	'''try to choose between absolute, zero page and long address modes '''
 	# do we already have a hint ?
-	# - 'abmode' can be forced to any legal mode, and
-	# is guaranteed to be non-null (unlike the other two)
 	if _CPU.forcemode:
-		return save_mnemonic_expr( mnemonic, mode, bitop, expr )
+		return save_mnemonic_expr( mnemonic, abmode, 'ubit16', expr )
+
+	# otherwise 'abmode' is default (as per WDC standard)
+	# - this can lead to problems with 24-bit forward addressing,
+	# which we address using silent truncation in problematic cases
+	mode = abmode
+	bitop = 'bit16' if lmode in ['lab', 'labx'] else 'ubit16'
 
 	# try to evaluate expression
 	ok, val = EXP.getnum( expr )
 
 	# if resolved, we can select most appropriate size...
 	if ok and EXP.resolved(val):
-		# if there is a zero page mode and value is within zero page...
+		# is there a zero page mode and value is within it ?
 		if zpmode is not None and (val >= _CPU.directpage and val < _CPU.directpage + 256):
 			mode = zpmode
 			bitop = 'ubit08'
 			val -= _CPU.directpage
-		# if there is a long mode...
+		# is there a long mode ?
 		elif lmode is not None:
 			# if value is within the data bank use absolute addressing...
 			if (val & 0xFFFF0000) == _CPU.databank:
@@ -489,123 +563,167 @@ def resolve(mnemonic, abmode, zpmode, lmode, expr):
 	CG.store( bitop, val )
 	return True
 
-def isindirect(expr):
-	'''check for pre-indexed indirection'''
-	# - to be true indirection indicator, initial open parenthesis
-	# can be balanced only by terminal close parenthesis
+def resolveabzp(mnemonic, abmode, zpmode, expr1, expr2):
+	'''choose between absolute and zero page address modes'''
+	# we are fortunate to know that only one instruction can come here,
+	# ie., HUC6280 TST, and we already know its four unique address modes
 
-	# leading and trailing parentheses -> possible indirection
-	# - we can imagine '(expr1) + (expr2)', which would not be indirection
-	if expr.startswith('(') and expr.endswith(')'):
-		inparen = 0
+	# is the first expression immediate ?
+	if not expr1.startswith('#'):
+		return False
+
+	# try to evaluate the second expression
+	ok, val = EXP.getnum( expr2 )
+
+	# default is absolute mode
+	mode = abmode
+	bitop = 'ubit16'
+
+	# should we change default ?
+	match (_CPU.forcemode):
+		case 'zeropage' | 'direct':
+			mode = zpmode
+			bitop = 'bit08'
+		case 'absolute':
+			mode = abmode
+			bitop = 'bit16'
+		# can't force long mode
+		case 'long':
+			return False
+		# if the expression evaluated, we can decide
+		case _:
+			# there shouldn't be much reason to change zero page location
+			# - but just in case...
+			if ok and EXP.resolved(val):
+				if val >= _CPU.directpage and val < _CPU.directpage + 256:
+					mode = zpmode
+					bitop = 'ubit08'
+					val -= _CPU.directpage
+
+	# save opcode and data (if legal)
+	if mode in _CPU.opcodes[mnemonic]:
+		save_opcode( mnemonic, mode )
+		save_data( 'ubit08', expr1[1:] )
+		CG.store( bitop, val )
+		return True
+	# not a legal address mode for this mnemonic
+	else:
+		return False
+
+# -----------------------------
+
+def isindirect(expr, lftch='(', rgtch=')'):
+	'''check for an indirect expression'''
+	# assumes 8-bit indirection: (expr)
+	# - pass '[' and ']' for 16-bit: [expr]
+
+	# surrounded by the indirection characters ?
+	if expr.startswith(lftch) and expr.endswith(rgtch):
+		counter = 0
 		for i, ch in enumerate(expr):
-			if ch == '(':
-				inparen += 1
-			elif ch == ')':
-				inparen -= 1
-				# if balance is reached only at end of expression, then indirect
-				if not inparen:
+			if ch == lftch:
+				counter += 1
+			elif ch == rgtch:
+				counter -= 1
+				# balance reached ?
+				if counter == 0:
+					# are we at the end of expression ?
 					return len(expr) == i + 1
 
 	# can't be indirect or is malformed (so not truly balanced, eh ?)
 	return False
 
-def islongindirect(expr):
-	'''check for long indirect addressing'''
-	return expr.startswith('[') and expr.endswith(']')
-
-def isindexed(expr, indexch):
+def ispreindexed(expr, target='X'):
 	'''check for address mode pre-indexed indirection'''
-	# without using regular expressions !
-	comma = expr.find( ',' )
-	# pre-indexed indirect ?
-	if comma > 0:
-		tail = expr[comma+1:].upper()
-		target = indexch
-		while len(tail):
-			tail = tail.lstrip()
-			if tail.startswith(target):
-				tail = tail[1:]
-				target = ')' if target == indexch else 'EOE'
-			else:
-				break		# illegal char
+	# are there any commas ?
+	elist = expr.split( ',' )
 
-		# found the target index char ?
-		if target == 'EOE':
-			return ( True, expr[1:comma] )
+	# exactly one found ?
+	if len(elist) == 2:
 
-	# not pre-indexed indirect or malformed
-	return ( False, expr[1:-1] )
+		# is the second part what we are looking for ?
+		ergt = elist[1][:-1].strip().upper()
+		return ergt == target
+
+	# no pre-indexing found
+	return False
+
+def nopreindex(expr):
+	'''separate expression from pre-indexing'''
+	elist = expr.split( ',' )
+	return elist[0][1:].strip()
 
 # -------------------------------
 
 def saveimm(mnemonic, expr):
 	'''save immediate opcode and 8- or 16-bit data'''
 
-	def imm16():
-		'''determine if 8- or 16-bit immediate value is to be used'''
-		nonlocal mnemonic
-		if _CPU.cpu16bit:
-			if _CPU.ndx16bit and mnemonic.endswith(('X', 'Y')):
-				return True
-			if mnemonic == 'PEA':
-				return True
-			if mnemonic in 'BRK|COP|REP|SEP|WDM':
-				return False
-			if _CPU.acc16bit and not mnemonic.endswith(('X', 'Y')):
-				return True
+	# assume 8-bit data
+	bitop = 'ubit08'
 
-	# 8-bit registers or tests above fell through
-	if not _CPU.forcemode:
-		save_opcode( mnemonic, 'imm' )
-		save_data( 'bit16' if imm16() else 'bit08', expr[1:] )
-		return True
-	else:	# this mode can't be forced
-		return False
+	# should we use 16-bit instead ?
+	if _CPU.cpu16bit:
+		if _CPU.ndx16bit and mnemonic.endswith(('X', 'Y')):
+			bitop = 'ubit16'
+		elif _CPU.acc16bit and not mnemonic.endswith(('X', 'Y')):
+			bitop = 'ubit16'
+		elif mnemonic == 'PEA':
+			bitop = 'ubit16'
+#		elif mnemonic in 'BRK|COP|REP|SEP|WDM':
+#			pass
+
+	return save_mnemonic_expr( mnemonic, 'imm', bitop, expr[1:] )
 
 # -------------------------------
 
+# handle mnemonic with one following expression
+
 def single_expr(mnemonic, allowed, expr):
 	'''handle mnemonic with one following expression'''
-	# - 6502:  ab, abi, acc (explicit), imm, pcr, zp, zpxi
+	# - 6502:  ab, abi, acc, imm, pcr, zp, zpxi
 	# - 65c02, r65c02, w65c02s: abxi, zpi
-	# - w65c816s: lab, lpcr, lzpi
+	# - w65c816s: lab, labi, lpcr, lzpi
 
 	# immediate ?
 	if expr.startswith('#'):
-		return saveimm(mnemonic, expr) if 'imm' in allowed else False
+		return saveimm( mnemonic, expr )
 
-	# accumulator (explicit) ?
+	# accumulator ?
 	if expr.upper() == 'A':
-		return save00(mnemonic, 'acc') if 'acc' in allowed else False
+		return save00( mnemonic, 'acc' )
 
-	# absolute indirect or zero page indirect ?
+	# indirect (parentheses) ?
 	if isindirect(expr):
 		# x-indexed indirect ?
-		yes, nexpr = isindexed( expr, 'X' )
-		if yes:
+		if ispreindexed(expr, 'X'):
 			if 'abxi' in allowed:
-				return save16( mnemonic, 'abxi', nexpr )
+				return save16( mnemonic, 'abxi', nopreindex(expr) )
 			elif 'zpxi' in allowed:
-				return save08( mnemonic, 'zpxi', nexpr )
+				return save08( mnemonic, 'zpxi', nopreindex(expr) )
 			else:
 				return False
 
-		# indirect
+		# indirect ?
+		if 'labi' in allowed:
+			return save16f( mnemonic, 'labi', expr )
 		if 'abi' in allowed:
-			return save16( mnemonic, 'abi', nexpr )
+			return save16( mnemonic, 'abi', expr )
 		elif 'zpi' in allowed:
-			return save08( mnemonic, 'zpi', nexpr )
+			return save08( mnemonic, 'zpi', expr )
 		else:
 			return False
 
 	# possibly long ?
 	if _CPU.cpu16bit:
 
-		# long indirect ?
-		if islongindirect(expr):
-			if 'lzpi' in allowed:
-				return save08( mnemonic, 'lzpi', expr[1:-1] )
+		# indirect [brackets] ?
+		if isindirect(expr, '[', ']'):
+			nexpr = expr[ 1:-1 ]
+			# no legal mnemonic has both 'labi' and 'lzpi'  modes
+			if 'labi' in allowed:
+				return save16f( mnemonic, 'labi', nexpr )
+			elif 'lzpi' in allowed:
+				return save08( mnemonic, 'lzpi', nexpr )
 			else:
 				return False
 
@@ -617,9 +735,9 @@ def single_expr(mnemonic, allowed, expr):
 		if 'lab' in allowed:
 			# 'ab' and 'zp' and 'lab' are not mutually exclusive
 			if  'zp' in allowed:
-				return resolve( mnemonic, 'ab', 'zp', 'lab', expr )
+				return resolveabzpl( mnemonic, 'ab', 'zp', 'lab', expr )
 			elif 'ab' in allowed:
-				return resolve( mnemonic, 'ab', None, 'lab', expr )
+				return resolveabzpl( mnemonic, 'ab', None, 'lab', expr )
 			else:
 				return save_mnemonic_expr( mnemonic, 'lab', 'ubit24', expr )
 
@@ -631,7 +749,7 @@ def single_expr(mnemonic, allowed, expr):
 	if 'ab' in allowed:
 		# 'ab' and 'zp' are not mutually exclusive
 		if 'zp' in allowed:
-			return resolve( mnemonic, 'ab', 'zp', None, expr )
+			return resolveabzpl( mnemonic, 'ab', 'zp', None, expr )
 		else:
 			return save16( mnemonic, 'ab', expr )
 
@@ -644,29 +762,30 @@ def single_expr(mnemonic, allowed, expr):
 
 # -------------------------------
 
+# handle mnemonic with two following expressions
+
 def double_expr(mnemonic, allowed, expr1, expr2):
 	'''handle mnemonic with two following expressions'''
 	# - 6502, 65c02: abx, aby, zpx, zpiy, zpy 
 	# - r65c02, w65c02s: zptr
 	# - w65c816s: bmv, labx, lzpiy, sr, sriy
+	# - huc6280: zpimm, abimm
 
 	# what about that second expression ?
 	match expr2.upper():
 		# Y-indexed ?
 		case 'Y':
 
-			# zero page indirect or stack relative indirect ?
+			# indirect (parentheses) ?
 			if isindirect(expr1):
 
 				# stack-relative indirect ?
-				yes, nexpr = isindexed( expr1, 'S' )
-				if yes:
-					if 'sriy' in allowed:
-						return save08( mnemonic, 'sriy', nexpr )
+				if ispreindexed(expr1, 'S'):
+					return save08( mnemonic, 'sriy', nopreindex(expr1) )
 
 				# zero-page indirect ?
 				elif 'zpiy' in allowed:
-					return save08( mnemonic, 'zpiy', nexpr )
+					return save08( mnemonic, 'zpiy', expr1 )
 
 				# illegal indirect
 				return False
@@ -674,8 +793,8 @@ def double_expr(mnemonic, allowed, expr1, expr2):
 			# possibly long ?
 			if _CPU.cpu16bit:
 
-				# long indirect ?
-				if islongindirect(expr1):
+				# indirect [brackets] ?
+				if isindirect(expr1, '[', ']'):
 					if 'lzpiy' in allowed:
 						return save08( mnemonic, 'lzpiy', expr1[1:-1] )
 					else:
@@ -685,7 +804,7 @@ def double_expr(mnemonic, allowed, expr1, expr2):
 			if 'aby' in allowed:
 				# 'aby' and 'zpy' are not mutually exclusive
 				if 'zpy' in allowed:
-					return resolve( mnemonic, 'aby', 'zpy', None, expr1 )
+					return resolveabzpl( mnemonic, 'aby', 'zpy', None, expr1 )
 				else:
 					return save16( mnemonic, 'aby', expr1 )
 
@@ -700,9 +819,9 @@ def double_expr(mnemonic, allowed, expr1, expr2):
 		case 'X':
 
 			if 'labx' in allowed:
-				return resolve( mnemonic, 'abx', 'zpx', 'labx', expr1 )
+				return resolveabzpl( mnemonic, 'abx', 'zpx', 'labx', expr1 )
 			elif 'abx' in allowed:
-				return resolve( mnemonic, 'abx', 'zpx', None, expr1 )
+				return resolveabzpl( mnemonic, 'abx', 'zpx', None, expr1 )
 			elif 'zpx' in allowed:
 				return save08( mnemonic, 'zpx', expr1 )
 			else:
@@ -721,18 +840,53 @@ def double_expr(mnemonic, allowed, expr1, expr2):
 
 			# block move ?
 			if 'bmv' in allowed:
-				if save_mnemonic_expr(mnemonic, 'bmv', 'ubit08', f'^{expr2}'):
-					save_data( 'ubit08', f'^{expr1}' )
+				# doesn't seem to be a standard form, so we'll accept two forms,
+				# immediate byte or 24-bit long for either operand
+				# - mix and match, though it's probably better to pick just one
+				nexpr1 = expr1[1:] if expr1.startswith('#') else f'^{expr1}'
+				nexpr2 = expr2[1:] if expr2.startswith('#') else f'^{expr2}'
+				if save08(mnemonic, 'bmv', nexpr1):
+					save_data( 'ubit08', nexpr2 )
 					return True
 
 			# zero page test relative ?
 			elif 'zptr' in allowed:
-				if save_mnemonic_expr(mnemonic, 'zptr', 'ubit08', expr1):
+				if save08(mnemonic, 'zptr', expr1):
 					save_data( 'rbit08', expr2 )
 					return True 
 
-			# not legal or save failed
+			# zero page immediate or absolute immediate (if one, the other is also legal) ?
+			elif "zpimm" in allowed:
+				return resolveabzp( mnemonic, "abimm", "zpimm", expr1, expr2 )
+
+			# not legal or save08() failed
 			return False
+
+# -------------------------------
+
+# handle mnemonic with three following expressions
+# - so far only the HuC6280 has these
+
+def triple_expr(mnemonic, allowed, expr1, expr2, expr3):
+	'''handle mnemonic with three following expressions'''
+	# HuC6280: abxfr, abimm, abimx, zpimm, zpimx
+
+	# X-indexed ?
+	# - we happen to know TST mnemonic is the only possibility...
+	if expr3.upper() == 'X':
+		return resolveabzp( mnemonic, "abimx", "zpimx", expr1, expr2 )
+
+	# memory transfer ?
+	elif 'abxfr' in allowed:
+		if _CPU.forcemode is None or _CPU.forcemode == "ab":
+			save_opcode( mnemonic, 'abxfr' )
+			save_data( 'ubit16', expr1 )
+			save_data( 'ubit16', expr2 )
+			save_data( 'ubit16', expr3 )
+			return True
+
+	# don't know what this is
+	return False
 
 # -------------------------------
 
@@ -751,6 +905,8 @@ def doop(mnemonic, exprcnt, exprlist):
 			legalmode = single_expr( mnemonic, allowed, exprlist[0] )
 		case 2:
 			legalmode = double_expr( mnemonic, allowed, exprlist[0], exprlist[1] )
+		case 3:
+			legalmode = triple_expr( mnemonic, allowed, exprlist[0], exprlist[1], exprlist[2] )
 		case _:
 			legalmode = False
 
@@ -786,6 +942,8 @@ def getsizeflag(expr, current):
 
 	return current
 
+# -------------------------------
+
 # required method
 def doassume(cmd, arg):
 	''' handle cpu-specific "ASSUME" psop '''
@@ -794,15 +952,10 @@ def doassume(cmd, arg):
 
 		# set forced address mode ?
 		case 'addr':
-			match arg:
-				case 'absolute':
-					_CPU.forcemode = 'ab'
-				case 'zeropage' | 'direct':
-					_CPU.forcemode = 'zp'
-				case 'long':
-					_CPU.forcemode = 'l'
-				case _:
-					return False
+			if arg in ['absolute', 'zeropage', 'direct', 'long']:
+				_CPU.forcemode = arg
+			else:
+				return False
 
 		# set zero (direct) page location ?
 		case 'zeropage':

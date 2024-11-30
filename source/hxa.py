@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.100 - Top Level Executive
+# Hobby Cross-Assembler (HXA) V1.200 - Top Level Executive
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/18/03		(in Thompson AWK 4.0)
-# last revision: 07/07/24
+# last revision: 09/17/24
 
 # preferred public function prefix: none (other modules cannot call this module)
 # - it is only imported as part of testing a "cpu_" module
@@ -43,6 +43,7 @@ import hxa_codegen as CG
 import hxa_symbol as SYM
 import hxa_progctr as PC
 import hxa_strings as STR
+import hxa_float as FP
 import hxa_source as SRC
 import hxa_file as OS
 import hxa_misc as UTIL
@@ -52,13 +53,13 @@ import hxa_misc as UTIL
 # version IDs
 # -----------------------------
 
-# one decimal digit per nybble - lowest three nybbles are for minor
-# version numbers and bug fix indicators
+# one decimal digit per nybble
+# - lowest three nybbles are for minor version numbers and bug fix indicators
 # - and no, we're not likely to get 99,999 major version numbers :-)
 # - HXA versions implemented in TAWK are all less than '1.00'
 
-verNum = 0x00001100
-verStr = '1.100'
+verNum = 0x00001200
+verStr = '1.200'
 
 # pre-defined symbols
 
@@ -79,7 +80,7 @@ def checkargs():
 		if msgndx is not None:
 			UM.newline()
 			UM.firestop( msgndx, msgval )
-			
+
 		UM.useage()
 		sys.exit( exitcode )
 

@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.100 - Miscellaneous 
+# Hobby Cross-Assembler (HXA) V1.200 - Miscellaneous 
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 01/24/03	(in Thompson AWK 4.0)
-# last revision: 06/21/24
+# last revision: 09/26/24
 
 # preferred public function prefix: UTIL
 
@@ -57,11 +57,11 @@ _MSC = MSCvariables()
 # -----------------------------
 
 def iformat(val):
-	''' format integer value for display '''
-	if abs(val) < 256:
-		return f'{val}'
-	else:
+	''' format value for display '''
+	if isinstance(val, int) and abs(val) > 255:
 		return f'{val} ({"0x" if val >= 0 else "-0x"}{abs(val):02X})'
+	else:
+		return f'{val}'
 
 # -----------------------------
 

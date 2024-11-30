@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 05/16/03		(in Thompson AWK 4.0)
-# last revision: 06/20/24
+# last revision: 11/09/24
 
 # preferred public function prefix: "SRC"
 
@@ -90,7 +90,7 @@ class SRCvariables(object):
 		self.HASCOMMENT	 = re.compile( '[ ](;|//|#)' )
 		self.UNIREMOVE	 = re.compile( '([ ]+)(;|//)' )
 		self.SINGLESHARP = re.compile( '([ ]+)#([ ]|$)' )
-		self.DOUBLESHARP = re.compile( '#.*?([ ]+)#' )
+		self.DOUBLESHARP = re.compile( '#.*?[^,]([ ]+)#' )
 
 		# variables
 

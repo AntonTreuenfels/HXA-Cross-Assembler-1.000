@@ -1,4 +1,4 @@
-# Hobby Cross-Assembler (HXA) V1.002 - String Helper Functions
+# Hobby Cross-Assembler (HXA) V1.200 - String Helper Functions
 
 # (c) 2004-2024 by Anton Treuenfels
 
@@ -28,7 +28,7 @@
 # source language: Python 3.11.4
 
 # first created: 11/01/21
-# last revision: 02/05/24
+# last revision: 10/17/24
 
 # preferred public function prefix: "STR"
 
@@ -101,7 +101,8 @@ def printable(this):
 
 def unichr(val):
 	''' Unicode char of codepoint val '''
-	return chr(val) if 0 <= val <= 0x10FFFF else '?' 
+	# - or if out of range, the replacement symbol
+	return chr(val) if 0 <= val <= 0x10FFFF else chr(0xFFFD)
 
 # recognized mnemonic escape sequences
 
