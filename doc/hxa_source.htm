@@ -1341,18 +1341,12 @@ a:hover {background-color:#FFF}
 <p><em>Added</em></p>
 <ul> <li>cpu handler to support 6800 and 6801/6803 processors</li>
  </ul>
-<h4>v1.200 - Unreleased</h4>
+<h4>v1.200 - December 2024</h4>
 <p><b>All Versions</b></p>
 <p><em>Added</em></p>
 <ul> <li>RES and RESERVE aliases for DS</li>
  <li>FLOAT pseudo op to allow storing floating point data values in several formats</li>
- </ul>
-<p><em>Extended</em></p>
-<ul> <li>ASSUME FLOAT:(format) to specify the format of stored floating point values</li>
- </ul>
-<p><em>Changed</em></p>
-<ul> <li>then: values outside of the range [0x00, 0x10FFFF] changed to '?' when interpreted as Unicode characters</li>
- <li>now: values which are not legal Unicode characters are changed to 0xFFFD, the replacement character</li>
+ <li>'ieee-double', 'ieee-single', 'ieee-half' and 'esm4' assumptions</li>
  </ul>
 <p><em>Bug Fix - Match()/Case Default</em></p>
 <ul> <li>then: "case '_':" branch in pseudo op dispatch could never match anything</li>
